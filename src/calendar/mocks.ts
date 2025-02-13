@@ -1,43 +1,174 @@
+import type { TEventColor } from "@/calendar/types";
 import type { ICalendarItem, IUser } from "@/calendar/interfaces";
+
+// ================================== //
 
 export const USERS_MOCK: IUser[] = [
   {
-    id: 1,
+    id: "f3b035ac-49f7-4e92-a715-35680bf63175",
     name: "Michael Johnson",
     picturePath: null,
   },
   {
-    id: 2,
+    id: "3e36ea6e-78f3-40dd-ab8c-a6c737c3c422",
     name: "Alice Johnson",
     picturePath: null,
   },
   {
-    id: 3,
+    id: "a7aff6bd-a50a-4d6a-ab57-76f76bb27cf5",
     name: "Robert Smith",
     picturePath: null,
   },
   {
-    id: 4,
+    id: "dd503cf9-6c38-43cf-94cc-0d4032e2f77a",
     name: "Emily Davis",
     picturePath: null,
   },
 ];
 
-export const CALENDAR_ITENS_MOCK: ICalendarItem[] = [
-  {
-    id: 1,
-    startDate: "2025-01-30T11:00:00.000Z",
-    endDate: "2025-02-01T20:00:00.000Z",
-    title: "Lorem Ipsum",
-    color: "red",
-    userId: 2,
-  },
-  {
-    id: 2,
-    startDate: "2025-01-31T15:00:00.000Z",
-    endDate: "2025-01-31T16:10:00.000Z",
-    title: "Random event",
-    color: "green",
-    userId: 1,
-  },
+// ================================== //
+
+const colors: TEventColor[] = ["blue", "green", "red", "yellow", "purple", "orange"];
+const userIds = USERS_MOCK.map(user => user.id);
+const events = [
+  "Doctor's appointment",
+  "Dental cleaning",
+  "Eye exam",
+  "Therapy session",
+  "Business meeting",
+  "Team stand-up",
+  "Project deadline",
+  "Weekly report submission",
+  "Client presentation",
+  "Marketing strategy review",
+  "Networking event",
+  "Sales call",
+  "Investor pitch",
+  "Board meeting",
+  "Employee training",
+  "Performance review",
+  "One-on-one meeting",
+  "Lunch with a colleague",
+  "HR interview",
+  "Conference call",
+  "Web development sprint planning",
+  "Software deployment",
+  "Code review",
+  "QA testing session",
+  "Cybersecurity audit",
+  "Server maintenance",
+  "API integration update",
+  "Data backup",
+  "Cloud migration",
+  "System upgrade",
+  "Content planning session",
+  "Product launch",
+  "Customer support review",
+  "Team building activity",
+  "Legal consultation",
+  "Budget review",
+  "Financial planning session",
+  "Tax filing deadline",
+  "Investor relations update",
+  "Partnership negotiation",
+  "Medical check-up",
+  "Vaccination appointment",
+  "Blood donation",
+  "Gym workout",
+  "Yoga class",
+  "Physical therapy session",
+  "Nutrition consultation",
+  "Personal trainer session",
+  "Parent-teacher meeting",
+  "School open house",
+  "College application deadline",
+  "Final exam",
+  "Graduation ceremony",
+  "Job interview",
+  "Internship orientation",
+  "Office relocation",
+  "Business trip",
+  "Flight departure",
+  "Hotel check-in",
+  "Vacation planning",
+  "Birthday party",
+  "Wedding anniversary",
+  "Family reunion",
+  "Housewarming party",
+  "Community volunteer work",
+  "Charity fundraiser",
+  "Religious service",
+  "Concert attendance",
+  "Theater play",
+  "Movie night",
+  "Sporting event",
+  "Football match",
+  "Basketball game",
+  "Tennis practice",
+  "Marathon training",
+  "Cycling event",
+  "Fishing trip",
+  "Camping weekend",
+  "Hiking expedition",
+  "Photography session",
+  "Art workshop",
+  "Cooking class",
+  "Book club meeting",
+  "Grocery shopping",
+  "Car maintenance",
+  "Home renovation meeting",
 ];
+
+const mockGenerator = (numberOfEvents: number): ICalendarItem[] => {
+  const result: ICalendarItem[] = [];
+  let currentId = 1;
+
+  // Calculate date range: 90 days before and after now
+  const now = new Date();
+  const startRange = new Date(now);
+  startRange.setDate(now.getDate() - 90);
+  const endRange = new Date(now);
+  endRange.setDate(now.getDate() + 90);
+
+  for (let i = 0; i < numberOfEvents; i++) {
+    // Determine if this is a multi-day event (5% chance)
+    const isMultiDay = Math.random() < 0.05;
+
+    // Generate random start date within range
+    const startDate = new Date(startRange.getTime() + Math.random() * (endRange.getTime() - startRange.getTime()));
+
+    // Set time between 8 AM and 8 PM
+    startDate.setHours(
+      8 + Math.floor(Math.random() * 12), // Random hour between 8 and 19
+      Math.floor(Math.random() * 60), // Random minute
+      0,
+      0
+    ); // Reset seconds and milliseconds
+
+    const endDate = new Date(startDate);
+
+    if (isMultiDay) {
+      // Multi-day event: Add 1-4 days
+      const additionalDays = Math.floor(Math.random() * 4) + 1;
+      endDate.setDate(startDate.getDate() + additionalDays);
+      // Set end time
+      endDate.setHours(8 + Math.floor(Math.random() * 12), Math.floor(Math.random() * 60), 0, 0);
+    } else {
+      // Same-day event: Add 1-3 hours
+      endDate.setHours(endDate.getHours() + Math.floor(Math.random() * 3) + 1);
+    }
+
+    result.push({
+      id: currentId++,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+      title: events[Math.floor(Math.random() * events.length)],
+      color: colors[Math.floor(Math.random() * colors.length)],
+      userId: userIds[Math.floor(Math.random() * userIds.length)],
+    });
+  }
+
+  return result;
+};
+
+export const CALENDAR_ITENS_MOCK: ICalendarItem[] = mockGenerator(50);

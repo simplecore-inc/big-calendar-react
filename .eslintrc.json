@@ -1,0 +1,103 @@
+{
+  "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended", "plugin:tailwindcss/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "tailwindcss"],
+  "rules": {
+    // Warn when console statements are used
+    "no-console": "warn",
+
+    // Enforce the use of the `import type` syntax for type imports
+    "@typescript-eslint/consistent-type-imports": "error",
+
+    // Disallow unused variables (with some exceptions)
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": false,
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+
+    // Prevent usage of dangerous JSX props
+    "react/no-danger": "error",
+
+    // Prevent multiple component definitions in a single file, except in /src/components
+    "react/no-multi-comp": ["error"],
+
+    // Enforce consistent usage of destructuring assignment of props, state, and context
+    "react/destructuring-assignment": ["error", "always"],
+
+    // Enforce consistent React fragment syntax
+    "react/jsx-fragments": ["error", "syntax"],
+
+    // Prevent usage of unsafe `target='_blank'` without `rel="noopener noreferrer"`
+    "react/jsx-no-target-blank": "error",
+
+    // Enforce PascalCase for user-defined JSX components
+    "react/jsx-pascal-case": "error",
+
+    // Disallow unnecessary curly braces in JSX props and children
+    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }],
+
+    // Enforce a specific function type for function components
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": "function-declaration",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+
+    // Ensure consistent use of file extension within the import path
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never",
+        "tsx": "never",
+        "js": "never",
+        "jsx": "never"
+      }
+    ],
+
+    // Enforce using `@/` alias for imports from the `src/` directory
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["../*", "./*"],
+            "message": "Usage of relative parent imports is not allowed. Use `@/` alias instead."
+          }
+        ]
+      }
+    ],
+
+    // Enforce a consistent order for Tailwind CSS classes
+    "tailwindcss/classnames-order": "warn",
+
+    // Prevent using custom class names that are not defined in Tailwind CSS config
+    "tailwindcss/no-custom-classname": [
+      "warn",
+      {
+        "callees": ["cn", "clsx", "twMerge", "cva"],
+        "whitelist": ["^theme-", "^chart-"]
+      }
+    ],
+
+    // Prevent using contradicting Tailwind CSS classes together
+    "tailwindcss/no-contradicting-classname": "error"
+  },
+  "overrides": [
+    {
+      "files": ["src/components/**/*.{js,jsx,ts,tsx}"],
+      "rules": {
+        "react/no-multi-comp": "off"
+      }
+    }
+  ]
+}

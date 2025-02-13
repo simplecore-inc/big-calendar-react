@@ -6,7 +6,7 @@ import { ToggleTheme } from "@/components/layout/change-theme";
 export function Header() {
   return (
     <header className="mx-auto flex h-[88px] w-full max-w-screen-2xl items-center justify-center">
-      <div className="my-3 hidden h-14 w-full items-center justify-between px-8 lg:flex">
+      <div className="my-3 flex h-14 w-full items-center justify-between px-8">
         <div className="flex items-center gap-3.5">
           <div className="flex size-12 items-center justify-center rounded-full border p-3">
             <Calendar className="size-6 text-t-secondary" />

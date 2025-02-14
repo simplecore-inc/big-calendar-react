@@ -6,6 +6,8 @@ import { isSameDay, parseISO } from "date-fns";
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { CalendarHeader } from "@/calendar/components/calendar-header";
+import { CalendarMonthView } from "@/calendar/components/calendar-month-view";
+import { ChangeBadgeVariant } from "@/calendar/components/change-badge-variant";
 
 import type { ICalendarItem, IUser } from "@/calendar/interfaces";
 
@@ -44,12 +46,15 @@ export function ClientContainer({ calendarItems, users }: IProps) {
   });
 
   return (
-    <div className="mx-auto max-w-screen-2xl px-8">
+    <div className="mx-auto flex max-w-screen-2xl flex-col gap-4 px-8">
       <div className="rounded-xl border">
         <CalendarHeader view="month" calendarItens={filteredCalendarItens} users={users} />
-        <p className="p-4">{JSON.stringify(filteredCalendarItens, null, 2)}</p>
-        {/* <CalendarMonthView selectedDate={selectedDate} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} /> */}
+        <CalendarMonthView selectedDate={selectedDate} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />
       </div>
+
+      {/* <p className="p-4">{JSON.stringify(filteredCalendarItens, null, 2)}</p> */}
+
+      <ChangeBadgeVariant />
     </div>
   );
 }

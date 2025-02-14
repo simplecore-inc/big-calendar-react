@@ -1,10 +1,15 @@
 import { ClientContainer } from "@/calendar/components/client-container";
 
-import { getCalendarItems } from "@/calendar/requests";
+import { getCalendarItems, getUsers } from "@/calendar/requests";
 
-import { USERS_MOCK } from "@/calendar/mocks";
+import { CalendarProvider } from "@/calendar/contexts/calendar-context";
 
 export default async function Page() {
-  const calendarItems = await getCalendarItems();
-  return <ClientContainer calendarItems={calendarItems} users={USERS_MOCK} />;
+  const [calendarItems, users] = await Promise.all([getCalendarItems(), getUsers()]);
+
+  return (
+    <CalendarProvider>
+      <ClientContainer calendarItems={calendarItems} users={users} />
+    </CalendarProvider>
+  );
 }

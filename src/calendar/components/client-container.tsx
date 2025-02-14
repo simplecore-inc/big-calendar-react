@@ -1,6 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { isSameDay, parseISO } from "date-fns";
+
+import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { CalendarHeader } from "@/calendar/components/calendar-header";
 
@@ -12,12 +15,7 @@ interface IProps {
 }
 
 export function ClientContainer({ calendarItems, users }: IProps) {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedUserId, setSelectedUserId] = useState<IUser["id"] | "all">("all");
-
-  const handleUserIdChange = (userId: IUser["id"] | "all") => {
-    setSelectedUserId(userId);
-  };
+  const { selectedDate, selectedUserId } = useCalendar();
 
   const filteredCalendarItens = useMemo(() => {
     return calendarItems.filter(item => {
@@ -33,20 +31,24 @@ export function ClientContainer({ calendarItems, users }: IProps) {
     });
   }, [selectedDate, selectedUserId, calendarItems]);
 
+  const singleDayItems = filteredCalendarItens.filter(calendarItem => {
+    const startDate = parseISO(calendarItem.startDate);
+    const endDate = parseISO(calendarItem.endDate);
+    return isSameDay(startDate, endDate);
+  });
+
+  const multiDayItems = filteredCalendarItens.filter(calendarItem => {
+    const startDate = parseISO(calendarItem.startDate);
+    const endDate = parseISO(calendarItem.endDate);
+    return !isSameDay(startDate, endDate);
+  });
+
   return (
     <div className="mx-auto max-w-screen-2xl px-8">
       <div className="rounded-xl border">
-        <CalendarHeader
-          view="month"
-          calendarItens={filteredCalendarItens}
-          users={users}
-          selectedDate={selectedDate}
-          onDateChange={setSelectedDate}
-          selectedUserId={selectedUserId}
-          onUserIdChange={handleUserIdChange}
-        />
-
+        <CalendarHeader view="month" calendarItens={filteredCalendarItens} users={users} />
         <p className="p-4">{JSON.stringify(filteredCalendarItens, null, 2)}</p>
+        {/* <CalendarMonthView selectedDate={selectedDate} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} /> */}
       </div>
     </div>
   );

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, Columns, Grid3X3, List } from "lucide-react";
 import { formatDate, addDays, addMonths, addWeeks, subDays, subMonths, subWeeks } from "date-fns";
 
+import { useCalendar } from "@/calendar/contexts/calendar-context";
+
 import { Badge } from "@/components/ui/badge";
 import { Select } from "@/components/ui/select";
 import { Avatar } from "@/components/ui/avatar";
@@ -16,13 +18,11 @@ interface IProps {
   view: "day" | "week" | "month";
   calendarItens: ICalendarItem[];
   users: IUser[];
-  selectedDate: Date;
-  onDateChange: (date: Date) => void;
-  selectedUserId: IUser["id"] | "all";
-  onUserIdChange: (userId: IUser["id"] | "all") => void;
 }
 
-export function CalendarHeader({ view, selectedDate, calendarItens, onDateChange, users, selectedUserId, onUserIdChange }: IProps) {
+export function CalendarHeader({ view, calendarItens, users }: IProps) {
+  const { selectedDate, selectedUserId, setSelectedDate, setSelectedUserId } = useCalendar();
+
   const selectedMonth = formatDate(selectedDate, "MMMM");
   const selectedYear = selectedDate.getFullYear();
 
@@ -40,13 +40,13 @@ export function CalendarHeader({ view, selectedDate, calendarItens, onDateChange
   const handlePrevious = () => {
     switch (view) {
       case "month":
-        onDateChange(subMonths(selectedDate, 1));
+        setSelectedDate(subMonths(selectedDate, 1));
         break;
       case "week":
-        onDateChange(subWeeks(selectedDate, 1));
+        setSelectedDate(subWeeks(selectedDate, 1));
         break;
       case "day":
-        onDateChange(subDays(selectedDate, 1));
+        setSelectedDate(subDays(selectedDate, 1));
         break;
     }
   };
@@ -54,19 +54,19 @@ export function CalendarHeader({ view, selectedDate, calendarItens, onDateChange
   const handleNext = () => {
     switch (view) {
       case "month":
-        onDateChange(addMonths(selectedDate, 1));
+        setSelectedDate(addMonths(selectedDate, 1));
         break;
       case "week":
-        onDateChange(addWeeks(selectedDate, 1));
+        setSelectedDate(addWeeks(selectedDate, 1));
         break;
       case "day":
-        onDateChange(addDays(selectedDate, 1));
+        setSelectedDate(addDays(selectedDate, 1));
         break;
     }
   };
 
   const handleTodayClick = () => {
-    onDateChange(new Date());
+    setSelectedDate(new Date());
   };
 
   return (
@@ -123,7 +123,7 @@ export function CalendarHeader({ view, selectedDate, calendarItens, onDateChange
           </Button>
         </ButtonGroup>
 
-        <Select.Root value={selectedUserId} onValueChange={onUserIdChange}>
+        <Select.Root value={selectedUserId} onValueChange={setSelectedUserId}>
           <Select.Trigger className="w-48">
             <Select.Value />
           </Select.Trigger>

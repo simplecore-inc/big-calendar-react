@@ -123,12 +123,12 @@ const mockGenerator = (numberOfEvents: number): ICalendarItem[] => {
   const result: ICalendarItem[] = [];
   let currentId = 1;
 
-  // Calculate date range: 90 days before and after now
+  // Calculate date range: 30 days before and after now
   const now = new Date();
   const startRange = new Date(now);
-  startRange.setDate(now.getDate() - 90);
+  startRange.setDate(now.getDate() - 30);
   const endRange = new Date(now);
-  endRange.setDate(now.getDate() + 90);
+  endRange.setDate(now.getDate() + 30);
 
   for (let i = 0; i < numberOfEvents; i++) {
     // Determine if this is a multi-day event (5% chance)
@@ -138,12 +138,7 @@ const mockGenerator = (numberOfEvents: number): ICalendarItem[] => {
     const startDate = new Date(startRange.getTime() + Math.random() * (endRange.getTime() - startRange.getTime()));
 
     // Set time between 8 AM and 8 PM
-    startDate.setHours(
-      8 + Math.floor(Math.random() * 12), // Random hour between 8 and 19
-      Math.floor(Math.random() * 60), // Random minute
-      0,
-      0
-    ); // Reset seconds and milliseconds
+    startDate.setHours(8 + Math.floor(Math.random() * 12), Math.floor(Math.random() * 60), 0, 0);
 
     const endDate = new Date(startDate);
 
@@ -151,7 +146,6 @@ const mockGenerator = (numberOfEvents: number): ICalendarItem[] => {
       // Multi-day event: Add 1-4 days
       const additionalDays = Math.floor(Math.random() * 4) + 1;
       endDate.setDate(startDate.getDate() + additionalDays);
-      // Set end time
       endDate.setHours(8 + Math.floor(Math.random() * 12), Math.floor(Math.random() * 60), 0, 0);
     } else {
       // Same-day event: Add 1-3 hours
@@ -171,4 +165,4 @@ const mockGenerator = (numberOfEvents: number): ICalendarItem[] => {
   return result;
 };
 
-export const CALENDAR_ITENS_MOCK: ICalendarItem[] = mockGenerator(50);
+export const CALENDAR_ITENS_MOCK: ICalendarItem[] = mockGenerator(80);

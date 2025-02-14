@@ -6,17 +6,19 @@ import { isSameDay, parseISO } from "date-fns";
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { CalendarHeader } from "@/calendar/components/calendar-header";
+import { CalendarWeekView } from "@/calendar/components/calendar-week-view";
 import { CalendarMonthView } from "@/calendar/components/calendar-month-view";
 import { ChangeBadgeVariant } from "@/calendar/components/change-badge-variant";
 
 import type { ICalendarItem, IUser } from "@/calendar/interfaces";
 
 interface IProps {
+  view: "month" | "week";
   calendarItems: ICalendarItem[];
   users: IUser[];
 }
 
-export function ClientContainer({ calendarItems, users }: IProps) {
+export function ClientContainer({ view, calendarItems, users }: IProps) {
   const { selectedDate, selectedUserId } = useCalendar();
 
   const filteredCalendarItens = useMemo(() => {
@@ -48,11 +50,10 @@ export function ClientContainer({ calendarItems, users }: IProps) {
   return (
     <div className="mx-auto flex max-w-screen-2xl flex-col gap-4 px-8">
       <div className="rounded-xl border">
-        <CalendarHeader view="month" calendarItens={filteredCalendarItens} users={users} />
-        <CalendarMonthView selectedDate={selectedDate} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />
+        <CalendarHeader view={view} calendarItens={filteredCalendarItens} users={users} />
+        {view === "month" && <CalendarMonthView selectedDate={selectedDate} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
+        {view === "week" && <CalendarWeekView selectedDate={selectedDate} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
       </div>
-
-      {/* <p className="p-4">{JSON.stringify(filteredCalendarItens, null, 2)}</p> */}
 
       <ChangeBadgeVariant />
     </div>

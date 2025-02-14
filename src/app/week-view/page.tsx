@@ -9,7 +9,7 @@ export default async function Page() {
 
   return (
     <CalendarProvider>
-      <ClientContainer view="month" calendarItems={calendarItems} users={users} />
+      <ClientContainer view="week" calendarItems={calendarItems} users={users} />
     </CalendarProvider>
   );
 }

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { CalendarCell } from "@/calendar/components/month-view/calendar-cell";
+import { DayCell } from "@/calendar/components/month-view/day-cell";
 
 import { getCalendarCells, calculateMonthEventPositions } from "@/calendar/helpers";
 
@@ -39,7 +39,7 @@ export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
 
       <div className="grid grid-cols-7 overflow-hidden border-b lg:border-b-0">
         {cells.map(cell => (
-          <CalendarCell key={cell.date.toISOString()} cell={cell} events={allEvents} eventPositions={eventPositions} />
+          <DayCell key={cell.date.toISOString()} cell={cell} events={allEvents} eventPositions={eventPositions} />
         ))}
       </div>
     </div>

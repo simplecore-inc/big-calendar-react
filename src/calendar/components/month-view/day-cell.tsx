@@ -17,7 +17,7 @@ interface IProps {
 
 const MAX_VISIBLE_EVENTS = 3;
 
-export function CalendarCell({ cell, events, eventPositions }: IProps) {
+export function DayCell({ cell, events, eventPositions }: IProps) {
   const { day, currentMonth, date } = cell;
 
   const cellEvents = useMemo(() => getMonthCellEvents(date, events, eventPositions), [date, events, eventPositions]);

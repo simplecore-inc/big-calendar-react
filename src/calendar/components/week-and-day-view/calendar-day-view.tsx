@@ -1,5 +1,5 @@
 import { Calendar, Clock, User } from "lucide-react";
-import { parseISO, differenceInMinutes, areIntervalsOverlapping, format, isWithinInterval } from "date-fns";
+import { parseISO, areIntervalsOverlapping, format, isWithinInterval } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
@@ -9,6 +9,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { EventBlock } from "@/calendar/components/week-and-day-view/event-block";
 import { CalendarTimeline } from "@/calendar/components/week-and-day-view/calendar-time-line";
 import { DayViewMultiDayEventsRow } from "@/calendar/components/week-and-day-view/day-view-multi-day-events-row";
+
+import { groupEvents, getEventBlockStyle } from "@/calendar/helpers";
 
 import type { IEvent } from "@/calendar/interfaces";
 
@@ -22,7 +24,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
-  const getCurrentEvent = (events: IEvent[]) => {
+  const getCurrentEvents = (events: IEvent[]) => {
     const now = new Date();
 
     return (
@@ -35,46 +37,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
     );
   };
 
-  const currentEvents = getCurrentEvent(singleDayEvents);
-
-  // ================ Logic to fill the calendar with events ================ //
-  const getEventStyle = (event: IEvent, groupIndex: number, groupSize: number) => {
-    const startDate = parseISO(event.startDate);
-    const dayStart = new Date(selectedDate.setHours(0, 0, 0, 0));
-    const eventStart = startDate < dayStart ? dayStart : startDate;
-    const startMinutes = differenceInMinutes(eventStart, dayStart);
-
-    const top = (startMinutes / 1440) * 100;
-    const width = 100 / groupSize;
-    const left = groupIndex * width;
-
-    return { top: `${top}%`, width: `${width}%`, left: `${left}%` };
-  };
-
-  const groupEvents = (dayEvents: IEvent[]) => {
-    const sortedEvents = dayEvents.sort((a, b) => parseISO(a.startDate).getTime() - parseISO(b.startDate).getTime());
-    const groups: IEvent[][] = [];
-
-    for (const event of sortedEvents) {
-      const eventStart = parseISO(event.startDate);
-
-      let placed = false;
-      for (const group of groups) {
-        const lastEventInGroup = group[group.length - 1];
-        const lastEventEnd = parseISO(lastEventInGroup.endDate);
-
-        if (eventStart >= lastEventEnd) {
-          group.push(event);
-          placed = true;
-          break;
-        }
-      }
-
-      if (!placed) groups.push([event]);
-    }
-
-    return groups;
-  };
+  const currentEvents = getCurrentEvents(singleDayEvents);
 
   const dayEvents = singleDayEvents.filter(event => {
     const eventDate = parseISO(event.startDate);
@@ -141,7 +104,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 
                 {groupedEvents.map((group, groupIndex) =>
                   group.map(event => {
-                    let style = getEventStyle(event, groupIndex, groupedEvents.length);
+                    let style = getEventBlockStyle(event, selectedDate, groupIndex, groupedEvents.length);
                     const hasOverlap = groupedEvents.some(
                       (otherGroup, otherIndex) =>
                         otherIndex !== groupIndex &&

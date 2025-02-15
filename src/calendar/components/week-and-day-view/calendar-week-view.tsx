@@ -1,4 +1,4 @@
-import { startOfWeek, addDays, format, parseISO, isSameDay, differenceInMinutes, areIntervalsOverlapping } from "date-fns";
+import { startOfWeek, addDays, format, parseISO, isSameDay, areIntervalsOverlapping } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
@@ -7,6 +7,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { EventBlock } from "@/calendar/components/week-and-day-view/event-block";
 import { CalendarTimeline } from "@/calendar/components/week-and-day-view/calendar-time-line";
 import { WeekViewMultiDayEventsRow } from "@/calendar/components/week-and-day-view/week-view-multi-day-events-row";
+
+import { groupEvents, getEventBlockStyle } from "@/calendar/helpers";
 
 import type { IEvent } from "@/calendar/interfaces";
 
@@ -18,49 +20,9 @@ interface IProps {
 export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate } = useCalendar();
 
-  // ================ Logic to mount the calendar and it's cells ================ //
   const weekStart = startOfWeek(selectedDate);
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
   const hours = Array.from({ length: 24 }, (_, i) => i);
-
-  // ================ Logic to add the events to the calendar cells ================ //
-  const getEventStyle = (event: IEvent, day: Date, groupIndex: number, groupSize: number) => {
-    const startDate = parseISO(event.startDate);
-    const dayStart = new Date(day.setHours(0, 0, 0, 0));
-    const eventStart = startDate < dayStart ? dayStart : startDate;
-    const startMinutes = differenceInMinutes(eventStart, dayStart);
-
-    const top = (startMinutes / 1440) * 100;
-    const width = 100 / groupSize;
-    const left = groupIndex * width;
-
-    return { top: `${top}%`, width: `${width}%`, left: `${left}%` };
-  };
-
-  const groupEvents = (dayEvents: IEvent[]) => {
-    const sortedEvents = dayEvents.sort((a, b) => parseISO(a.startDate).getTime() - parseISO(b.startDate).getTime());
-    const groups: IEvent[][] = [];
-
-    for (const event of sortedEvents) {
-      const eventStart = parseISO(event.startDate);
-
-      let placed = false;
-      for (const group of groups) {
-        const lastEventInGroup = group[group.length - 1];
-        const lastEventEnd = parseISO(lastEventInGroup.endDate);
-
-        if (eventStart >= lastEventEnd) {
-          group.push(event);
-          placed = true;
-          break;
-        }
-      }
-
-      if (!placed) groups.push([event]);
-    }
-
-    return groups;
-  };
 
   const handleTimeSlotClick = (day: Date, hour: number, minutes: number) => {
     const selectedDateTime = new Date(day);
@@ -131,7 +93,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
 
                       {groupedEvents.map((group, groupIndex) =>
                         group.map(event => {
-                          let style = getEventStyle(event, day, groupIndex, groupedEvents.length);
+                          let style = getEventBlockStyle(event, day, groupIndex, groupedEvents.length);
                           const hasOverlap = groupedEvents.some(
                             (otherGroup, otherIndex) =>
                               otherIndex !== groupIndex &&

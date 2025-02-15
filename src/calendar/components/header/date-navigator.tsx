@@ -7,7 +7,7 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-import { getEventsCount, navigateDate, formatMonthRange, formatWeekRange } from "@/calendar/helpers";
+import { getEventsCount, navigateDate, rangeText } from "@/calendar/helpers";
 
 import type { IEvent } from "@/calendar/interfaces";
 import type { TCalendarView } from "@/calendar/types";
@@ -20,16 +20,9 @@ interface IProps {
 export function DateNavigator({ view, events }: IProps) {
   const { selectedDate, setSelectedDate } = useCalendar();
 
-  const dateInfo = useMemo(
-    () => ({
-      month: formatDate(selectedDate, "MMMM"),
-      year: selectedDate.getFullYear(),
-      rangeText: view === "month" ? formatMonthRange(selectedDate) : view === "week" ? formatWeekRange(selectedDate) : formatDate(selectedDate, "MMM d, yyyy"),
-    }),
-    [selectedDate, view]
-  );
+  const month = formatDate(selectedDate, "MMMM");
+  const year = selectedDate.getFullYear();
 
-  // Memoize event count
   const eventCount = useMemo(() => getEventsCount(events, selectedDate, view), [events, selectedDate, view]);
 
   const handlePrevious = () => setSelectedDate(navigateDate(selectedDate, view, "previous"));
@@ -39,7 +32,7 @@ export function DateNavigator({ view, events }: IProps) {
     <div className="space-y-0.5">
       <div className="flex items-center gap-2">
         <span className="text-lg font-semibold">
-          {dateInfo.month} {dateInfo.year}
+          {month} {year}
         </span>
         <Badge>{eventCount} events</Badge>
       </div>
@@ -49,7 +42,7 @@ export function DateNavigator({ view, events }: IProps) {
           <ChevronLeft />
         </Button>
 
-        <p className="text-sm text-t-tertiary">{dateInfo.rangeText}</p>
+        <p className="text-sm text-t-tertiary">{rangeText(view, selectedDate)}</p>
 
         <Button variant="outline" className="size-6.5 px-0 [&_svg]:size-4.5" onClick={handleNext}>
           <ChevronRight />

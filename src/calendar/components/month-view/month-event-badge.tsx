@@ -3,6 +3,8 @@ import { endOfDay, format, isSameDay, parseISO, startOfDay } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
+import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
+
 import { cn } from "@/utils/helpers/cn.helper";
 
 import type { IEvent } from "@/calendar/interfaces";
@@ -79,28 +81,29 @@ export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDa
   const eventBadgeClasses = cn(eventBadgeVariants({ color, multiDayPosition: position, className }));
 
   return (
-    // TO DO: implement dialog
-    <div className={eventBadgeClasses}>
-      <div className="flex items-center gap-1.5 truncate">
-        {!["middle", "last"].includes(position) && badgeVariant === "dot" && (
-          <svg width="8" height="8" viewBox="0 0 8 8" className="shrink-0">
-            <circle cx="4" cy="4" r="4" />
-          </svg>
-        )}
+    <EventDetailsDialog event={event}>
+      <div role="button" tabIndex={0} className={eventBadgeClasses}>
+        <div className="flex items-center gap-1.5 truncate">
+          {!["middle", "last"].includes(position) && badgeVariant === "dot" && (
+            <svg width="8" height="8" viewBox="0 0 8 8" className="shrink-0">
+              <circle cx="4" cy="4" r="4" />
+            </svg>
+          )}
 
-        {renderBadgeText && (
-          <p className="flex-1 truncate font-semibold">
-            {eventCurrentDay && (
-              <span className="text-xs">
-                Day {eventCurrentDay} of {eventTotalDays} •{" "}
-              </span>
-            )}
-            {event.title}
-          </p>
-        )}
+          {renderBadgeText && (
+            <p className="flex-1 truncate font-semibold">
+              {eventCurrentDay && (
+                <span className="text-xs">
+                  Day {eventCurrentDay} of {eventTotalDays} •{" "}
+                </span>
+              )}
+              {event.title}
+            </p>
+          )}
+        </div>
+
+        {renderBadgeText && <span>{format(new Date(event.startDate), "HH:mm")}</span>}
       </div>
-
-      {renderBadgeText && <span>{format(new Date(event.startDate), "HH:mm")}</span>}
-    </div>
+    </EventDetailsDialog>
   );
 }

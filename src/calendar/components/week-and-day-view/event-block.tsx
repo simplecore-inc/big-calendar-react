@@ -3,6 +3,8 @@ import { format, differenceInMinutes, parseISO } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
+import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
+
 import { cn } from "@/utils/helpers/cn.helper";
 
 import type { HTMLAttributes } from "react";
@@ -54,23 +56,24 @@ export function EventBlock({ event, className }: IProps) {
   const calendarWeekEventCardClasses = cn(calendarWeekEventCardVariants({ color, className }), durationInMinutes < 35 && "py-0 justify-center");
 
   return (
-    // TO DO: implement dialog
-    <div className={calendarWeekEventCardClasses} style={{ height: `${heightInPixels}px` }}>
-      <div className="flex items-center gap-1.5 truncate">
-        {badgeVariant === "dot" && (
-          <svg width="8" height="8" viewBox="0 0 8 8" className="shrink-0">
-            <circle cx="4" cy="4" r="4" />
-          </svg>
+    <EventDetailsDialog event={event}>
+      <div role="button" tabIndex={0} className={calendarWeekEventCardClasses} style={{ height: `${heightInPixels}px` }}>
+        <div className="flex items-center gap-1.5 truncate">
+          {badgeVariant === "dot" && (
+            <svg width="8" height="8" viewBox="0 0 8 8" className="shrink-0">
+              <circle cx="4" cy="4" r="4" />
+            </svg>
+          )}
+
+          <p className="truncate font-semibold">{event.title}</p>
+        </div>
+
+        {durationInMinutes > 25 && (
+          <p>
+            {format(start, "HH:mm a")} - {format(end, "HH:mm a")}
+          </p>
         )}
-
-        <p className="truncate font-semibold">{event.title}</p>
       </div>
-
-      {durationInMinutes > 25 && (
-        <p>
-          {format(start, "HH:mm a")} - {format(end, "HH:mm a")}
-        </p>
-      )}
-    </div>
+    </EventDetailsDialog>
   );
 }

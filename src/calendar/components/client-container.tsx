@@ -28,7 +28,7 @@ export function ClientContainer({ view }: IProps) {
       const monthEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
 
       const isInSelectedMonth = itemStartDate <= monthEnd && itemEndDate >= monthStart;
-      const isUserMatch = selectedUserId === "all" || event.userId === selectedUserId;
+      const isUserMatch = selectedUserId === "all" || event.user.id === selectedUserId;
       return isInSelectedMonth && isUserMatch;
     });
   }, [selectedDate, selectedUserId, events]);

@@ -29,7 +29,6 @@ export const USERS_MOCK: IUser[] = [
 // ================================== //
 
 const colors: TEventColor[] = ["blue", "green", "red", "yellow", "purple", "orange"];
-const userIds = USERS_MOCK.map(user => user.id);
 const events = [
   "Doctor's appointment",
   "Dental cleaning",
@@ -123,6 +122,8 @@ const mockGenerator = (numberOfEvents: number): IEvent[] => {
   const result: IEvent[] = [];
   let currentId = 1;
 
+  const randomUser = USERS_MOCK[Math.floor(Math.random() * USERS_MOCK.length)];
+
   // Date range: 30 days before and after now
   const now = new Date();
   const startRange = new Date(now);
@@ -137,7 +138,8 @@ const mockGenerator = (numberOfEvents: number): IEvent[] => {
     endDate: new Date(now.getTime() + 30 * 60000).toISOString(),
     title: events[Math.floor(Math.random() * events.length)],
     color: colors[Math.floor(Math.random() * colors.length)],
-    userId: userIds[Math.floor(Math.random() * userIds.length)],
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    user: randomUser,
   };
 
   result.push(currentEvent);
@@ -170,7 +172,8 @@ const mockGenerator = (numberOfEvents: number): IEvent[] => {
       endDate: endDate.toISOString(),
       title: events[Math.floor(Math.random() * events.length)],
       color: colors[Math.floor(Math.random() * colors.length)],
-      userId: userIds[Math.floor(Math.random() * userIds.length)],
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      user: USERS_MOCK[Math.floor(Math.random() * USERS_MOCK.length)],
     });
   }
 

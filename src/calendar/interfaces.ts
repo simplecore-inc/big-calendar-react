@@ -12,7 +12,8 @@ export interface IEvent {
   endDate: string;
   title: string;
   color: TEventColor;
-  userId: IUser["id"];
+  description: string;
+  user: IUser;
 }
 
 export interface ICalendarCell {

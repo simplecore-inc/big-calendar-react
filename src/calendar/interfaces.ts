@@ -14,3 +14,9 @@ export interface IEvent {
   color: TEventColor;
   userId: IUser["id"];
 }
+
+export interface ICalendarCell {
+  day: number;
+  currentMonth: boolean;
+  date: Date;
+}

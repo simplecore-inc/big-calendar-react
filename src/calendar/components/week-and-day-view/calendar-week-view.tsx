@@ -62,6 +62,12 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
     return groups;
   };
 
+  const handleTimeSlotClick = (day: Date, hour: number, minutes: number) => {
+    const selectedDateTime = new Date(day);
+    selectedDateTime.setHours(hour, minutes, 0, 0);
+    // TODO: Open add event dialog
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center border-b py-4 text-sm text-t-quaternary sm:hidden">
@@ -110,8 +116,16 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                     <div key={dayIndex} className="relative">
                       {hours.map((hour, index) => (
                         <div key={hour} className="relative" style={{ height: "96px" }}>
-                          {index !== 0 && <div className="absolute inset-x-0 top-0 border-b"></div>}
-                          <div className="absolute inset-x-0 top-1/2 border-b border-dashed border-b-tertiary"></div>
+                          {index !== 0 && <div className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>}
+                          <div
+                            onClick={() => handleTimeSlotClick(day, hour, 0)}
+                            className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover"
+                          />
+                          <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed border-b-tertiary"></div>
+                          <div
+                            onClick={() => handleTimeSlotClick(day, hour, 30)}
+                            className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover"
+                          />
                         </div>
                       ))}
 

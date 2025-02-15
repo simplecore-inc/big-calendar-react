@@ -6,6 +6,7 @@ import { isSameDay, parseISO } from "date-fns";
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { CalendarHeader } from "@/calendar/components/calendar-header";
+import { CalendarDayView } from "@/calendar/components/calendar-day-view";
 import { CalendarWeekView } from "@/calendar/components/calendar-week-view";
 import { CalendarMonthView } from "@/calendar/components/calendar-month-view";
 import { ChangeBadgeVariant } from "@/calendar/components/change-badge-variant";
@@ -13,7 +14,7 @@ import { ChangeBadgeVariant } from "@/calendar/components/change-badge-variant";
 import type { ICalendarItem, IUser } from "@/calendar/interfaces";
 
 interface IProps {
-  view: "month" | "week";
+  view: "month" | "week" | "day";
   calendarItems: ICalendarItem[];
   users: IUser[];
 }
@@ -53,6 +54,7 @@ export function ClientContainer({ view, calendarItems, users }: IProps) {
         <CalendarHeader view={view} calendarItens={filteredCalendarItens} users={users} />
         {view === "month" && <CalendarMonthView selectedDate={selectedDate} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
         {view === "week" && <CalendarWeekView selectedDate={selectedDate} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
+        {view === "day" && <CalendarDayView users={users} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
       </div>
 
       <ChangeBadgeVariant />

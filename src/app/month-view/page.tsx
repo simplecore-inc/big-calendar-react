@@ -8,7 +8,7 @@ export default async function Page() {
   const [calendarItems, users] = await Promise.all([getCalendarItems(), getUsers()]);
 
   return (
-    <CalendarProvider>
+    <CalendarProvider users={users}>
       <ClientContainer view="month" calendarItems={calendarItems} users={users} />
     </CalendarProvider>
   );

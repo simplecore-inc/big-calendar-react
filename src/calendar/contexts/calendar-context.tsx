@@ -11,11 +11,12 @@ interface ICalendarContext {
   setSelectedUserId: (userId: IUser["id"] | "all") => void;
   badgeVariant: "dot" | "colored";
   setBadgeVariant: (variant: "dot" | "colored") => void;
+  users: IUser[];
 }
 
 const CalendarContext = createContext({} as ICalendarContext);
 
-export function CalendarProvider({ children }: { children: React.ReactNode }) {
+export function CalendarProvider({ children, users }: { children: React.ReactNode; users: IUser[] }) {
   const [badgeVariant, setBadgeVariant] = useState<"dot" | "colored">("dot");
 
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -27,7 +28,9 @@ export function CalendarProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <CalendarContext.Provider value={{ selectedDate, setSelectedDate: handleSelectDate, selectedUserId, setSelectedUserId, badgeVariant, setBadgeVariant }}>
+    <CalendarContext.Provider
+      value={{ selectedDate, setSelectedDate: handleSelectDate, selectedUserId, setSelectedUserId, badgeVariant, setBadgeVariant, users }}
+    >
       {children}
     </CalendarContext.Provider>
   );

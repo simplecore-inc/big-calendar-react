@@ -5,16 +5,17 @@ import { isSameDay, parseISO } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { CalendarHeader } from "@/calendar/components/calendar-header";
 import { CalendarDayView } from "@/calendar/components/calendar-day-view";
 import { CalendarWeekView } from "@/calendar/components/calendar-week-view";
+import { CalendarHeader } from "@/calendar/components/header/calendar-header";
 import { CalendarMonthView } from "@/calendar/components/calendar-month-view";
 import { ChangeBadgeVariant } from "@/calendar/components/change-badge-variant";
 
+import type { TCalendarView } from "@/calendar/types";
 import type { ICalendarItem, IUser } from "@/calendar/interfaces";
 
 interface IProps {
-  view: "month" | "week" | "day";
+  view: TCalendarView;
   calendarItems: ICalendarItem[];
   users: IUser[];
 }
@@ -51,7 +52,7 @@ export function ClientContainer({ view, calendarItems, users }: IProps) {
   return (
     <div className="mx-auto flex max-w-screen-2xl flex-col gap-4 px-8">
       <div className="rounded-xl border">
-        <CalendarHeader view={view} calendarItens={filteredCalendarItens} users={users} />
+        <CalendarHeader view={view} calendarItens={filteredCalendarItens} />
         {view === "month" && <CalendarMonthView singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
         {view === "week" && <CalendarWeekView singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
         {view === "day" && <CalendarDayView users={users} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}

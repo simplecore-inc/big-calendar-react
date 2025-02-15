@@ -1,6 +1,6 @@
 import { CALENDAR_ITENS_MOCK, USERS_MOCK } from "@/calendar/mocks";
 
-export const getCalendarItems = async () => {
+export const getEvents = async () => {
   await new Promise(resolve => setTimeout(resolve, 800));
   return CALENDAR_ITENS_MOCK;
 };

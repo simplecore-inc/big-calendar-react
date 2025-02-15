@@ -6,16 +6,16 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { CalendarTimeline } from "@/calendar/components/calendar-time-line";
 import { MultiDayWeekSection } from "@/calendar/components/multi-day-week-section";
-import { CalendarItemWeekBadge } from "@/calendar/components/calendar-item-week-badge";
+import { EventBlock } from "@/calendar/components/event-block";
 
-import type { ICalendarItem } from "@/calendar/interfaces";
+import type { IEvent } from "@/calendar/interfaces";
 
 interface IProps {
-  singleDayCalendarItems: ICalendarItem[];
-  multiDayCalendarItems: ICalendarItem[];
+  singleDayEvents: IEvent[];
+  multiDayEvents: IEvent[];
 }
 
-export function CalendarWeekView({ singleDayCalendarItems, multiDayCalendarItems }: IProps) {
+export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate } = useCalendar();
 
   // ================ Logic to mount the calendar and it's cells ================ //
@@ -23,12 +23,12 @@ export function CalendarWeekView({ singleDayCalendarItems, multiDayCalendarItems
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
-  // ================ Logic to fill the calendar with events ================ //
-  const getCalendarItemStyle = (item: ICalendarItem, day: Date, groupIndex: number, groupSize: number) => {
-    const startDate = parseISO(item.startDate);
+  // ================ Logic to add the events to the calendar cells ================ //
+  const getEventStyle = (event: IEvent, day: Date, groupIndex: number, groupSize: number) => {
+    const startDate = parseISO(event.startDate);
     const dayStart = new Date(day.setHours(0, 0, 0, 0));
-    const itemStart = startDate < dayStart ? dayStart : startDate;
-    const startMinutes = differenceInMinutes(itemStart, dayStart);
+    const eventStart = startDate < dayStart ? dayStart : startDate;
+    const startMinutes = differenceInMinutes(eventStart, dayStart);
 
     const top = (startMinutes / 1440) * 100;
     const width = 100 / groupSize;
@@ -37,26 +37,26 @@ export function CalendarWeekView({ singleDayCalendarItems, multiDayCalendarItems
     return { top: `${top}%`, width: `${width}%`, left: `${left}%` };
   };
 
-  const groupCalendarItems = (dayCalendarItems: ICalendarItem[]) => {
-    const sortedCalendarItems = dayCalendarItems.sort((a, b) => parseISO(a.startDate).getTime() - parseISO(b.startDate).getTime());
-    const groups: ICalendarItem[][] = [];
+  const groupEvents = (dayEvents: IEvent[]) => {
+    const sortedEvents = dayEvents.sort((a, b) => parseISO(a.startDate).getTime() - parseISO(b.startDate).getTime());
+    const groups: IEvent[][] = [];
 
-    for (const item of sortedCalendarItems) {
-      const itemStart = parseISO(item.startDate);
+    for (const event of sortedEvents) {
+      const eventStart = parseISO(event.startDate);
 
       let placed = false;
       for (const group of groups) {
-        const lastItemInGroup = group[group.length - 1];
-        const lastItemEnd = parseISO(lastItemInGroup.endDate);
+        const lastEventInGroup = group[group.length - 1];
+        const lastEventEnd = parseISO(lastEventInGroup.endDate);
 
-        if (itemStart >= lastItemEnd) {
-          group.push(item);
+        if (eventStart >= lastEventEnd) {
+          group.push(event);
           placed = true;
           break;
         }
       }
 
-      if (!placed) groups.push([item]);
+      if (!placed) groups.push([event]);
     }
 
     return groups;
@@ -71,7 +71,7 @@ export function CalendarWeekView({ singleDayCalendarItems, multiDayCalendarItems
 
       <div className="hidden flex-col border-b sm:flex lg:border-b-0">
         <div>
-          <MultiDayWeekSection selectedDate={selectedDate} multiDayCalendarItems={multiDayCalendarItems} />
+          <MultiDayWeekSection selectedDate={selectedDate} multiDayEvents={multiDayEvents} />
 
           {/* Week header */}
           <div className="relative z-20 flex border-b">
@@ -103,8 +103,8 @@ export function CalendarWeekView({ singleDayCalendarItems, multiDayCalendarItems
             <div className="relative flex-1 border-l">
               <div className="grid grid-cols-7 divide-x">
                 {weekDays.map((day, dayIndex) => {
-                  const dayItems = singleDayCalendarItems.filter(item => isSameDay(parseISO(item.startDate), day) || isSameDay(parseISO(item.endDate), day));
-                  const groupedItems = groupCalendarItems(dayItems);
+                  const dayEvents = singleDayEvents.filter(event => isSameDay(parseISO(event.startDate), day) || isSameDay(parseISO(event.endDate), day));
+                  const groupedEvents = groupEvents(dayEvents);
 
                   return (
                     <div key={dayIndex} className="relative">
@@ -115,16 +115,16 @@ export function CalendarWeekView({ singleDayCalendarItems, multiDayCalendarItems
                         </div>
                       ))}
 
-                      {groupedItems.map((group, groupIndex) =>
-                        group.map(item => {
-                          let style = getCalendarItemStyle(item, day, groupIndex, groupedItems.length);
-                          const hasOverlap = groupedItems.some(
+                      {groupedEvents.map((group, groupIndex) =>
+                        group.map(event => {
+                          let style = getEventStyle(event, day, groupIndex, groupedEvents.length);
+                          const hasOverlap = groupedEvents.some(
                             (otherGroup, otherIndex) =>
                               otherIndex !== groupIndex &&
-                              otherGroup.some(otherItem =>
+                              otherGroup.some(otherEvent =>
                                 areIntervalsOverlapping(
-                                  { start: parseISO(item.startDate), end: parseISO(item.endDate) },
-                                  { start: parseISO(otherItem.startDate), end: parseISO(otherItem.endDate) }
+                                  { start: parseISO(event.startDate), end: parseISO(event.endDate) },
+                                  { start: parseISO(otherEvent.startDate), end: parseISO(otherEvent.endDate) }
                                 )
                               )
                           );
@@ -132,8 +132,8 @@ export function CalendarWeekView({ singleDayCalendarItems, multiDayCalendarItems
                           if (!hasOverlap) style = { ...style, width: "100%", left: "0%" };
 
                           return (
-                            <div key={item.id} className="absolute p-1" style={style}>
-                              <CalendarItemWeekBadge calendarItem={item} />
+                            <div key={event.id} className="absolute p-1" style={style}>
+                              <EventBlock event={event} />
                             </div>
                           );
                         })

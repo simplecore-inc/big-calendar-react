@@ -6,7 +6,7 @@ export interface IUser {
   picturePath: string | null;
 }
 
-export interface ICalendarItem {
+export interface IEvent {
   id: number;
   startDate: string;
   endDate: string;

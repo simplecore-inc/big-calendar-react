@@ -1,5 +1,5 @@
 import type { TEventColor } from "@/calendar/types";
-import type { ICalendarItem, IUser } from "@/calendar/interfaces";
+import type { IEvent, IUser } from "@/calendar/interfaces";
 
 // ================================== //
 
@@ -119,8 +119,8 @@ const events = [
   "Home renovation meeting",
 ];
 
-const mockGenerator = (numberOfEvents: number): ICalendarItem[] => {
-  const result: ICalendarItem[] = [];
+const mockGenerator = (numberOfEvents: number): IEvent[] => {
+  const result: IEvent[] = [];
   let currentId = 1;
 
   // Calculate date range: 30 days before and after now
@@ -165,4 +165,4 @@ const mockGenerator = (numberOfEvents: number): ICalendarItem[] => {
   return result;
 };
 
-export const CALENDAR_ITENS_MOCK: ICalendarItem[] = mockGenerator(80);
+export const CALENDAR_ITENS_MOCK: IEvent[] = mockGenerator(80);

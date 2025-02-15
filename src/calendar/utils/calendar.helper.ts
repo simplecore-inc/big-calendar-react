@@ -16,7 +16,7 @@ import {
 } from "date-fns";
 
 import type { TCalendarView } from "@/calendar/types";
-import type { ICalendarItem } from "@/calendar/interfaces";
+import type { IEvent } from "@/calendar/interfaces";
 
 // ================ Header helper functions ================ //
 
@@ -44,12 +44,12 @@ export function navigateDate(date: Date, view: TCalendarView, direction: "previo
   return operations[view](date, 1);
 }
 
-export function getEventsCount(events: ICalendarItem[], date: Date, view: TCalendarView): number {
+export function getEventsCount(events: IEvent[], date: Date, view: TCalendarView): number {
   const compareFns = {
     day: isSameDay,
     week: isSameWeek,
     month: isSameMonth,
   };
 
-  return events.filter(item => compareFns[view](new Date(item.startDate), date)).length;
+  return events.filter(event => compareFns[view](new Date(event.startDate), date)).length;
 }

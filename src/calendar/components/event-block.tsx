@@ -6,7 +6,7 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 import { cn } from "@/utils/helpers/cn.helper";
 
 import type { HTMLAttributes } from "react";
-import type { ICalendarItem } from "@/calendar/interfaces";
+import type { IEvent } from "@/calendar/interfaces";
 import type { VariantProps } from "class-variance-authority";
 
 const calendarWeekEventCardVariants = cva(
@@ -38,18 +38,18 @@ const calendarWeekEventCardVariants = cva(
 );
 
 interface IProps extends HTMLAttributes<HTMLDivElement>, Omit<VariantProps<typeof calendarWeekEventCardVariants>, "color"> {
-  calendarItem: ICalendarItem;
+  event: IEvent;
 }
 
-export function CalendarItemWeekBadge({ calendarItem, className }: IProps) {
+export function EventBlock({ event, className }: IProps) {
   const { badgeVariant } = useCalendar();
 
-  const start = parseISO(calendarItem.startDate);
-  const end = parseISO(calendarItem.endDate);
+  const start = parseISO(event.startDate);
+  const end = parseISO(event.endDate);
   const durationInMinutes = differenceInMinutes(end, start);
   const heightInPixels = (durationInMinutes / 60) * 96 - 8;
 
-  const color = (badgeVariant === "dot" ? `${calendarItem.color}-dot` : calendarItem.color) as VariantProps<typeof calendarWeekEventCardVariants>["color"];
+  const color = (badgeVariant === "dot" ? `${event.color}-dot` : event.color) as VariantProps<typeof calendarWeekEventCardVariants>["color"];
 
   const calendarWeekEventCardClasses = cn(calendarWeekEventCardVariants({ color, className }), durationInMinutes < 35 && "py-0 justify-center");
 
@@ -63,7 +63,7 @@ export function CalendarItemWeekBadge({ calendarItem, className }: IProps) {
           </svg>
         )}
 
-        <p className="truncate font-semibold">{calendarItem.title}</p>
+        <p className="truncate font-semibold">{event.title}</p>
       </div>
 
       {durationInMinutes > 25 && (

@@ -8,19 +8,19 @@ import { TodayButton } from "@/calendar/components/header/today-button";
 import { DateNavigator } from "@/calendar/components/header/date-navigator";
 
 import type { TCalendarView } from "@/calendar/types";
-import type { ICalendarItem } from "@/calendar/interfaces";
+import type { IEvent } from "@/calendar/interfaces";
 
 interface IProps {
   view: TCalendarView;
-  calendarItens: ICalendarItem[];
+  events: IEvent[];
 }
 
-export function CalendarHeader({ view, calendarItens }: IProps) {
+export function CalendarHeader({ view, events }: IProps) {
   return (
     <div className="flex flex-col gap-4 border-b p-4 md:flex-row md:items-center md:justify-between">
       <div className="flex items-center gap-3">
         <TodayButton />
-        <DateNavigator view={view} calendarItens={calendarItens} />
+        <DateNavigator view={view} events={events} />
       </div>
 
       <div className="flex items-center justify-between gap-1.5">

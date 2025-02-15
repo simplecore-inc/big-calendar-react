@@ -4,7 +4,7 @@ import { cn } from "@/utils/helpers/cn.helper";
 
 import type { TEventColor } from "@/calendar/types";
 
-const bulletEventVariants = cva("size-2 rounded-full", {
+const eventBulletVariants = cva("size-2 rounded-full", {
   variants: {
     color: {
       blue: "bg-blue-600 dark:bg-blue-500",
@@ -21,6 +21,6 @@ const bulletEventVariants = cva("size-2 rounded-full", {
   },
 });
 
-export function CalendarItemBullet({ color, className }: { color: TEventColor; className: string }) {
-  return <div className={cn(bulletEventVariants({ color, className }))} />;
+export function EventBullet({ color, className }: { color: TEventColor; className: string }) {
+  return <div className={cn(eventBulletVariants({ color, className }))} />;
 }

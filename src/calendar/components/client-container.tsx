@@ -17,40 +17,40 @@ interface IProps {
 }
 
 export function ClientContainer({ view }: IProps) {
-  const { selectedDate, selectedUserId, calendarItems } = useCalendar();
+  const { selectedDate, selectedUserId, events } = useCalendar();
 
-  const filteredCalendarItens = useMemo(() => {
-    return calendarItems.filter(item => {
-      const itemStartDate = new Date(item.startDate);
-      const itemEndDate = new Date(item.endDate);
+  const filteredEvents = useMemo(() => {
+    return events.filter(event => {
+      const itemStartDate = new Date(event.startDate);
+      const itemEndDate = new Date(event.endDate);
 
       const monthStart = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
       const monthEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
 
       const isInSelectedMonth = itemStartDate <= monthEnd && itemEndDate >= monthStart;
-      const isUserMatch = selectedUserId === "all" || item.userId === selectedUserId;
+      const isUserMatch = selectedUserId === "all" || event.userId === selectedUserId;
       return isInSelectedMonth && isUserMatch;
     });
-  }, [selectedDate, selectedUserId, calendarItems]);
+  }, [selectedDate, selectedUserId, events]);
 
-  const singleDayItems = filteredCalendarItens.filter(calendarItem => {
-    const startDate = parseISO(calendarItem.startDate);
-    const endDate = parseISO(calendarItem.endDate);
+  const singleDayEvents = filteredEvents.filter(event => {
+    const startDate = parseISO(event.startDate);
+    const endDate = parseISO(event.endDate);
     return isSameDay(startDate, endDate);
   });
 
-  const multiDayItems = filteredCalendarItens.filter(calendarItem => {
-    const startDate = parseISO(calendarItem.startDate);
-    const endDate = parseISO(calendarItem.endDate);
+  const multiDayEvents = filteredEvents.filter(event => {
+    const startDate = parseISO(event.startDate);
+    const endDate = parseISO(event.endDate);
     return !isSameDay(startDate, endDate);
   });
 
   return (
     <div className="rounded-xl border">
-      <CalendarHeader view={view} calendarItens={filteredCalendarItens} />
-      {view === "month" && <CalendarMonthView singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
-      {view === "week" && <CalendarWeekView singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
-      {view === "day" && <CalendarDayView singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
+      <CalendarHeader view={view} events={filteredEvents} />
+      {view === "month" && <CalendarMonthView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
+      {view === "week" && <CalendarWeekView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
+      {view === "day" && <CalendarDayView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
     </div>
   );
 }

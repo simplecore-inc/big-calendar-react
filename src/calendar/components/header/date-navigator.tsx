@@ -10,14 +10,14 @@ import { Button } from "@/components/ui/button";
 import { getEventsCount, navigateDate, formatMonthRange, formatWeekRange } from "@/calendar/utils/calendar.helper";
 
 import type { TCalendarView } from "@/calendar/types";
-import type { ICalendarItem } from "@/calendar/interfaces";
+import type { IEvent } from "@/calendar/interfaces";
 
 interface IProps {
   view: TCalendarView;
-  calendarItens: ICalendarItem[];
+  events: IEvent[];
 }
 
-export function DateNavigator({ view, calendarItens }: IProps) {
+export function DateNavigator({ view, events }: IProps) {
   const { selectedDate, setSelectedDate } = useCalendar();
 
   const dateInfo = useMemo(
@@ -30,7 +30,7 @@ export function DateNavigator({ view, calendarItens }: IProps) {
   );
 
   // Memoize event count
-  const eventCount = useMemo(() => getEventsCount(calendarItens, selectedDate, view), [calendarItens, selectedDate, view]);
+  const eventCount = useMemo(() => getEventsCount(events, selectedDate, view), [events, selectedDate, view]);
 
   const handlePrevious = () => setSelectedDate(navigateDate(selectedDate, view, "previous"));
   const handleNext = () => setSelectedDate(navigateDate(selectedDate, view, "next"));

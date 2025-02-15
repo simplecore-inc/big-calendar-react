@@ -1,27 +1,27 @@
 import { parseISO, isWithinInterval, differenceInDays, startOfDay, endOfDay } from "date-fns";
 
-import { CalendarItemBadge } from "@/calendar/components/calendar-item-badge";
+import { MonthEventBadge } from "@/calendar/components/month-event-badge";
 
-import type { ICalendarItem } from "@/calendar/interfaces";
+import type { IEvent } from "@/calendar/interfaces";
 
 interface IProps {
   selectedDate: Date;
-  multiDayCalendarItems: ICalendarItem[];
+  multiDayEvents: IEvent[];
 }
 
-export function MultiDayDaySection({ selectedDate, multiDayCalendarItems }: IProps) {
+export function MultiDayDaySection({ selectedDate, multiDayEvents }: IProps) {
   const dayStart = startOfDay(selectedDate);
   const dayEnd = endOfDay(selectedDate);
 
-  const multiDayCalendarItemsInDay = multiDayCalendarItems
-    .filter(item => {
-      const itemStart = parseISO(item.startDate);
-      const itemEnd = parseISO(item.endDate);
+  const multiDayEventsInDay = multiDayEvents
+    .filter(event => {
+      const eventStart = parseISO(event.startDate);
+      const eventEnd = parseISO(event.endDate);
 
       const isOverlapping =
-        isWithinInterval(dayStart, { start: itemStart, end: itemEnd }) ||
-        isWithinInterval(dayEnd, { start: itemStart, end: itemEnd }) ||
-        (itemStart <= dayStart && itemEnd >= dayEnd);
+        isWithinInterval(dayStart, { start: eventStart, end: eventEnd }) ||
+        isWithinInterval(dayEnd, { start: eventStart, end: eventEnd }) ||
+        (eventStart <= dayStart && eventEnd >= dayEnd);
 
       return isOverlapping;
     })
@@ -31,29 +31,21 @@ export function MultiDayDaySection({ selectedDate, multiDayCalendarItems }: IPro
       return durationB - durationA;
     });
 
-  if (multiDayCalendarItemsInDay.length === 0) return null;
+  if (multiDayEventsInDay.length === 0) return null;
 
   return (
     <div className="flex border-b">
       <div className="w-18"></div>
       <div className="flex flex-1 flex-col gap-1 border-l py-1">
-        {multiDayCalendarItemsInDay.map(item => {
-          const itemStart = startOfDay(parseISO(item.startDate));
-          const itemEnd = startOfDay(parseISO(item.endDate));
+        {multiDayEventsInDay.map(event => {
+          const eventStart = startOfDay(parseISO(event.startDate));
+          const eventEnd = startOfDay(parseISO(event.endDate));
           const currentDate = startOfDay(selectedDate);
 
-          const itemTotalDays = differenceInDays(itemEnd, itemStart) + 1;
-          const itemCurrentDay = differenceInDays(currentDate, itemStart) + 1;
+          const eventTotalDays = differenceInDays(eventEnd, eventStart) + 1;
+          const eventCurrentDay = differenceInDays(currentDate, eventStart) + 1;
 
-          return (
-            <CalendarItemBadge
-              key={item.id}
-              calendarItem={item}
-              cellDate={selectedDate}
-              calendarItemCurrentDay={itemCurrentDay}
-              calendarItemTotalDays={itemTotalDays}
-            />
-          );
+          return <MonthEventBadge key={event.id} event={event} cellDate={selectedDate} eventCurrentDay={eventCurrentDay} eventTotalDays={eventTotalDays} />;
         })}
       </div>
     </div>

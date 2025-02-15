@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 
-import type { ICalendarItem, IUser } from "@/calendar/interfaces";
+import type { IEvent, IUser } from "@/calendar/interfaces";
 
 interface ICalendarContext {
   selectedDate: Date;
@@ -12,12 +12,12 @@ interface ICalendarContext {
   badgeVariant: "dot" | "colored";
   setBadgeVariant: (variant: "dot" | "colored") => void;
   users: IUser[];
-  calendarItems: ICalendarItem[];
+  events: IEvent[];
 }
 
 const CalendarContext = createContext({} as ICalendarContext);
 
-export function CalendarProvider({ children, users, calendarItems }: { children: React.ReactNode; users: IUser[]; calendarItems: ICalendarItem[] }) {
+export function CalendarProvider({ children, users, events }: { children: React.ReactNode; users: IUser[]; events: IEvent[] }) {
   const [badgeVariant, setBadgeVariant] = useState<"dot" | "colored">("dot");
 
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -30,7 +30,7 @@ export function CalendarProvider({ children, users, calendarItems }: { children:
 
   return (
     <CalendarContext.Provider
-      value={{ selectedDate, setSelectedDate: handleSelectDate, selectedUserId, setSelectedUserId, badgeVariant, setBadgeVariant, users, calendarItems }}
+      value={{ selectedDate, setSelectedDate: handleSelectDate, selectedUserId, setSelectedUserId, badgeVariant, setBadgeVariant, users, events }}
     >
       {children}
     </CalendarContext.Provider>

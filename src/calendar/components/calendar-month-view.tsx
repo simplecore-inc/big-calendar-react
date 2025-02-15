@@ -2,19 +2,19 @@ import { isToday, parseISO, isSameDay, differenceInDays, startOfDay, startOfMont
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { CalendarItemBadge } from "@/calendar/components/calendar-item-badge";
-import { CalendarItemBullet } from "@/calendar/components/calendar-item-bullet";
+import { MonthEventBadge } from "@/calendar/components/month-event-badge";
+import { EventBullet } from "@/calendar/components/event-bullet";
 
 import { cn } from "@/utils/helpers/cn.helper";
 
-import type { ICalendarItem } from "@/calendar/interfaces";
+import type { IEvent } from "@/calendar/interfaces";
 
 interface IProps {
-  singleDayCalendarItems: ICalendarItem[];
-  multiDayCalendarItems: ICalendarItem[];
+  singleDayEvents: IEvent[];
+  multiDayEvents: IEvent[];
 }
 
-export function CalendarMonthView({ singleDayCalendarItems, multiDayCalendarItems }: IProps) {
+export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate } = useCalendar();
 
   // ================ Logic to mount the calendar and it's cells ================ //
@@ -49,19 +49,19 @@ export function CalendarMonthView({ singleDayCalendarItems, multiDayCalendarItem
 
   const allCells = [...prevMonthCells, ...currentMonthCells, ...nextMonthCells];
 
-  // ================ Logic to fill the calendar items in the cells ================ //
-  const calculateCalendarItemPositions = (multiDay: ICalendarItem[], singleDay: ICalendarItem[]) => {
+  // ================ Logic to add the events to the calendar cells ================ //
+  const calculateEventPositions = (multiDay: IEvent[], singleDay: IEvent[]) => {
     const monthStart = startOfMonth(selectedDate);
     const monthEnd = endOfMonth(selectedDate);
 
-    const calendarItemPositions: { [key: string]: number } = {};
+    const eventPositions: { [key: string]: number } = {};
     const occupiedPositions: { [key: string]: boolean[] } = {};
 
     eachDayOfInterval({ start: monthStart, end: monthEnd }).forEach(day => {
       occupiedPositions[day.toISOString()] = [false, false, false];
     });
 
-    const sortedCalendarItems = [
+    const sortedEvents = [
       ...multiDay.sort((a, b) => {
         const aDuration = differenceInDays(parseISO(a.endDate), parseISO(a.startDate));
         const bDuration = differenceInDays(parseISO(b.endDate), parseISO(b.startDate));
@@ -70,19 +70,19 @@ export function CalendarMonthView({ singleDayCalendarItems, multiDayCalendarItem
       ...singleDay.sort((a, b) => parseISO(a.startDate).getTime() - parseISO(b.startDate).getTime()),
     ];
 
-    sortedCalendarItems.forEach(calendarItem => {
-      const itemStart = parseISO(calendarItem.startDate);
-      const itemEnd = parseISO(calendarItem.endDate);
-      const itemDays = eachDayOfInterval({
-        start: itemStart < monthStart ? monthStart : itemStart,
-        end: itemEnd > monthEnd ? monthEnd : itemEnd,
+    sortedEvents.forEach(event => {
+      const eventStart = parseISO(event.startDate);
+      const eventEnd = parseISO(event.endDate);
+      const eventDays = eachDayOfInterval({
+        start: eventStart < monthStart ? monthStart : eventStart,
+        end: eventEnd > monthEnd ? monthEnd : eventEnd,
       });
 
       let position = -1;
 
       for (let i = 0; i < 3; i++) {
         if (
-          itemDays.every(day => {
+          eventDays.every(day => {
             const dayPositions = occupiedPositions[startOfDay(day).toISOString()];
             return dayPositions && !dayPositions[i];
           })
@@ -93,31 +93,31 @@ export function CalendarMonthView({ singleDayCalendarItems, multiDayCalendarItem
       }
 
       if (position !== -1) {
-        itemDays.forEach(day => {
+        eventDays.forEach(day => {
           const dayKey = startOfDay(day).toISOString();
           occupiedPositions[dayKey][position] = true;
         });
-        calendarItemPositions[calendarItem.id] = position;
+        eventPositions[event.id] = position;
       }
     });
 
-    return calendarItemPositions;
+    return eventPositions;
   };
 
-  const calendarItemPositions = calculateCalendarItemPositions(multiDayCalendarItems, singleDayCalendarItems);
+  const eventPositions = calculateEventPositions(multiDayEvents, singleDayEvents);
 
-  const getCalendarItemsForDate = (date: Date) => {
-    const calendarItemsForDate = [...multiDayCalendarItems, ...singleDayCalendarItems].filter(calendarItem => {
-      const calendarItemStart = parseISO(calendarItem.startDate);
-      const calendarItemEnd = parseISO(calendarItem.endDate);
-      return (date >= calendarItemStart && date <= calendarItemEnd) || isSameDay(date, calendarItemStart) || isSameDay(date, calendarItemEnd);
+  const getEventsForDate = (date: Date) => {
+    const eventsForDate = [...multiDayEvents, ...singleDayEvents].filter(event => {
+      const eventStart = parseISO(event.startDate);
+      const eventEnd = parseISO(event.endDate);
+      return (date >= eventStart && date <= eventEnd) || isSameDay(date, eventStart) || isSameDay(date, eventEnd);
     });
 
-    return calendarItemsForDate
-      .map(calendarItem => ({
-        ...calendarItem,
-        position: calendarItemPositions[calendarItem.id] ?? -1,
-        isMultiDay: multiDayCalendarItems.includes(calendarItem),
+    return eventsForDate
+      .map(event => ({
+        ...event,
+        position: eventPositions[event.id] ?? -1,
+        isMultiDay: multiDayEvents.includes(event),
       }))
       .sort((a, b) => {
         if (a.isMultiDay && !b.isMultiDay) return -1;
@@ -138,7 +138,7 @@ export function CalendarMonthView({ singleDayCalendarItems, multiDayCalendarItem
 
       <div className="grid grid-cols-7 overflow-hidden border-b lg:border-b-0">
         {allCells.map(({ day, currentMonth, date }, index) => {
-          const cellCalendarItems = getCalendarItemsForDate(date);
+          const cellEvents = getEventsForDate(date);
 
           return (
             <div key={date.toISOString()} className={cn("flex flex-col gap-1 py-1.5 lg:py-2", index > 6 && "border-t", index % 7 !== 0 && "border-l")}>
@@ -154,15 +154,15 @@ export function CalendarMonthView({ singleDayCalendarItems, multiDayCalendarItem
 
               <div className={cn("flex h-6 gap-1 px-2 lg:h-[94px] lg:flex-col lg:gap-2 lg:px-0", !currentMonth && "opacity-50")}>
                 {[0, 1, 2].map(position => {
-                  const calendarItem = cellCalendarItems.find(e => e.position === position);
-                  const calendarItemKey = calendarItem ? `calendar-item-${calendarItem.id}-${position}` : `empty-${position}`;
+                  const event = cellEvents.find(e => e.position === position);
+                  const eventKey = event ? `event-${event.id}-${position}` : `empty-${position}`;
 
                   return (
-                    <div key={calendarItemKey} className="lg:flex-1">
-                      {calendarItem && (
+                    <div key={eventKey} className="lg:flex-1">
+                      {event && (
                         <>
-                          <CalendarItemBullet className="lg:hidden" color={calendarItem.color} />
-                          <CalendarItemBadge className="hidden lg:flex" calendarItem={calendarItem} cellDate={startOfDay(date)} />
+                          <EventBullet className="lg:hidden" color={event.color} />
+                          <MonthEventBadge className="hidden lg:flex" event={event} cellDate={startOfDay(date)} />
                         </>
                       )}
                     </div>
@@ -171,10 +171,10 @@ export function CalendarMonthView({ singleDayCalendarItems, multiDayCalendarItem
               </div>
 
               <p className={cn("h-4.5 px-1.5 text-xs font-semibold text-t-quaternary", !currentMonth && "opacity-50")}>
-                {cellCalendarItems.length > 3 && (
+                {cellEvents.length > 3 && (
                   <>
-                    <span className="sm:hidden">+{cellCalendarItems.length - 3}</span>
-                    <span className="hidden sm:inline"> {cellCalendarItems.length - 3} more...</span>
+                    <span className="sm:hidden">+{cellEvents.length - 3}</span>
+                    <span className="hidden sm:inline"> {cellEvents.length - 3} more...</span>
                   </>
                 )}
               </p>

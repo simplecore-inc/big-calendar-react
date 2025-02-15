@@ -6,9 +6,9 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 import { cn } from "@/utils/helpers/cn.helper";
 
 import type { VariantProps } from "class-variance-authority";
-import type { ICalendarItem } from "@/calendar/interfaces";
+import type { IEvent } from "@/calendar/interfaces";
 
-const calendarItemBadgeVariants = cva(
+const eventBadgeVariants = cva(
   "mx-1 flex size-auto h-6.5 select-none items-center justify-between gap-1.5 truncate whitespace-nowrap rounded-md border px-2 text-xs",
   {
     variants: {
@@ -42,25 +42,25 @@ const calendarItemBadgeVariants = cva(
   }
 );
 
-interface IProps extends Omit<VariantProps<typeof calendarItemBadgeVariants>, "color" | "multiDayPosition"> {
-  calendarItem: ICalendarItem;
+interface IProps extends Omit<VariantProps<typeof eventBadgeVariants>, "color" | "multiDayPosition"> {
+  event: IEvent;
   cellDate: Date;
-  calendarItemCurrentDay?: number;
-  calendarItemTotalDays?: number;
+  eventCurrentDay?: number;
+  eventTotalDays?: number;
   className?: string;
 }
 
-export function CalendarItemBadge({ calendarItem, cellDate, calendarItemCurrentDay, calendarItemTotalDays, className }: IProps) {
+export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDays, className }: IProps) {
   const { badgeVariant } = useCalendar();
 
-  const itemStart = startOfDay(parseISO(calendarItem.startDate));
-  const itemEnd = endOfDay(parseISO(calendarItem.endDate));
+  const itemStart = startOfDay(parseISO(event.startDate));
+  const itemEnd = endOfDay(parseISO(event.endDate));
 
   if (cellDate < itemStart || cellDate > itemEnd) return null;
 
   let position: "first" | "middle" | "last" | "none" | undefined;
 
-  if (calendarItemCurrentDay && calendarItemTotalDays) {
+  if (eventCurrentDay && eventTotalDays) {
     position = "none";
   } else if (isSameDay(itemStart, itemEnd)) {
     position = "none";
@@ -74,13 +74,13 @@ export function CalendarItemBadge({ calendarItem, cellDate, calendarItemCurrentD
 
   const renderBadgeText = ["first", "none"].includes(position);
 
-  const color = (badgeVariant === "dot" ? `${calendarItem.color}-dot` : calendarItem.color) as VariantProps<typeof calendarItemBadgeVariants>["color"];
+  const color = (badgeVariant === "dot" ? `${event.color}-dot` : event.color) as VariantProps<typeof eventBadgeVariants>["color"];
 
-  const calendarItemBadgeClasses = cn(calendarItemBadgeVariants({ color, multiDayPosition: position, className }));
+  const eventBadgeClasses = cn(eventBadgeVariants({ color, multiDayPosition: position, className }));
 
   return (
     // TO DO: implement dialog
-    <div className={calendarItemBadgeClasses}>
+    <div className={eventBadgeClasses}>
       <div className="flex items-center gap-1.5 truncate">
         {!["middle", "last"].includes(position) && badgeVariant === "dot" && (
           <svg width="8" height="8" viewBox="0 0 8 8" className="shrink-0">
@@ -90,17 +90,17 @@ export function CalendarItemBadge({ calendarItem, cellDate, calendarItemCurrentD
 
         {renderBadgeText && (
           <p className="flex-1 truncate font-semibold">
-            {calendarItemCurrentDay && (
+            {eventCurrentDay && (
               <span className="text-xs">
-                Day {calendarItemCurrentDay} of {calendarItemTotalDays} •{" "}
+                Day {eventCurrentDay} of {eventTotalDays} •{" "}
               </span>
             )}
-            {calendarItem.title}
+            {event.title}
           </p>
         )}
       </div>
 
-      {renderBadgeText && <span>{format(new Date(calendarItem.startDate), "HH:mm")}</span>}
+      {renderBadgeText && <span>{format(new Date(event.startDate), "HH:mm")}</span>}
     </div>
   );
 }

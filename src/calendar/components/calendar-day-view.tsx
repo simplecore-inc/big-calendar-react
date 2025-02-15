@@ -8,21 +8,21 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { CalendarTimeline } from "@/calendar/components/calendar-time-line";
 import { MultiDayDaySection } from "@/calendar/components/multi-day-day-section";
-import { CalendarItemWeekBadge } from "@/calendar/components/calendar-item-week-badge";
+import { EventBlock } from "@/calendar/components/event-block";
 
-import type { ICalendarItem } from "@/calendar/interfaces";
+import type { IEvent } from "@/calendar/interfaces";
 
 interface IProps {
-  singleDayCalendarItems: ICalendarItem[];
-  multiDayCalendarItems: ICalendarItem[];
+  singleDayEvents: IEvent[];
+  multiDayEvents: IEvent[];
 }
 
-export function CalendarDayView({ singleDayCalendarItems, multiDayCalendarItems }: IProps) {
+export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate, setSelectedDate, users } = useCalendar();
 
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
-  const getCurrentEvent = (events: ICalendarItem[]) => {
+  const getCurrentEvent = (events: IEvent[]) => {
     const now = new Date();
 
     return (
@@ -35,10 +35,10 @@ export function CalendarDayView({ singleDayCalendarItems, multiDayCalendarItems 
     );
   };
 
-  const currentEvents = getCurrentEvent(singleDayCalendarItems);
+  const currentEvents = getCurrentEvent(singleDayEvents);
 
   // ================ Logic to fill the calendar with events ================ //
-  const getEventStyle = (event: ICalendarItem, groupIndex: number, groupSize: number) => {
+  const getEventStyle = (event: IEvent, groupIndex: number, groupSize: number) => {
     const startDate = parseISO(event.startDate);
     const dayStart = new Date(selectedDate.setHours(0, 0, 0, 0));
     const eventStart = startDate < dayStart ? dayStart : startDate;
@@ -51,9 +51,9 @@ export function CalendarDayView({ singleDayCalendarItems, multiDayCalendarItems 
     return { top: `${top}%`, width: `${width}%`, left: `${left}%` };
   };
 
-  const groupEvents = (dayEvents: ICalendarItem[]) => {
+  const groupEvents = (dayEvents: IEvent[]) => {
     const sortedEvents = dayEvents.sort((a, b) => parseISO(a.startDate).getTime() - parseISO(b.startDate).getTime());
-    const groups: ICalendarItem[][] = [];
+    const groups: IEvent[][] = [];
 
     for (const event of sortedEvents) {
       const eventStart = parseISO(event.startDate);
@@ -76,7 +76,7 @@ export function CalendarDayView({ singleDayCalendarItems, multiDayCalendarItems 
     return groups;
   };
 
-  const dayEvents = singleDayCalendarItems.filter(event => {
+  const dayEvents = singleDayEvents.filter(event => {
     const eventDate = parseISO(event.startDate);
     return (
       eventDate.getDate() === selectedDate.getDate() &&
@@ -91,7 +91,7 @@ export function CalendarDayView({ singleDayCalendarItems, multiDayCalendarItems 
     <div className="flex border-b lg:border-b-0">
       <div className="flex flex-1 flex-col">
         <div>
-          <MultiDayDaySection selectedDate={selectedDate} multiDayCalendarItems={multiDayCalendarItems} />
+          <MultiDayDaySection selectedDate={selectedDate} multiDayEvents={multiDayEvents} />
 
           {/* Day header */}
           <div className="relative z-20 flex border-b">
@@ -143,7 +143,7 @@ export function CalendarDayView({ singleDayCalendarItems, multiDayCalendarItems 
 
                     return (
                       <div key={event.id} className="absolute p-1" style={style}>
-                        <CalendarItemWeekBadge calendarItem={event} />
+                        <EventBlock event={event} />
                       </div>
                     );
                   })
@@ -176,12 +176,12 @@ export function CalendarDayView({ singleDayCalendarItems, multiDayCalendarItems 
           {currentEvents.length > 0 && (
             <ScrollArea className="h-[422px] px-4" type="always">
               <div className="space-y-6 pb-4">
-                {currentEvents.map(item => {
-                  const user = users.find(user => user.id === item.userId);
+                {currentEvents.map(event => {
+                  const user = users.find(user => user.id === event.userId);
 
                   return (
-                    <div key={item.id} className="space-y-1.5">
-                      <p className="line-clamp-2 text-sm font-semibold">{item.title}</p>
+                    <div key={event.id} className="space-y-1.5">
+                      <p className="line-clamp-2 text-sm font-semibold">{event.title}</p>
 
                       {user && (
                         <div className="flex items-center gap-1.5">
@@ -198,7 +198,7 @@ export function CalendarDayView({ singleDayCalendarItems, multiDayCalendarItems 
                       <div className="flex items-center gap-1.5">
                         <Clock className="size-4 text-t-quinary" />
                         <span className="text-sm text-t-tertiary">
-                          {format(parseISO(item.startDate), "hh:mm a")} - {format(parseISO(item.endDate), "hh:mm a")}
+                          {format(parseISO(event.startDate), "hh:mm a")} - {format(parseISO(event.endDate), "hh:mm a")}
                         </span>
                       </div>
                     </div>

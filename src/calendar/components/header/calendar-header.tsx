@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { Columns, Grid3X3, List } from "lucide-react";
+import { Columns, Grid3X3, List, Plus } from "lucide-react";
 
 import { Button, ButtonGroup } from "@/components/ui/button";
 
 import { UserSelect } from "@/calendar/components/header/user-select";
 import { TodayButton } from "@/calendar/components/header/today-button";
 import { DateNavigator } from "@/calendar/components/header/date-navigator";
+import { AddEventDialog } from "@/calendar/components/dialogs/add-event-dialog";
 
 import type { IEvent } from "@/calendar/interfaces";
 import type { TCalendarView } from "@/calendar/types";
@@ -45,6 +46,13 @@ export function CalendarHeader({ view, events }: IProps) {
         </ButtonGroup>
 
         <UserSelect />
+
+        <AddEventDialog>
+          <Button size="sm">
+            <Plus />
+            Add Event
+          </Button>
+        </AddEventDialog>
       </div>
     </div>
   );

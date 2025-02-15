@@ -6,7 +6,7 @@ import type { IUser } from "@/calendar/interfaces";
 
 interface ICalendarContext {
   selectedDate: Date;
-  setSelectedDate: (date: Date) => void;
+  setSelectedDate: (date: Date | undefined) => void;
   selectedUserId: IUser["id"] | "all";
   setSelectedUserId: (userId: IUser["id"] | "all") => void;
   badgeVariant: "dot" | "colored";
@@ -21,8 +21,13 @@ export function CalendarProvider({ children }: { children: React.ReactNode }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedUserId, setSelectedUserId] = useState<IUser["id"] | "all">("all");
 
+  const handleSelectDate = (date: Date | undefined) => {
+    if (!date) return;
+    setSelectedDate(date);
+  };
+
   return (
-    <CalendarContext.Provider value={{ selectedDate, setSelectedDate, selectedUserId, setSelectedUserId, badgeVariant, setBadgeVariant }}>
+    <CalendarContext.Provider value={{ selectedDate, setSelectedDate: handleSelectDate, selectedUserId, setSelectedUserId, badgeVariant, setBadgeVariant }}>
       {children}
     </CalendarContext.Provider>
   );

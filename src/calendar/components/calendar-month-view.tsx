@@ -1,19 +1,22 @@
 import { isToday, parseISO, isSameDay, differenceInDays, startOfDay, startOfMonth, endOfMonth, eachDayOfInterval } from "date-fns";
 
-import { cn } from "@/utils/helpers/cn.helper";
+import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { CalendarItemBadge } from "@/calendar/components/calendar-item-badge";
 import { CalendarItemBullet } from "@/calendar/components/calendar-item-bullet";
 
+import { cn } from "@/utils/helpers/cn.helper";
+
 import type { ICalendarItem } from "@/calendar/interfaces";
 
 interface IProps {
-  selectedDate: Date;
   singleDayCalendarItems: ICalendarItem[];
   multiDayCalendarItems: ICalendarItem[];
 }
 
-export function CalendarMonthView({ selectedDate, singleDayCalendarItems, multiDayCalendarItems }: IProps) {
+export function CalendarMonthView({ singleDayCalendarItems, multiDayCalendarItems }: IProps) {
+  const { selectedDate } = useCalendar();
+
   // ================ Logic to mount the calendar and it's cells ================ //
   const currentYear = selectedDate.getFullYear();
   const currentMonth = selectedDate.getMonth();

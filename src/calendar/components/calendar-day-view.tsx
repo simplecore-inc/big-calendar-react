@@ -21,13 +21,24 @@ interface IProps {
 export function CalendarDayView({ users, singleDayCalendarItems, multiDayCalendarItems }: IProps) {
   const { selectedDate, setSelectedDate } = useCalendar();
 
-  const handleSelect = (value: Date | undefined) => {
-    if (!value) return;
-    setSelectedDate(value);
-  };
-
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
+  const getCurrentEvent = (events: ICalendarItem[]) => {
+    const now = new Date();
+
+    return (
+      events.filter(event =>
+        isWithinInterval(now, {
+          start: parseISO(event.startDate),
+          end: parseISO(event.endDate),
+        })
+      ) || null
+    );
+  };
+
+  const currentEvents = getCurrentEvent(singleDayCalendarItems);
+
+  // ================ Logic to fill the calendar with events ================ //
   const getEventStyle = (event: ICalendarItem, groupIndex: number, groupSize: number) => {
     const startDate = parseISO(event.startDate);
     const dayStart = new Date(selectedDate.setHours(0, 0, 0, 0));
@@ -77,21 +88,6 @@ export function CalendarDayView({ users, singleDayCalendarItems, multiDayCalenda
 
   const groupedEvents = groupEvents(dayEvents);
 
-  const getCurrentEvent = (events: ICalendarItem[]) => {
-    const now = new Date();
-
-    return (
-      events.filter(event =>
-        isWithinInterval(now, {
-          start: parseISO(event.startDate),
-          end: parseISO(event.endDate),
-        })
-      ) || null
-    );
-  };
-
-  const currentEvents = getCurrentEvent(singleDayCalendarItems);
-
   return (
     <div className="flex border-b lg:border-b-0">
       <div className="flex flex-1 flex-col">
@@ -101,12 +97,9 @@ export function CalendarDayView({ users, singleDayCalendarItems, multiDayCalenda
           {/* Day header */}
           <div className="relative z-20 flex border-b">
             <div className="w-18"></div>
-            {/* TO DO: remove this div */}
-            <div className="flex-1 border-l py-2 text-center">
-              <span className="text-xs font-medium text-t-quaternary">
-                {format(selectedDate, "EE")} <span className="font-semibold text-t-secondary">{format(selectedDate, "d")}</span>
-              </span>
-            </div>
+            <span className="flex-1 border-l py-2 text-center text-xs font-medium text-t-quaternary">
+              {format(selectedDate, "EE")} <span className="font-semibold text-t-secondary">{format(selectedDate, "d")}</span>
+            </span>
           </div>
         </div>
 
@@ -165,7 +158,7 @@ export function CalendarDayView({ users, singleDayCalendarItems, multiDayCalenda
       </div>
 
       <div className="hidden w-72 divide-y border-l md:block">
-        <DayPicker className="mx-auto w-fit" mode="single" selected={selectedDate} onSelect={handleSelect} initialFocus />
+        <DayPicker className="mx-auto w-fit" mode="single" selected={selectedDate} onSelect={setSelectedDate} initialFocus />
 
         <div className="flex-1 space-y-3">
           {currentEvents.length > 0 ? (

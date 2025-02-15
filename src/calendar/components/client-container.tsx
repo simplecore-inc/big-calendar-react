@@ -52,8 +52,8 @@ export function ClientContainer({ view, calendarItems, users }: IProps) {
     <div className="mx-auto flex max-w-screen-2xl flex-col gap-4 px-8">
       <div className="rounded-xl border">
         <CalendarHeader view={view} calendarItens={filteredCalendarItens} users={users} />
-        {view === "month" && <CalendarMonthView selectedDate={selectedDate} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
-        {view === "week" && <CalendarWeekView selectedDate={selectedDate} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
+        {view === "month" && <CalendarMonthView singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
+        {view === "week" && <CalendarWeekView singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
         {view === "day" && <CalendarDayView users={users} singleDayCalendarItems={singleDayItems} multiDayCalendarItems={multiDayItems} />}
       </div>
 

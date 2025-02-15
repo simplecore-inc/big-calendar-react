@@ -1,5 +1,7 @@
 import { startOfWeek, addDays, format, parseISO, isSameDay, differenceInMinutes, areIntervalsOverlapping } from "date-fns";
 
+import { useCalendar } from "@/calendar/contexts/calendar-context";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { CalendarTimeline } from "@/calendar/components/calendar-time-line";
@@ -9,12 +11,13 @@ import { CalendarItemWeekBadge } from "@/calendar/components/calendar-item-week-
 import type { ICalendarItem } from "@/calendar/interfaces";
 
 interface IProps {
-  selectedDate: Date;
   singleDayCalendarItems: ICalendarItem[];
   multiDayCalendarItems: ICalendarItem[];
 }
 
-export function CalendarWeekView({ selectedDate, singleDayCalendarItems, multiDayCalendarItems }: IProps) {
+export function CalendarWeekView({ singleDayCalendarItems, multiDayCalendarItems }: IProps) {
+  const { selectedDate } = useCalendar();
+
   // ================ Logic to mount the calendar and it's cells ================ //
   const weekStart = startOfWeek(selectedDate);
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));

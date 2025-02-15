@@ -11,6 +11,7 @@ import { WeekViewMultiDayEventsRow } from "@/calendar/components/week-and-day-vi
 import { groupEvents, getEventBlockStyle } from "@/calendar/helpers";
 
 import type { IEvent } from "@/calendar/interfaces";
+import { AddEventDialog } from "@/calendar/components/dialogs/add-event-dialog";
 
 interface IProps {
   singleDayEvents: IEvent[];
@@ -23,12 +24,6 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
   const weekStart = startOfWeek(selectedDate);
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
   const hours = Array.from({ length: 24 }, (_, i) => i);
-
-  const handleTimeSlotClick = (day: Date, hour: number, minutes: number) => {
-    const selectedDateTime = new Date(day);
-    selectedDateTime.setHours(hour, minutes, 0, 0);
-    // TODO: Open add event dialog
-  };
 
   return (
     <>
@@ -79,15 +74,15 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                       {hours.map((hour, index) => (
                         <div key={hour} className="relative" style={{ height: "96px" }}>
                           {index !== 0 && <div className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>}
-                          <div
-                            onClick={() => handleTimeSlotClick(day, hour, 0)}
-                            className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover"
-                          />
+                          <AddEventDialog startDate={day} startTime={{ hour, minute: 0 }}>
+                            <div className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover" />
+                          </AddEventDialog>
+
                           <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed border-b-tertiary"></div>
-                          <div
-                            onClick={() => handleTimeSlotClick(day, hour, 30)}
-                            className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover"
-                          />
+
+                          <AddEventDialog startDate={day} startTime={{ hour, minute: 30 }}>
+                            <div className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover" />
+                          </AddEventDialog>
                         </div>
                       ))}
 

@@ -16,13 +16,13 @@ import { SingleDayPickerInput } from "@/components/ui/single-day-picker-input";
 
 import { eventSchema } from "@/calendar/schemas";
 
-import type { TimeValue } from "@react-types/datepicker";
+import type { TimeValue } from "react-aria-components";
 import type { TEventFormData } from "@/calendar/schemas";
 
 interface IProps {
   children: React.ReactNode;
   startDate?: Date;
-  startTime?: TimeValue;
+  startTime?: { hour: number; minute: number };
 }
 
 export function AddEventDialog({ children, startDate, startTime }: IProps) {
@@ -33,8 +33,8 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
     defaultValues: {
       title: "",
       description: "",
-      startDate: startDate ?? undefined,
-      startTime: startTime ?? undefined,
+      startDate: typeof startDate !== "undefined" ? startDate : undefined,
+      startTime: typeof startTime !== "undefined" ? startTime : undefined,
     },
   });
 

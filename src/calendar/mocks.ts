@@ -6,7 +6,7 @@ import type { IEvent, IUser } from "@/calendar/interfaces";
 export const USERS_MOCK: IUser[] = [
   {
     id: "f3b035ac-49f7-4e92-a715-35680bf63175",
-    name: "Michael Johnson",
+    name: "Michael Doe",
     picturePath: null,
   },
   {
@@ -123,18 +123,30 @@ const mockGenerator = (numberOfEvents: number): IEvent[] => {
   const result: IEvent[] = [];
   let currentId = 1;
 
-  // Calculate date range: 30 days before and after now
+  // Date range: 30 days before and after now
   const now = new Date();
   const startRange = new Date(now);
   startRange.setDate(now.getDate() - 30);
   const endRange = new Date(now);
   endRange.setDate(now.getDate() + 30);
 
-  for (let i = 0; i < numberOfEvents; i++) {
-    // Determine if this is a multi-day event (5% chance)
-    const isMultiDay = Math.random() < 0.05;
+  // Create an event happening now
+  const currentEvent = {
+    id: currentId++,
+    startDate: new Date(now.getTime() - 30 * 60000).toISOString(),
+    endDate: new Date(now.getTime() + 30 * 60000).toISOString(),
+    title: events[Math.floor(Math.random() * events.length)],
+    color: colors[Math.floor(Math.random() * colors.length)],
+    userId: userIds[Math.floor(Math.random() * userIds.length)],
+  };
 
-    // Generate random start date within range
+  result.push(currentEvent);
+
+  // Generate the remaining events
+  for (let i = 0; i < numberOfEvents - 1; i++) {
+    // Determine if this is a multi-day event (10% chance)
+    const isMultiDay = Math.random() < 0.1;
+
     const startDate = new Date(startRange.getTime() + Math.random() * (endRange.getTime() - startRange.getTime()));
 
     // Set time between 8 AM and 8 PM

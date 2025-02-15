@@ -1,3 +1,5 @@
+"use client";
+
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { Select } from "@/components/ui/select";

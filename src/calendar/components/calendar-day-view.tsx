@@ -10,16 +10,15 @@ import { CalendarTimeline } from "@/calendar/components/calendar-time-line";
 import { MultiDayDaySection } from "@/calendar/components/multi-day-day-section";
 import { CalendarItemWeekBadge } from "@/calendar/components/calendar-item-week-badge";
 
-import type { ICalendarItem, IUser } from "@/calendar/interfaces";
+import type { ICalendarItem } from "@/calendar/interfaces";
 
 interface IProps {
-  users: IUser[];
   singleDayCalendarItems: ICalendarItem[];
   multiDayCalendarItems: ICalendarItem[];
 }
 
-export function CalendarDayView({ users, singleDayCalendarItems, multiDayCalendarItems }: IProps) {
-  const { selectedDate, setSelectedDate } = useCalendar();
+export function CalendarDayView({ singleDayCalendarItems, multiDayCalendarItems }: IProps) {
+  const { selectedDate, setSelectedDate, users } = useCalendar();
 
   const hours = Array.from({ length: 24 }, (_, i) => i);
 

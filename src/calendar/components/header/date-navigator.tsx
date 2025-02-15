@@ -7,10 +7,10 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-import { getEventsCount, navigateDate, formatMonthRange, formatWeekRange } from "@/calendar/utils/calendar.helper";
+import { getEventsCount, navigateDate, formatMonthRange, formatWeekRange } from "@/calendar/helpers";
 
-import type { TCalendarView } from "@/calendar/types";
 import type { IEvent } from "@/calendar/interfaces";
+import type { TCalendarView } from "@/calendar/types";
 
 interface IProps {
   view: TCalendarView;

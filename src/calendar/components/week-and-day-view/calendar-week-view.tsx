@@ -4,9 +4,9 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-import { CalendarTimeline } from "@/calendar/components/calendar-time-line";
-import { MultiDayWeekSection } from "@/calendar/components/multi-day-week-section";
-import { EventBlock } from "@/calendar/components/event-block";
+import { EventBlock } from "@/calendar/components/week-and-day-view/event-block";
+import { CalendarTimeline } from "@/calendar/components/week-and-day-view/calendar-time-line";
+import { WeekViewMultiDayEventsRow } from "@/calendar/components/week-and-day-view/week-view-multi-day-events-row";
 
 import type { IEvent } from "@/calendar/interfaces";
 
@@ -71,7 +71,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
 
       <div className="hidden flex-col border-b sm:flex lg:border-b-0">
         <div>
-          <MultiDayWeekSection selectedDate={selectedDate} multiDayEvents={multiDayEvents} />
+          <WeekViewMultiDayEventsRow selectedDate={selectedDate} multiDayEvents={multiDayEvents} />
 
           {/* Week header */}
           <div className="relative z-20 flex border-b">

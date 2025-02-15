@@ -5,10 +5,10 @@ import { isSameDay, parseISO } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { CalendarDayView } from "@/calendar/components/calendar-day-view";
-import { CalendarWeekView } from "@/calendar/components/calendar-week-view";
 import { CalendarHeader } from "@/calendar/components/header/calendar-header";
-import { CalendarMonthView } from "@/calendar/components/calendar-month-view";
+import { CalendarMonthView } from "@/calendar/components/month-view/calendar-month-view";
+import { CalendarDayView } from "@/calendar/components/week-and-day-view/calendar-day-view";
+import { CalendarWeekView } from "@/calendar/components/week-and-day-view/calendar-week-view";
 
 import type { TCalendarView } from "@/calendar/types";
 

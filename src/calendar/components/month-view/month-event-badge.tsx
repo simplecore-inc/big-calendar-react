@@ -5,8 +5,8 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { cn } from "@/utils/helpers/cn.helper";
 
-import type { VariantProps } from "class-variance-authority";
 import type { IEvent } from "@/calendar/interfaces";
+import type { VariantProps } from "class-variance-authority";
 
 const eventBadgeVariants = cva(
   "mx-1 flex size-auto h-6.5 select-none items-center justify-between gap-1.5 truncate whitespace-nowrap rounded-md border px-2 text-xs",

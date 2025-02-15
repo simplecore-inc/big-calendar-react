@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { parseISO, startOfDay, startOfWeek, endOfWeek, addDays, differenceInDays, isBefore, isAfter } from "date-fns";
 
-import { MonthEventBadge } from "@/calendar/components/month-event-badge";
+import { MonthEventBadge } from "@/calendar/components/month-view/month-event-badge";
 
 import type { IEvent } from "@/calendar/interfaces";
 
@@ -10,7 +10,7 @@ interface IProps {
   multiDayEvents: IEvent[];
 }
 
-export function MultiDayWeekSection({ selectedDate, multiDayEvents }: IProps) {
+export function WeekViewMultiDayEventsRow({ selectedDate, multiDayEvents }: IProps) {
   const weekStart = startOfWeek(selectedDate);
   const weekEnd = endOfWeek(selectedDate);
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));

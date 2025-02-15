@@ -2,8 +2,8 @@ import { isToday, parseISO, isSameDay, differenceInDays, startOfDay, startOfMont
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { MonthEventBadge } from "@/calendar/components/month-event-badge";
-import { EventBullet } from "@/calendar/components/event-bullet";
+import { EventBullet } from "@/calendar/components/month-view/event-bullet";
+import { MonthEventBadge } from "@/calendar/components/month-view/month-event-badge";
 
 import { cn } from "@/utils/helpers/cn.helper";
 

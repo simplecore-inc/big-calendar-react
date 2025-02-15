@@ -6,9 +6,9 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 import { DayPicker } from "@/components/ui/day-picker";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-import { CalendarTimeline } from "@/calendar/components/calendar-time-line";
-import { MultiDayDaySection } from "@/calendar/components/multi-day-day-section";
-import { EventBlock } from "@/calendar/components/event-block";
+import { EventBlock } from "@/calendar/components/week-and-day-view/event-block";
+import { CalendarTimeline } from "@/calendar/components/week-and-day-view/calendar-time-line";
+import { DayViewMultiDayEventsRow } from "@/calendar/components/week-and-day-view/day-view-multi-day-events-row";
 
 import type { IEvent } from "@/calendar/interfaces";
 
@@ -91,7 +91,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
     <div className="flex border-b lg:border-b-0">
       <div className="flex flex-1 flex-col">
         <div>
-          <MultiDayDaySection selectedDate={selectedDate} multiDayEvents={multiDayEvents} />
+          <DayViewMultiDayEventsRow selectedDate={selectedDate} multiDayEvents={multiDayEvents} />
 
           {/* Day header */}
           <div className="relative z-20 flex border-b">

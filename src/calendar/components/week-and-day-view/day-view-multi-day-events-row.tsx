@@ -1,6 +1,6 @@
 import { parseISO, isWithinInterval, differenceInDays, startOfDay, endOfDay } from "date-fns";
 
-import { MonthEventBadge } from "@/calendar/components/month-event-badge";
+import { MonthEventBadge } from "@/calendar/components/month-view/month-event-badge";
 
 import type { IEvent } from "@/calendar/interfaces";
 
@@ -9,7 +9,7 @@ interface IProps {
   multiDayEvents: IEvent[];
 }
 
-export function MultiDayDaySection({ selectedDate, multiDayEvents }: IProps) {
+export function DayViewMultiDayEventsRow({ selectedDate, multiDayEvents }: IProps) {
   const dayStart = startOfDay(selectedDate);
   const dayEnd = endOfDay(selectedDate);
 

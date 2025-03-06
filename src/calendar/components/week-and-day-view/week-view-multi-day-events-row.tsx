@@ -86,11 +86,23 @@ export function WeekViewMultiDayEventsRow({ selectedDate, multiDayEvents }: IPro
             {eventRows.map((row, rowIndex) => {
               const event = row.find(e => e.startIndex <= dayIndex && e.endIndex >= dayIndex);
 
-              return event ? (
-                <MonthEventBadge key={`${event.id}-${dayIndex}`} event={event} cellDate={startOfDay(day)} />
-              ) : (
-                <div key={`${rowIndex}-${dayIndex}`} className="h-6.5" />
-              );
+              if (!event) {
+                return <div key={`${rowIndex}-${dayIndex}`} className="h-6.5" />;
+              }
+
+              let position: "first" | "middle" | "last" | "none" = "none";
+
+              if (dayIndex === event.startIndex && dayIndex === event.endIndex) {
+                position = "none";
+              } else if (dayIndex === event.startIndex) {
+                position = "first";
+              } else if (dayIndex === event.endIndex) {
+                position = "last";
+              } else {
+                position = "middle";
+              }
+
+              return <MonthEventBadge key={`${event.id}-${dayIndex}`} event={event} cellDate={startOfDay(day)} position={position} />;
             })}
           </div>
         ))}

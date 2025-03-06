@@ -50,9 +50,10 @@ interface IProps extends Omit<VariantProps<typeof eventBadgeVariants>, "color" |
   eventCurrentDay?: number;
   eventTotalDays?: number;
   className?: string;
+  position?: "first" | "middle" | "last" | "none";
 }
 
-export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDays, className }: IProps) {
+export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDays, className, position: propPosition }: IProps) {
   const { badgeVariant } = useCalendar();
 
   const itemStart = startOfDay(parseISO(event.startDate));
@@ -62,7 +63,9 @@ export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDa
 
   let position: "first" | "middle" | "last" | "none" | undefined;
 
-  if (eventCurrentDay && eventTotalDays) {
+  if (propPosition) {
+    position = propPosition;
+  } else if (eventCurrentDay && eventTotalDays) {
     position = "none";
   } else if (isSameDay(itemStart, itemEnd)) {
     position = "none";

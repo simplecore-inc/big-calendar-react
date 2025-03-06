@@ -5,19 +5,21 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
 ## Features
 
 - 📅 Multiple calendar views:
+
   - Month view with event previews
   - Week view with detailed time slots
   - Day view with hourly breakdown
+
 - 🎨 Event customization:
 
   - Multiple color options for events
-  - Support for single and multi-day events
   - Two badge display variants (dot and colored)
+  - Support for single and multi-day events
 
 - 👥 User management:
 
   - Filter events by user
-  - View all users' events simultaneously
+  - View all users's events simultaneously
   - User avatars and profile integration
 
 - ⚡ Real-time features:
@@ -60,6 +62,12 @@ npm install
 
 ```bash
 npm run dev
+```
+
+or
+
+```bash
+npm run turbo
 ```
 
 4. Open your browser and navigate to `http://localhost:3000` to view the application.

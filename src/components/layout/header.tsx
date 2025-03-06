@@ -13,7 +13,7 @@ export function Header() {
           </div>
 
           <div className="space-y-1">
-            <p className="text-lg font-medium leading-6">Calendar</p>
+            <p className="text-lg font-medium leading-6">Big calendar</p>
             <p className="text-sm text-t-secondary">
               Built with Next.js and Tailwind by{" "}
               <Link href="https://github.com/lramos33" target="_blank" className="inline-flex gap-0.5 text-sm underline">
@@ -24,7 +24,7 @@ export function Header() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="hidden items-center gap-4 md:flex">
           <Link href="https://github.com/lramos33/beautiful-calendar" target="_blank" className="inline-flex gap-0.5 text-sm hover:underline">
             View on GitHub
             <ArrowUpRight size={14} className="text-t-tertiary" />

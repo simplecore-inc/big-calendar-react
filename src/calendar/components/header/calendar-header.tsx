@@ -18,7 +18,7 @@ interface IProps {
 
 export function CalendarHeader({ view, events }: IProps) {
   return (
-    <div className="flex flex-col gap-4 border-b p-4 md:flex-row md:items-center md:justify-between">
+    <div className="flex flex-col gap-4 border-b p-4 lg:flex-row lg:items-center lg:justify-between">
       <div className="flex items-center gap-3">
         <TodayButton />
         <DateNavigator view={view} events={events} />
@@ -45,14 +45,16 @@ export function CalendarHeader({ view, events }: IProps) {
           </Button>
         </ButtonGroup>
 
-        <UserSelect />
+        <div className="flex items-center gap-1.5">
+          <UserSelect />
 
-        <AddEventDialog>
-          <Button size="sm">
-            <Plus />
-            Add Event
-          </Button>
-        </AddEventDialog>
+          <AddEventDialog>
+            <Button size="sm">
+              <Plus />
+              Add Event
+            </Button>
+          </AddEventDialog>
+        </div>
       </div>
     </div>
   );

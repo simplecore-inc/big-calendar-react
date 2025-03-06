@@ -37,7 +37,7 @@ export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
         ))}
       </div>
 
-      <div className="grid grid-cols-7 overflow-hidden border-b lg:border-b-0">
+      <div className="grid grid-cols-7 overflow-hidden">
         {cells.map(cell => (
           <DayCell key={cell.date.toISOString()} cell={cell} events={allEvents} eventPositions={eventPositions} />
         ))}

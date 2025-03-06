@@ -25,7 +25,7 @@ export function Header() {
         </div>
 
         <div className="hidden items-center gap-4 md:flex">
-          <Link href="https://github.com/lramos33/beautiful-calendar" target="_blank" className="inline-flex gap-0.5 text-sm hover:underline">
+          <Link href="https://github.com/lramos33/big-calendar" target="_blank" className="inline-flex gap-0.5 text-sm hover:underline">
             View on GitHub
             <ArrowUpRight size={14} className="text-t-tertiary" />
           </Link>

@@ -2,6 +2,10 @@
 
 A feature-rich calendar application built with Next.js, TypeScript, and Tailwind CSS. This project provides a modern, responsive interface for managing events and schedules with multiple viewing options.
 
+## Preview
+
+![image](public/preview.png)
+
 ## Features
 
 - 📅 Multiple calendar views:
@@ -98,3 +102,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  Made with ♥ by Leonardo Ramos 👋 <a href="https://www.linkedin.com/in/lramos33/">Get in touch!</a>
+<p>

@@ -4,6 +4,7 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+import { AddEventDialog } from "@/calendar/components/dialogs/add-event-dialog";
 import { EventBlock } from "@/calendar/components/week-and-day-view/event-block";
 import { CalendarTimeline } from "@/calendar/components/week-and-day-view/calendar-time-line";
 import { WeekViewMultiDayEventsRow } from "@/calendar/components/week-and-day-view/week-view-multi-day-events-row";
@@ -11,7 +12,6 @@ import { WeekViewMultiDayEventsRow } from "@/calendar/components/week-and-day-vi
 import { groupEvents, getEventBlockStyle } from "@/calendar/helpers";
 
 import type { IEvent } from "@/calendar/interfaces";
-import { AddEventDialog } from "@/calendar/components/dialogs/add-event-dialog";
 
 interface IProps {
   singleDayEvents: IEvent[];

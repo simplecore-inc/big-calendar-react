@@ -1,5 +1,7 @@
 import "@/styles/globals.css";
 
+import { Analytics } from "@vercel/analytics/react";
+
 import { inter, lexend, manrope } from "@/styles/fonts";
 
 import { cn } from "@/utils/helpers/cn.helper";
@@ -29,6 +31,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <html lang="en-US" className={cn(inter.variable, lexend.variable, manrope.variable, "bg-bg-primary text-t-primary", theme)}>
       <body>
         <Header />
+        <Analytics />
         {children}
       </body>
     </html>

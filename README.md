@@ -44,8 +44,10 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
 - **Language**: TypeScript
 - **Styling**: Tailwind v3
 - **Date Management**: date-fns
-- **UI Components**: Heavily edited shadcn/ui components
+- **UI Components**: ⚠️ Heavily edited shadcn/ui components
 - **State Management**: React Context
+
+Note: I **_DO NOT_** use the default shadcn components or its color palette. Some of the shadcn components have been modified to fit my design system and palette, so keep that in mind if you plan to integrate the calendar into your project.
 
 ## Getting Started
 
@@ -101,7 +103,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License
 
 ##
 

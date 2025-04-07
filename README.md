@@ -4,7 +4,10 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
 
 ## Preview
 
-![image](public/preview.png)
+![image](public/preview_1.png)
+![image](public/preview_2.png)
+![image](public/preview_3.png)
+![image](public/preview_4.png)
 
 ## Features
 

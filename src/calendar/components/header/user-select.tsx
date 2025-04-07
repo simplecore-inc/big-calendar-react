@@ -9,7 +9,7 @@ export function UserSelect() {
 
   return (
     <Select.Root value={selectedUserId} onValueChange={setSelectedUserId}>
-      <Select.Trigger className="w-48">
+      <Select.Trigger className="flex-1 md:w-48">
         <Select.Value />
       </Select.Trigger>
 

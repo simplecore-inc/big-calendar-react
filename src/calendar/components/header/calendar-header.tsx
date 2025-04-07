@@ -24,37 +24,37 @@ export function CalendarHeader({ view, events }: IProps) {
         <DateNavigator view={view} events={events} />
       </div>
 
-      <div className="flex items-center justify-between gap-1.5">
-        <ButtonGroup>
-          <Button asChild aria-label="View by day">
-            <Link href="/day-view">
-              <List />
-            </Link>
-          </Button>
-
-          <Button asChild aria-label="View by week" className="hidden md:flex">
-            <Link href="/week-view">
-              <Columns />
-            </Link>
-          </Button>
-
-          <Button asChild aria-label="View by month">
-            <Link href="/month-view">
-              <Grid3X3 />
-            </Link>
-          </Button>
-        </ButtonGroup>
-
-        <div className="flex items-center gap-1.5">
-          <UserSelect />
-
-          <AddEventDialog>
-            <Button size="sm">
-              <Plus />
-              Add Event
+      <div className="flex flex-col items-center gap-1.5 sm:flex-row sm:justify-between">
+        <div className="flex w-full items-center gap-1.5">
+          <ButtonGroup>
+            <Button asChild aria-label="View by day">
+              <Link href="/day-view">
+                <List />
+              </Link>
             </Button>
-          </AddEventDialog>
+
+            <Button asChild aria-label="View by week" className="hidden md:flex">
+              <Link href="/week-view">
+                <Columns />
+              </Link>
+            </Button>
+
+            <Button asChild aria-label="View by month">
+              <Link href="/month-view">
+                <Grid3X3 />
+              </Link>
+            </Button>
+          </ButtonGroup>
+
+          <UserSelect />
         </div>
+
+        <AddEventDialog>
+          <Button size="sm" className="w-full sm:w-auto">
+            <Plus />
+            Add Event
+          </Button>
+        </AddEventDialog>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Columns, Grid3X3, List, Plus } from "lucide-react";
+import { Columns, Grid3x3, List, Plus, Grid2x2 } from "lucide-react";
 
 import { Button, ButtonGroup } from "@/components/ui/button";
 
@@ -41,7 +41,13 @@ export function CalendarHeader({ view, events }: IProps) {
 
             <Button asChild aria-label="View by month">
               <Link href="/month-view">
-                <Grid3X3 />
+                <Grid2x2 />
+              </Link>
+            </Button>
+
+            <Button asChild aria-label="View by year">
+              <Link href="/year-view">
+                <Grid3x3 />
               </Link>
             </Button>
           </ButtonGroup>

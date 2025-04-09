@@ -1,4 +1,7 @@
 import { isToday } from "date-fns";
+import { useRouter } from "next/navigation";
+
+import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { cn } from "@/utils/helpers/cn.helper";
 
@@ -11,12 +14,26 @@ interface IProps {
 }
 
 export function YearViewDayCell({ day, date, events }: IProps) {
+  const { push } = useRouter();
+  const { setSelectedDate } = useCalendar();
+
   const maxIndicators = 3;
   const eventCount = events.length;
 
+  const handleClick = () => {
+    setSelectedDate(date);
+    push("/day-view");
+  };
+
   return (
-    <div className="flex h-11 flex-1 cursor-pointer flex-col items-center justify-start gap-0.5 rounded-md pt-1 hover:bg-bg-primary-hover">
-      <div className={cn("flex size-6 items-center justify-center rounded-full text-xs font-semibold", isToday(date) && "bg-primary-600 font-bold text-white")}>
+    <button
+      onClick={handleClick}
+      type="button"
+      className="flex h-11 flex-1 flex-col items-center justify-start gap-0.5 rounded-md pt-1 hover:bg-bg-primary-hover"
+    >
+      <div
+        className={cn("flex size-6 items-center justify-center rounded-full text-xs font-medium", isToday(date) && "bg-primary-600 font-semibold text-white")}
+      >
         {day}
       </div>
 
@@ -45,6 +62,6 @@ export function YearViewDayCell({ day, date, events }: IProps) {
           )}
         </div>
       )}
-    </div>
+    </button>
   );
 }

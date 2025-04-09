@@ -1,5 +1,8 @@
 import { useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { format, isSameDay, parseISO, getDaysInMonth, startOfMonth, addDays } from "date-fns";
+
+import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { YearViewDayCell } from "@/calendar/components/year-view/year-view-day-cell";
 
@@ -11,6 +14,9 @@ interface IProps {
 }
 
 export function YearViewMonth({ month, events }: IProps) {
+  const { push } = useRouter();
+  const { setSelectedDate } = useCalendar();
+
   const monthName = format(month, "MMMM");
 
   const daysInMonth = useMemo(() => {
@@ -25,11 +31,16 @@ export function YearViewMonth({ month, events }: IProps) {
 
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(startOfMonth(month), i + 1 - startOfMonth(month).getDay()));
 
+  const handleClick = () => {
+    setSelectedDate(new Date(month.getFullYear(), month.getMonth(), 1));
+    push("/month-view");
+  };
+
   return (
-    <div className="rounded-lg border">
-      <div className="border-b px-3 py-2">
-        <p className="text-base font-semibold">{monthName}</p>
-      </div>
+    <div className="overflow-hidden rounded-lg border">
+      <button type="button" onClick={handleClick} className="w-full border-b px-3 py-2 text-sm font-semibold hover:bg-bg-primary-hover">
+        {monthName}
+      </button>
 
       <div className="space-y-2 p-3">
         <div className="grid grid-cols-7 gap-x-0.5 text-center">

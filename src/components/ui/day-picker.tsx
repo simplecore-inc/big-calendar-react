@@ -1,6 +1,7 @@
 "use client";
 
 import { enUS } from "date-fns/locale";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker as ReactDayPicker } from "react-day-picker";
 
@@ -8,17 +9,23 @@ import { buttonVariants } from "@/components/ui/button";
 
 import { cn } from "@/utils/helpers/cn.helper";
 
-import type { ComponentProps } from "react";
-import type { CustomComponents } from "react-day-picker";
+import type { CustomComponents, DayPickerSingleProps } from "react-day-picker";
 
 // ================================== //
 
-type TDayPickerProps = ComponentProps<typeof ReactDayPicker>;
+function DayPicker({ className, classNames, showOutsideDays = true, selected, ...props }: DayPickerSingleProps) {
+  const [currentMonth, setCurrentMonth] = useState<Date | undefined>(selected instanceof Date ? selected : undefined);
 
-function DayPicker({ className, classNames, showOutsideDays = true, ...props }: TDayPickerProps) {
+  useEffect(() => {
+    if (selected instanceof Date) setCurrentMonth(selected);
+  }, [selected]);
+
   return (
     <ReactDayPicker
+      selected={selected}
       showOutsideDays={showOutsideDays}
+      month={currentMonth}
+      onMonthChange={setCurrentMonth}
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col select-none sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",

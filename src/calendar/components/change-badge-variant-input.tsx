@@ -19,6 +19,7 @@ export function ChangeBadgeVariantInput() {
         <Select.Content viewportClassName="w-64" align="end">
           <Select.Item value="dot">Dot</Select.Item>
           <Select.Item value="colored">Colored</Select.Item>
+          <Select.Item value="mixed">Mixed</Select.Item>
         </Select.Content>
       </Select.Root>
     </div>

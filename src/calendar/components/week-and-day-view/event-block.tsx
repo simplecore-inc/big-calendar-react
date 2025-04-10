@@ -16,13 +16,13 @@ const calendarWeekEventCardVariants = cva(
   {
     variants: {
       color: {
-        // Colored variants
-        blue: "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300",
-        green: "border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300",
-        red: "border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300",
-        yellow: "border-yellow-200 bg-yellow-50 text-yellow-700 dark:border-yellow-800 dark:bg-yellow-950 dark:text-yellow-300",
-        purple: "border-purple-200 bg-purple-50 text-purple-700 dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300",
-        orange: "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300",
+        // Colored and mixed variants
+        blue: "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 [&_svg]:fill-blue-600",
+        green: "border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300 [&_svg]:fill-green-600",
+        red: "border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300 [&_svg]:fill-red-600",
+        yellow: "border-yellow-200 bg-yellow-50 text-yellow-700 dark:border-yellow-800 dark:bg-yellow-950 dark:text-yellow-300 [&_svg]:fill-yellow-600",
+        purple: "border-purple-200 bg-purple-50 text-purple-700 dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300 [&_svg]:fill-purple-600",
+        orange: "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300 [&_svg]:fill-orange-600",
 
         // Dot variants
         "blue-dot": "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-blue-600",
@@ -59,7 +59,7 @@ export function EventBlock({ event, className }: IProps) {
     <EventDetailsDialog event={event}>
       <div role="button" tabIndex={0} className={calendarWeekEventCardClasses} style={{ height: `${heightInPixels}px` }}>
         <div className="flex items-center gap-1.5 truncate">
-          {badgeVariant === "dot" && (
+          {["mixed", "dot"].includes(badgeVariant) && (
             <svg width="8" height="8" viewBox="0 0 8 8" className="shrink-0">
               <circle cx="4" cy="4" r="4" />
             </svg>

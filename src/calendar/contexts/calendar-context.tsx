@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 
+import type { TBadgeVariant } from "@/calendar/types";
 import type { IEvent, IUser } from "@/calendar/interfaces";
 
 interface ICalendarContext {
@@ -9,8 +10,8 @@ interface ICalendarContext {
   setSelectedDate: (date: Date | undefined) => void;
   selectedUserId: IUser["id"] | "all";
   setSelectedUserId: (userId: IUser["id"] | "all") => void;
-  badgeVariant: "dot" | "colored";
-  setBadgeVariant: (variant: "dot" | "colored") => void;
+  badgeVariant: TBadgeVariant;
+  setBadgeVariant: (variant: TBadgeVariant) => void;
   users: IUser[];
   events: IEvent[];
 }
@@ -18,7 +19,7 @@ interface ICalendarContext {
 const CalendarContext = createContext({} as ICalendarContext);
 
 export function CalendarProvider({ children, users, events }: { children: React.ReactNode; users: IUser[]; events: IEvent[] }) {
-  const [badgeVariant, setBadgeVariant] = useState<"dot" | "colored">("dot");
+  const [badgeVariant, setBadgeVariant] = useState<TBadgeVariant>("dot");
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedUserId, setSelectedUserId] = useState<IUser["id"] | "all">("all");

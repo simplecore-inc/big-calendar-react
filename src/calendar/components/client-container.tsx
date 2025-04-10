@@ -51,7 +51,9 @@ export function ClientContainer({ view }: IProps) {
       }
 
       if (view === "day") {
-        const isInSelectedDay = isSameDay(eventStartDate, selectedDate);
+        const dayStart = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 0, 0, 0);
+        const dayEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 23, 59, 59);
+        const isInSelectedDay = eventStartDate <= dayEnd && eventEndDate >= dayStart;
         const isUserMatch = selectedUserId === "all" || event.user.id === selectedUserId;
         return isInSelectedDay && isUserMatch;
       }

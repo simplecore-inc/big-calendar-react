@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { differenceInDays, format, parseISO, startOfDay } from "date-fns";
 
 import { Separator } from "@/components/ui/separator";
 import { AgendaEventCard } from "@/calendar/components/agenda-view/agenda-event-card";
@@ -24,9 +24,12 @@ export function AgendaDayGroup({ date, events, multiDayEvents }: IProps) {
       <div className="space-y-2">
         {multiDayEvents.length > 0 &&
           multiDayEvents.map(event => {
-            const startDate = new Date(event.startDate);
-            const eventTotalDays = Math.ceil((new Date(event.endDate).getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-            const eventCurrentDay = Math.ceil((date.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+            const eventStart = startOfDay(parseISO(event.startDate));
+            const eventEnd = startOfDay(parseISO(event.endDate));
+            const currentDate = startOfDay(date);
+
+            const eventTotalDays = differenceInDays(eventEnd, eventStart) + 1;
+            const eventCurrentDay = differenceInDays(currentDate, eventStart) + 1;
             return <AgendaEventCard key={event.id} event={event} eventCurrentDay={eventCurrentDay} eventTotalDays={eventTotalDays} />;
           })}
 

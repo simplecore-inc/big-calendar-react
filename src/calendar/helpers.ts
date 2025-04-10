@@ -58,6 +58,9 @@ export function rangeText(view: TCalendarView, date: Date) {
 }
 
 export function navigateDate(date: Date, view: TCalendarView, direction: "previous" | "next"): Date {
+  /* TO DO: Think in a better way to handle this with agenda view */
+  if (view === "agenda") return date;
+
   const operations = {
     year: direction === "next" ? addYears : subYears,
     month: direction === "next" ? addMonths : subMonths,
@@ -69,6 +72,9 @@ export function navigateDate(date: Date, view: TCalendarView, direction: "previo
 }
 
 export function getEventsCount(events: IEvent[], date: Date, view: TCalendarView): number {
+  /* TO DO: Think in a better way to handle this with agenda view */
+  if (view === "agenda") return events.length;
+
   const compareFns = {
     year: isSameYear,
     day: isSameDay,

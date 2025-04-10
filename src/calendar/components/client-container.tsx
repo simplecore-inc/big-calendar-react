@@ -55,6 +55,12 @@ export function ClientContainer({ view }: IProps) {
         const isUserMatch = selectedUserId === "all" || event.user.id === selectedUserId;
         return isInSelectedDay && isUserMatch;
       }
+
+      if (view === "agenda") {
+        // TO DO: Maybe add a pagination here ?????
+        const isUserMatch = selectedUserId === "all" || event.user.id === selectedUserId;
+        return isUserMatch;
+      }
     });
   }, [selectedDate, selectedUserId, events, view]);
 

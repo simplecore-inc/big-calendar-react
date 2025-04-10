@@ -85,7 +85,7 @@
       "warn",
       {
         "callees": ["cn", "clsx", "twMerge", "cva"],
-        "whitelist": ["^theme-", "^chart-", "^event-dot-icon"]
+        "whitelist": ["^theme-", "^chart-", "^event-dot"]
       }
     ],
 

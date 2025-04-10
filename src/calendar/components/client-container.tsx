@@ -34,7 +34,7 @@ export function ClientContainer({ view }: IProps) {
         return isInSelectedYear && isUserMatch;
       }
 
-      if (view === "month") {
+      if (view === "month" || view === "agenda") {
         const monthStart = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
         const monthEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
         const isInSelectedMonth = eventStartDate <= monthEnd && eventEndDate >= monthStart;

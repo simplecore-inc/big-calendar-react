@@ -72,13 +72,20 @@ export function ClientContainer({ view }: IProps) {
     return !isSameDay(startDate, endDate);
   });
 
+  // For year view, we only care about the start date
+  // by using the same date for both start and end,
+  // we ensure only the start day will show a dot
+  const eventStartDates = useMemo(() => {
+    return filteredEvents.map(event => ({ ...event, endDate: event.startDate }));
+  }, [filteredEvents]);
+
   return (
     <div className="rounded-xl border">
       <CalendarHeader view={view} events={filteredEvents} />
       {view === "day" && <CalendarDayView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
       {view === "month" && <CalendarMonthView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
       {view === "week" && <CalendarWeekView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
-      {view === "year" && <CalendarYearView allEvents={filteredEvents} />}
+      {view === "year" && <CalendarYearView allEvents={eventStartDates} />}
       {view === "agenda" && <CalendarAgendaView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
     </div>
   );

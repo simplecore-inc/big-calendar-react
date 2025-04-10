@@ -1,5 +1,7 @@
 import { useMemo } from "react";
-import { parseISO, format, endOfDay, startOfDay } from "date-fns";
+import { parseISO, format, endOfDay, startOfDay, isSameMonth } from "date-fns";
+
+import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AgendaDayGroup } from "@/calendar/components/agenda-view/agenda-day-group";
@@ -12,11 +14,15 @@ interface IProps {
 }
 
 export function CalendarAgendaView({ singleDayEvents, multiDayEvents }: IProps) {
+  const { selectedDate } = useCalendar();
+
   const eventsByDay = useMemo(() => {
     const allDates = new Map<string, { date: Date; events: IEvent[]; multiDayEvents: IEvent[] }>();
 
     singleDayEvents.forEach(event => {
       const eventDate = parseISO(event.startDate);
+      if (!isSameMonth(eventDate, selectedDate)) return;
+
       const dateKey = format(eventDate, "yyyy-MM-dd");
 
       if (!allDates.has(dateKey)) {
@@ -34,19 +40,21 @@ export function CalendarAgendaView({ singleDayEvents, multiDayEvents }: IProps) 
       const lastDate = endOfDay(eventEnd);
 
       while (currentDate <= lastDate) {
-        const dateKey = format(currentDate, "yyyy-MM-dd");
+        if (isSameMonth(currentDate, selectedDate)) {
+          const dateKey = format(currentDate, "yyyy-MM-dd");
 
-        if (!allDates.has(dateKey)) {
-          allDates.set(dateKey, { date: new Date(currentDate), events: [], multiDayEvents: [] });
+          if (!allDates.has(dateKey)) {
+            allDates.set(dateKey, { date: new Date(currentDate), events: [], multiDayEvents: [] });
+          }
+
+          allDates.get(dateKey)?.multiDayEvents.push(event);
         }
-
-        allDates.get(dateKey)?.multiDayEvents.push(event);
         currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
       }
     });
 
     return Array.from(allDates.values()).sort((a, b) => a.date.getTime() - b.date.getTime());
-  }, [singleDayEvents, multiDayEvents]);
+  }, [singleDayEvents, multiDayEvents, selectedDate]);
 
   const hasAnyEvents = singleDayEvents.length > 0 || multiDayEvents.length > 0;
 

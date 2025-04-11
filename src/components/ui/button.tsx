@@ -109,7 +109,7 @@ const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(({ className, v
 
           return cloneElement(child, {
             variant,
-            size: isIconOnly && (index === 0 || index === Children.count(children) - 1) ? `icon-${size!}` : size,
+            size: isIconOnly ? `icon-${size!}` : size,
             className: cn(
               child.props.className,
               "first:rounded-r-none last:rounded-l-none [&:not(:first-child):not(:last-child)]:rounded-none",

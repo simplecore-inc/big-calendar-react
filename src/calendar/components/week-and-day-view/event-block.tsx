@@ -17,20 +17,20 @@ const calendarWeekEventCardVariants = cva(
     variants: {
       color: {
         // Colored and mixed variants
-        blue: "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 [&_svg]:fill-blue-600",
-        green: "border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300 [&_svg]:fill-green-600",
-        red: "border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300 [&_svg]:fill-red-600",
-        yellow: "border-yellow-200 bg-yellow-50 text-yellow-700 dark:border-yellow-800 dark:bg-yellow-950 dark:text-yellow-300 [&_svg]:fill-yellow-600",
-        purple: "border-purple-200 bg-purple-50 text-purple-700 dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300 [&_svg]:fill-purple-600",
-        orange: "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300 [&_svg]:fill-orange-600",
+        blue: "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300 [&_.event-dot]:fill-blue-600",
+        green: "border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950 dark:text-green-300 [&_.event-dot]:fill-green-600",
+        red: "border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300 [&_.event-dot]:fill-red-600",
+        yellow: "border-yellow-200 bg-yellow-50 text-yellow-700 dark:border-yellow-800 dark:bg-yellow-950 dark:text-yellow-300 [&_.event-dot]:fill-yellow-600",
+        purple: "border-purple-200 bg-purple-50 text-purple-700 dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300 [&_.event-dot]:fill-purple-600",
+        orange: "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300 [&_.event-dot]:fill-orange-600",
 
         // Dot variants
-        "blue-dot": "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-blue-600",
-        "green-dot": "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-green-600",
-        "red-dot": "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-red-600",
-        "orange-dot": "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-orange-600",
-        "purple-dot": "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-purple-600",
-        "yellow-dot": "border-b-primary bg-bg-secondary text-t-primary [&_svg]:fill-yellow-600",
+        "blue-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-blue-600",
+        "green-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-green-600",
+        "red-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-red-600",
+        "orange-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-orange-600",
+        "purple-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-purple-600",
+        "yellow-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-yellow-600",
       },
     },
     defaultVariants: {
@@ -60,7 +60,7 @@ export function EventBlock({ event, className }: IProps) {
       <div role="button" tabIndex={0} className={calendarWeekEventCardClasses} style={{ height: `${heightInPixels}px` }}>
         <div className="flex items-center gap-1.5 truncate">
           {["mixed", "dot"].includes(badgeVariant) && (
-            <svg width="8" height="8" viewBox="0 0 8 8" className="shrink-0">
+            <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">
               <circle cx="4" cy="4" r="4" />
             </svg>
           )}
@@ -70,7 +70,7 @@ export function EventBlock({ event, className }: IProps) {
 
         {durationInMinutes > 25 && (
           <p>
-            {format(start, "HH:mm a")} - {format(end, "HH:mm a")}
+            {format(start, "h:mm a")} - {format(end, "h:mm a")}
           </p>
         )}
       </div>

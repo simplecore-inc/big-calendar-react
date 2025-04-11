@@ -15,7 +15,7 @@ export function CalendarTimeline() {
   };
 
   const formatCurrentTime = () => {
-    return format(currentTime, "hh:mm a");
+    return format(currentTime, "h:mm a");
   };
 
   return (

@@ -171,7 +171,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                       <div className="flex items-center gap-1.5">
                         <Clock className="size-4 text-t-quinary" />
                         <span className="text-sm text-t-tertiary">
-                          {format(parseISO(event.startDate), "hh:mm a")} - {format(parseISO(event.endDate), "hh:mm a")}
+                          {format(parseISO(event.startDate), "h:mm a")} - {format(parseISO(event.endDate), "h:mm a")}
                         </span>
                       </div>
                     </div>

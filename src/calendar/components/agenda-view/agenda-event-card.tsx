@@ -74,12 +74,12 @@ export function AgendaEventCard({ event, eventCurrentDay, eventTotalDays }: IPro
           </div>
 
           <div className="mt-1 flex items-center gap-1">
-            <User className="size-3" />
+            <User className="size-3 shrink-0" />
             <p className="text-xs text-t-tertiary">{event.user.name}</p>
           </div>
 
           <div className="flex items-center gap-1">
-            <Clock className="size-3" />
+            <Clock className="size-3 shrink-0" />
 
             <p className="text-xs text-t-tertiary">
               {format(startDate, "h:mm a")} - {format(endDate, "h:mm a")}
@@ -87,7 +87,7 @@ export function AgendaEventCard({ event, eventCurrentDay, eventTotalDays }: IPro
           </div>
 
           <div className="flex items-center gap-1">
-            <Text className="size-3" />
+            <Text className="size-3 shrink-0" />
             <p className="text-xs text-t-tertiary">{event.description}</p>
           </div>
         </div>

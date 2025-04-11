@@ -23,8 +23,8 @@ export function ClientContainer({ view }: IProps) {
 
   const filteredEvents = useMemo(() => {
     return events.filter(event => {
-      const eventStartDate = new Date(event.startDate);
-      const eventEndDate = new Date(event.endDate);
+      const eventStartDate = parseISO(event.startDate);
+      const eventEndDate = parseISO(event.endDate);
 
       if (view === "year") {
         const yearStart = new Date(selectedDate.getFullYear(), 0, 1);
@@ -36,15 +36,23 @@ export function ClientContainer({ view }: IProps) {
 
       if (view === "month" || view === "agenda") {
         const monthStart = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-        const monthEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
+        const monthEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0, 23, 59, 59, 999);
         const isInSelectedMonth = eventStartDate <= monthEnd && eventEndDate >= monthStart;
         const isUserMatch = selectedUserId === "all" || event.user.id === selectedUserId;
         return isInSelectedMonth && isUserMatch;
       }
 
       if (view === "week") {
-        const weekStart = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-        const weekEnd = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 6);
+        const dayOfWeek = selectedDate.getDay();
+
+        const weekStart = new Date(selectedDate);
+        weekStart.setDate(selectedDate.getDate() - dayOfWeek);
+        weekStart.setHours(0, 0, 0, 0);
+
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        weekEnd.setHours(23, 59, 59, 999);
+
         const isInSelectedWeek = eventStartDate <= weekEnd && eventEndDate >= weekStart;
         const isUserMatch = selectedUserId === "all" || event.user.id === selectedUserId;
         return isInSelectedWeek && isUserMatch;

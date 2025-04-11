@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { CalendarX2 } from "lucide-react";
 import { parseISO, format, endOfDay, startOfDay, isSameMonth } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
@@ -67,9 +68,9 @@ export function CalendarAgendaView({ singleDayEvents, multiDayEvents }: IProps) 
           ))}
 
           {!hasAnyEvents && (
-            <div className="flex h-96 flex-col items-center justify-center text-t-tertiary">
-              <p className="text-lg">No events scheduled</p>
-              <p className="text-sm">Use the &quot;Add Event&quot; button to create a new event</p>
+            <div className="flex flex-col items-center justify-center gap-2 py-20 text-t-tertiary">
+              <CalendarX2 className="size-10" />
+              <p className="text-sm md:text-base">No events scheduled for the selected month</p>
             </div>
           )}
         </div>

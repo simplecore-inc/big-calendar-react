@@ -9,13 +9,15 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
 ![image](public/preview_3.png)
 ![image](public/preview_4.png)
 ![image](public/preview_5.png)
+![image](public/preview_6.png)
 
 ## Features
 
 - 📅 Multiple calendar views:
 
-  - Year view with month navigation
-  - Month view with event previews
+  - Agenda view
+  - Year view
+  - Month view
   - Week view with detailed time slots
   - Day view with hourly breakdown
 
@@ -93,6 +95,7 @@ src/
 ├── calendar/                     # All files related to calendar are in this folder
 │   ├── components/
 │   │   ├── dialogs/              # Dialogs components
+│   │   ├── agenda-view/          # Agenda view components
 │   │   ├── header/               # Calendar header components
 │   │   ├── month-view/           # Month view components
 │   │   ├── week-and-day-view/    # Week and day view components

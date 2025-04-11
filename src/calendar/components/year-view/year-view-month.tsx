@@ -53,12 +53,12 @@ export function YearViewMonth({ month, events }: IProps) {
 
         <div className="grid grid-cols-7 gap-x-0.5 gap-y-2">
           {daysInMonth.map((day, index) => {
-            if (day === null) return <div key={index} className="h-10" />;
+            if (day === null) return <div key={`blank-${index}`} className="h-10" />;
 
             const date = new Date(month.getFullYear(), month.getMonth(), day);
             const dayEvents = events.filter(event => isSameDay(parseISO(event.startDate), date) || isSameDay(parseISO(event.endDate), date));
 
-            return <YearViewDayCell key={day} day={day} date={date} events={dayEvents} />;
+            return <YearViewDayCell key={`day-${day}`} day={day} date={date} events={dayEvents} />;
           })}
         </div>
       </div>

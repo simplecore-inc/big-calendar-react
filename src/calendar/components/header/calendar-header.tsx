@@ -29,31 +29,31 @@ export function CalendarHeader({ view, events }: IProps) {
           <ButtonGroup>
             <Button asChild aria-label="View by day">
               <Link href="/day-view">
-                <List />
+                <List strokeWidth={1.8} />
               </Link>
             </Button>
 
             <Button asChild aria-label="View by week" className="hidden md:flex">
               <Link href="/week-view">
-                <Columns />
+                <Columns strokeWidth={1.8} />
               </Link>
             </Button>
 
             <Button asChild aria-label="View by month">
               <Link href="/month-view">
-                <Grid2x2 />
+                <Grid2x2 strokeWidth={1.8} />
               </Link>
             </Button>
 
             <Button asChild aria-label="View by year">
               <Link href="/year-view">
-                <Grid3x3 />
+                <Grid3x3 strokeWidth={1.8} />
               </Link>
             </Button>
 
             <Button asChild aria-label="View by agenda">
               <Link href="/agenda-view">
-                <CalendarRange />
+                <CalendarRange strokeWidth={1.8} />
               </Link>
             </Button>
           </ButtonGroup>

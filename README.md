@@ -1,4 +1,4 @@
-# Modern Calendar Application
+# Big Calendar
 
 A feature-rich calendar application built with Next.js, TypeScript, and Tailwind CSS. This project provides a modern, responsive interface for managing events and schedules with multiple viewing options.
 
@@ -14,7 +14,6 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
 ## Features
 
 - 📅 Multiple calendar views:
-
   - Agenda view
   - Year view
   - Month view
@@ -22,19 +21,16 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
   - Day view with hourly breakdown
 
 - 🎨 Event customization:
-
   - Multiple color options for events
-  - Two badge display variants (dot and colored)
+  - Three badge display variants (dot, colored and mixed)
   - Support for single and multi-day events
 
 - 👥 User management:
-
   - Filter events by user
   - View all users's events simultaneously
   - User avatars and profile integration
 
 - ⚡ Real-time features:
-
   - Live time indicator
   - Current event highlighting
   - Dynamic event positioning
@@ -45,7 +41,7 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
   - Clean and modern interface
   - Dark mode support
 
-## Tech Stack
+## Tech stack
 
 - **Framework**: Next.js 14
 - **Language**: TypeScript
@@ -54,7 +50,7 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
 - **UI Components**: shadcn/ui
 - **State Management**: React Context
 
-## Getting Started
+## Getting started
 
 1. Clone the repository:
 
@@ -83,7 +79,7 @@ npm run turbo
 
 4. Open your browser and navigate to `http://localhost:3000` to view the application.
 
-## Project Structure
+## Project structure
 
 The project structure is organized as follows:
 
@@ -105,7 +101,7 @@ src/
 └── components/                   # Components not related to calendar eg: ui and layout components
 ```
 
-## How to Implement in Your Project
+## How to implement in your project
 
 ### Installation
 
@@ -119,9 +115,13 @@ src/
 
 2. Install dependencies
 
-### Basic Setup
+```bash
+npm install
+```
 
-1. **Set up the Calendar Provider**
+### Basic setup
+
+1. **Set up the CalendarProvider**
 
    Wrap your application or page with the `CalendarProvider`:
 
@@ -141,7 +141,7 @@ src/
    }
    ```
 
-2. **Add a Calendar View**
+2. **Add a CalendarView**
 
    Use the `ClientContainer` to render a specific view:
 
@@ -153,7 +153,7 @@ src/
    }
    ```
 
-### Views Configuration
+### Views configuration
 
 The calendar supports five different views, each can be used with the `ClientContainer` component:
 
@@ -174,7 +174,7 @@ The calendar supports five different views, each can be used with the `ClientCon
 <ClientContainer view="agenda" />
 ```
 
-### Data Structure
+### Data structure
 
 1. **Events Format**
 
@@ -195,7 +195,7 @@ The calendar supports five different views, each can be used with the `ClientCon
    }
    ```
 
-2. **Users Format**
+2. **Users format**
 
    Users should follow this interface (you can modify it as you want, but the calendar will expect these fields):
 
@@ -207,7 +207,7 @@ The calendar supports five different views, each can be used with the `ClientCon
    }
    ```
 
-### Customizing the Calendar
+### Customizing the calendar
 
 1. **Badge Variants**
 
@@ -220,7 +220,7 @@ The calendar supports five different views, each can be used with the `ClientCon
    <ChangeBadgeVariantInput />;
    ```
 
-2. **Creating Events**
+2. **Creating events**
 
    Implement your own event creation by modifying the `onSubmit` handler in the `AddEventDialog` component.
 
@@ -238,7 +238,7 @@ function MyComponent() {
 }
 ```
 
-### Example Implementation
+### Example implementation
 
 ```tsx
 // pages/calendar.tsx
@@ -261,8 +261,6 @@ export default function CalendarPage({ events, users }) {
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-##
 
 <p align="center">
   Made by Leonardo Ramos 👋 <a href="https://www.linkedin.com/in/lramos33/">Get in touch!</a>

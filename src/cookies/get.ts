@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 
-import { THEMES_VALUES } from "@/utils/constants/theme.const";
-import { DEFAULT_VALUES } from "@/utils/constants/cookies.const";
-import { THEME_COOKIE_NAME } from "@/utils/constants/cookies.const";
+import { THEMES_VALUES } from "@/constants/theme.const";
+import { DEFAULT_VALUES } from "@/constants/cookies.const";
+import { THEME_COOKIE_NAME } from "@/constants/cookies.const";
 
 export type TTheme = (typeof THEMES_VALUES)[number];
 

@@ -5,7 +5,7 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
 
-import { cn } from "@/utils/helpers/cn.helper";
+import { cn } from "@/lib/utils";
 
 import type { HTMLAttributes } from "react";
 import type { IEvent } from "@/calendar/interfaces";

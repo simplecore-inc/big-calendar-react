@@ -8,8 +8,6 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        manrope: "var(--font-manrope)",
-        lexend: "var(--font-lexend)",
         inter: "var(--font-inter)",
       },
       fontSize: {

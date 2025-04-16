@@ -2,9 +2,9 @@ import "@/styles/globals.css";
 
 import { Analytics } from "@vercel/analytics/react";
 
-import { inter, lexend, manrope } from "@/styles/fonts";
+import { inter } from "@/styles/fonts";
 
-import { cn } from "@/utils/helpers/cn.helper";
+import { cn } from "@/lib/utils";
 
 import { Header } from "@/components/layout/header";
 
@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const theme = getTheme();
 
   return (
-    <html lang="en-US" className={cn(inter.variable, lexend.variable, manrope.variable, "bg-bg-primary text-t-primary", theme)}>
+    <html lang="en-US" className={cn(inter.variable, theme)}>
       <body>
         <Header />
         <Analytics />

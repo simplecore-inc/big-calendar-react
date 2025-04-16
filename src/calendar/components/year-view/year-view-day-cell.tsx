@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { cn } from "@/utils/helpers/cn.helper";
+import { cn } from "@/lib/utils";
 
 import type { IEvent } from "@/calendar/interfaces";
 

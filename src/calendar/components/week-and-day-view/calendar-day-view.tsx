@@ -3,8 +3,8 @@ import { parseISO, areIntervalsOverlapping, format, isWithinInterval } from "dat
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { DayPicker } from "@/components/old-ui/day-picker";
-import { ScrollArea } from "@/components/old-ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Calendar as CalendarUI } from "@/components/ui/calendar";
 
 import { AddEventDialog } from "@/calendar/components/dialogs/add-event-dialog";
 import { EventBlock } from "@/calendar/components/week-and-day-view/event-block";
@@ -60,8 +60,8 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           {/* Day header */}
           <div className="relative z-20 flex border-b">
             <div className="w-18"></div>
-            <span className="flex-1 border-l py-2 text-center text-xs font-medium text-t-quaternary">
-              {format(selectedDate, "EE")} <span className="font-semibold text-t-secondary">{format(selectedDate, "d")}</span>
+            <span className="flex-1 border-l py-2 text-center text-xs font-medium text-muted-foreground">
+              {format(selectedDate, "EE")} <span className="font-semibold text-foreground">{format(selectedDate, "d")}</span>
             </span>
           </div>
         </div>
@@ -73,7 +73,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
               {hours.map((hour, index) => (
                 <div key={hour} className="relative" style={{ height: "96px" }}>
                   <div className="absolute -top-3 right-2 flex h-6 items-center">
-                    {index !== 0 && <span className="text-xs text-t-quaternary">{format(new Date().setHours(hour), "hh a")}</span>}
+                    {index !== 0 && <span className="text-xs text-muted-foreground">{format(new Date().setHours(hour), "hh a")}</span>}
                   </div>
                 </div>
               ))}
@@ -87,13 +87,13 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                     {index !== 0 && <div className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>}
 
                     <AddEventDialog startDate={selectedDate} startTime={{ hour, minute: 0 }}>
-                      <div className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover" />
+                      <div className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-accent" />
                     </AddEventDialog>
 
-                    <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed border-b-tertiary"></div>
+                    <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed"></div>
 
                     <AddEventDialog startDate={selectedDate} startTime={{ hour, minute: 30 }}>
-                      <div className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover" />
+                      <div className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-accent" />
                     </AddEventDialog>
                   </div>
                 ))}
@@ -129,21 +129,21 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
         </ScrollArea>
       </div>
 
-      <div className="hidden w-72 divide-y border-l md:block">
-        <DayPicker className="mx-auto w-fit" mode="single" selected={selectedDate} onSelect={setSelectedDate} initialFocus />
+      <div className="hidden w-64 divide-y border-l md:block">
+        <CalendarUI className="mx-auto w-fit" mode="single" selected={selectedDate} onSelect={setSelectedDate} initialFocus />
 
         <div className="flex-1 space-y-3">
           {currentEvents.length > 0 ? (
             <div className="flex items-start gap-2 px-4 pt-4">
               <span className="relative mt-[5px] flex size-2.5">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-success-400 opacity-75"></span>
-                <span className="relative inline-flex size-2.5 rounded-full bg-success-600"></span>
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex size-2.5 rounded-full bg-green-600"></span>
               </span>
 
-              <p className="text-sm font-semibold text-t-secondary">Happening now</p>
+              <p className="text-sm font-semibold text-foreground">Happening now</p>
             </div>
           ) : (
-            <p className="p-4 text-center text-sm italic text-t-tertiary">No appointments or consultations at the moment</p>
+            <p className="p-4 text-center text-sm italic text-muted-foreground">No appointments or consultations at the moment</p>
           )}
 
           {currentEvents.length > 0 && (
@@ -157,20 +157,20 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                       <p className="line-clamp-2 text-sm font-semibold">{event.title}</p>
 
                       {user && (
-                        <div className="flex items-center gap-1.5">
-                          <User className="size-4 text-t-quinary" />
-                          <span className="text-sm text-t-tertiary">{user.name}</span>
+                        <div className="flex items-center gap-1.5 text-muted-foreground">
+                          <User className="size-3.5" />
+                          <span className="text-sm">{user.name}</span>
                         </div>
                       )}
 
-                      <div className="flex items-center gap-1.5">
-                        <Calendar className="size-4 text-t-quinary" />
-                        <span className="text-sm text-t-tertiary">{format(new Date(), "MMM d, yyyy")}</span>
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
+                        <Calendar className="size-3.5" />
+                        <span className="text-sm">{format(new Date(), "MMM d, yyyy")}</span>
                       </div>
 
-                      <div className="flex items-center gap-1.5">
-                        <Clock className="size-4 text-t-quinary" />
-                        <span className="text-sm text-t-tertiary">
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
+                        <Clock className="size-3.5" />
+                        <span className="text-sm">
                           {format(parseISO(event.startDate), "h:mm a")} - {format(parseISO(event.endDate), "h:mm a")}
                         </span>
                       </div>

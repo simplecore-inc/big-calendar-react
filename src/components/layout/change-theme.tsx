@@ -4,7 +4,7 @@ import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/old-ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { setTheme } from "@/cookies/set";
 

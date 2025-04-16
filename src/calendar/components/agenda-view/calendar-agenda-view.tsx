@@ -4,7 +4,7 @@ import { parseISO, format, endOfDay, startOfDay, isSameMonth } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { ScrollArea } from "@/components/old-ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { AgendaDayGroup } from "@/calendar/components/agenda-view/agenda-day-group";
 
 import type { IEvent } from "@/calendar/interfaces";
@@ -68,7 +68,7 @@ export function CalendarAgendaView({ singleDayEvents, multiDayEvents }: IProps) 
           ))}
 
           {!hasAnyEvents && (
-            <div className="flex flex-col items-center justify-center gap-2 py-20 text-t-tertiary">
+            <div className="text-t-tertiary flex flex-col items-center justify-center gap-2 py-20">
               <CalendarX2 className="size-10" />
               <p className="text-sm md:text-base">No events scheduled for the selected month</p>
             </div>

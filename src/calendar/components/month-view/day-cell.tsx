@@ -29,7 +29,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
         className={cn(
           "h-6 px-1 text-xs font-semibold lg:px-2",
           !currentMonth && "opacity-20",
-          isToday(date) && "flex w-6 translate-x-1 items-center justify-center rounded-full bg-primary-600 px-0 font-bold text-white"
+          isToday(date) && "flex w-6 translate-x-1 items-center justify-center rounded-full bg-primary px-0 font-bold text-primary-foreground"
         )}
       >
         {day}
@@ -54,7 +54,7 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
       </div>
 
       {cellEvents.length > MAX_VISIBLE_EVENTS && (
-        <p className={cn("h-4.5 px-1.5 text-xs font-semibold text-t-quaternary", !currentMonth && "opacity-50")}>
+        <p className={cn("h-4.5 px-1.5 text-xs font-semibold text-muted-foreground", !currentMonth && "opacity-50")}>
           <span className="sm:hidden">+{cellEvents.length - MAX_VISIBLE_EVENTS}</span>
           <span className="hidden sm:inline"> {cellEvents.length - MAX_VISIBLE_EVENTS} more...</span>
         </p>

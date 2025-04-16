@@ -4,7 +4,7 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: ["./src/**/*.tsx"],
-  darkMode: ["class", "class"],
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {

@@ -23,12 +23,12 @@ const agendaEventCardVariants = cva("flex select-none items-center justify-betwe
       orange: "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300 [&_.event-dot]:fill-orange-600",
 
       // Dot variants
-      "blue-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-blue-600",
-      "green-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-green-600",
-      "red-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-red-600",
-      "orange-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-orange-600",
-      "purple-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-purple-600",
-      "yellow-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-yellow-600",
+      "blue-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-blue-600",
+      "green-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-green-600",
+      "red-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-red-600",
+      "orange-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-orange-600",
+      "purple-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-purple-600",
+      "yellow-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-yellow-600",
     },
   },
   defaultVariants: {
@@ -75,20 +75,19 @@ export function AgendaEventCard({ event, eventCurrentDay, eventTotalDays }: IPro
 
           <div className="mt-1 flex items-center gap-1">
             <User className="size-3 shrink-0" />
-            <p className="text-xs text-t-tertiary">{event.user.name}</p>
+            <p className="text-xs text-foreground">{event.user.name}</p>
           </div>
 
           <div className="flex items-center gap-1">
             <Clock className="size-3 shrink-0" />
-
-            <p className="text-xs text-t-tertiary">
+            <p className="text-xs text-foreground">
               {format(startDate, "h:mm a")} - {format(endDate, "h:mm a")}
             </p>
           </div>
 
           <div className="flex items-center gap-1">
             <Text className="size-3 shrink-0" />
-            <p className="text-xs text-t-tertiary">{event.description}</p>
+            <p className="text-xs text-foreground">{event.description}</p>
           </div>
         </div>
       </div>

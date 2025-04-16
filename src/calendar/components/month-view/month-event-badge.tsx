@@ -24,12 +24,12 @@ const eventBadgeVariants = cva(
         orange: "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300 [&_.event-dot]:fill-orange-600",
 
         // Dot variants
-        "blue-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-blue-600",
-        "green-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-green-600",
-        "red-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-red-600",
-        "orange-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-orange-600",
-        "purple-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-purple-600",
-        "yellow-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-yellow-600",
+        "blue-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-blue-600",
+        "green-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-green-600",
+        "red-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-red-600",
+        "orange-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-orange-600",
+        "purple-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-purple-600",
+        "yellow-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-yellow-600",
       },
       multiDayPosition: {
         first: "relative z-10 mr-0 w-[calc(100%_-_3px)] rounded-r-none border-r-0 [&>span]:mr-2.5",

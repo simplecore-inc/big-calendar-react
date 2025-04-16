@@ -68,7 +68,7 @@ export function CalendarAgendaView({ singleDayEvents, multiDayEvents }: IProps) 
           ))}
 
           {!hasAnyEvents && (
-            <div className="text-t-tertiary flex flex-col items-center justify-center gap-2 py-20">
+            <div className="flex flex-col items-center justify-center gap-2 py-20 text-muted-foreground">
               <CalendarX2 className="size-10" />
               <p className="text-sm md:text-base">No events scheduled for the selected month</p>
             </div>

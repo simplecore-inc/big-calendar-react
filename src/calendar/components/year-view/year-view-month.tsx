@@ -38,14 +38,14 @@ export function YearViewMonth({ month, events }: IProps) {
 
   return (
     <div className="overflow-hidden rounded-lg border">
-      <button type="button" onClick={handleClick} className="w-full border-b px-3 py-2 text-sm font-semibold hover:bg-bg-primary-hover">
+      <button type="button" onClick={handleClick} className="w-full border-b px-3 py-2 text-sm font-semibold hover:bg-accent">
         {monthName}
       </button>
 
       <div className="space-y-2 p-3">
         <div className="grid grid-cols-7 gap-x-0.5 text-center">
           {weekDays.map((day, index) => (
-            <div key={index} className="text-xs font-medium text-t-quaternary">
+            <div key={index} className="text-xs font-medium text-muted-foreground">
               {day}
             </div>
           ))}

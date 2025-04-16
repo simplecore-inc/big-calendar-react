@@ -27,7 +27,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center border-b py-4 text-sm text-t-quaternary sm:hidden">
+      <div className="flex flex-col items-center justify-center border-b py-4 text-sm text-muted-foreground sm:hidden">
         <p>Weekly view is not available on smaller devices.</p>
         <p>Please switch to daily or monthly view.</p>
       </div>
@@ -41,8 +41,8 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
             <div className="w-18"></div>
             <div className="grid flex-1 grid-cols-7 divide-x border-l">
               {weekDays.map((day, index) => (
-                <span key={index} className="py-2 text-center text-xs font-medium text-t-quaternary">
-                  {format(day, "EE")} <span className="ml-1 font-semibold text-t-secondary">{format(day, "d")}</span>
+                <span key={index} className="py-2 text-center text-xs font-medium text-muted-foreground">
+                  {format(day, "EE")} <span className="ml-1 font-semibold text-foreground">{format(day, "d")}</span>
                 </span>
               ))}
             </div>
@@ -56,7 +56,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
               {hours.map((hour, index) => (
                 <div key={hour} className="relative" style={{ height: "96px" }}>
                   <div className="absolute -top-3 right-2 flex h-6 items-center">
-                    {index !== 0 && <span className="text-xs text-t-quaternary">{format(new Date().setHours(hour), "hh a")}</span>}
+                    {index !== 0 && <span className="text-xs text-muted-foreground">{format(new Date().setHours(hour), "hh a")}</span>}
                   </div>
                 </div>
               ))}
@@ -75,13 +75,13 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                         <div key={hour} className="relative" style={{ height: "96px" }}>
                           {index !== 0 && <div className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>}
                           <AddEventDialog startDate={day} startTime={{ hour, minute: 0 }}>
-                            <div className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover" />
+                            <div className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-accent" />
                           </AddEventDialog>
 
-                          <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed border-b-tertiary"></div>
+                          <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed"></div>
 
                           <AddEventDialog startDate={day} startTime={{ hour, minute: 30 }}>
-                            <div className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-bg-primary-hover" />
+                            <div className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-accent" />
                           </AddEventDialog>
                         </div>
                       ))}

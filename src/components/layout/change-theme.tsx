@@ -25,7 +25,7 @@ export function ToggleTheme() {
   if (!currentTheme) return <Skeleton className="size-9" />;
 
   return (
-    <Button variant="ghost" size="icon-sm" onClick={toggleTheme}>
+    <Button variant="ghost" size="icon" onClick={toggleTheme}>
       {currentTheme === "light" && <Sun />}
       {currentTheme === "dark" && <Moon />}
     </Button>

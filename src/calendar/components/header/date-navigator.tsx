@@ -34,7 +34,9 @@ export function DateNavigator({ view, events }: IProps) {
         <span className="text-lg font-semibold">
           {month} {year}
         </span>
-        <Badge>{eventCount} events</Badge>
+        <Badge variant="outline" className="px-1.5">
+          {eventCount} events
+        </Badge>
       </div>
 
       <div className="flex items-center gap-2">
@@ -42,7 +44,7 @@ export function DateNavigator({ view, events }: IProps) {
           <ChevronLeft />
         </Button>
 
-        <p className="text-sm text-t-tertiary">{rangeText(view, selectedDate)}</p>
+        <p className="text-sm text-muted-foreground">{rangeText(view, selectedDate)}</p>
 
         <Button variant="outline" className="size-6.5 px-0 [&_svg]:size-4.5" onClick={handleNext}>
           <ChevronRight />

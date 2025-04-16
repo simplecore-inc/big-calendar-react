@@ -5,14 +5,14 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
 
-import { cn } from "@/utils/helpers/cn.helper";
+import { cn } from "@/lib/utils";
 
 import type { HTMLAttributes } from "react";
 import type { IEvent } from "@/calendar/interfaces";
 import type { VariantProps } from "class-variance-authority";
 
 const calendarWeekEventCardVariants = cva(
-  "flex select-none flex-col gap-0.5 truncate whitespace-nowrap rounded-md border px-2 py-1.5 text-xs focus-visible:outline-offset-2",
+  "flex select-none flex-col gap-0.5 truncate whitespace-nowrap rounded-md border px-2 py-1.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
   {
     variants: {
       color: {
@@ -25,12 +25,12 @@ const calendarWeekEventCardVariants = cva(
         orange: "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300 [&_.event-dot]:fill-orange-600",
 
         // Dot variants
-        "blue-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-blue-600",
-        "green-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-green-600",
-        "red-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-red-600",
-        "orange-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-orange-600",
-        "purple-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-purple-600",
-        "yellow-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-yellow-600",
+        "blue-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-blue-600",
+        "green-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-green-600",
+        "red-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-red-600",
+        "orange-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-orange-600",
+        "purple-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-purple-600",
+        "yellow-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-yellow-600",
       },
     },
     defaultVariants: {
@@ -55,9 +55,16 @@ export function EventBlock({ event, className }: IProps) {
 
   const calendarWeekEventCardClasses = cn(calendarWeekEventCardVariants({ color, className }), durationInMinutes < 35 && "py-0 justify-center");
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (e.currentTarget instanceof HTMLElement) e.currentTarget.click();
+    }
+  };
+
   return (
     <EventDetailsDialog event={event}>
-      <div role="button" tabIndex={0} className={calendarWeekEventCardClasses} style={{ height: `${heightInPixels}px` }}>
+      <div role="button" tabIndex={0} className={calendarWeekEventCardClasses} style={{ height: `${heightInPixels}px` }} onKeyDown={handleKeyDown}>
         <div className="flex items-center gap-1.5 truncate">
           {["mixed", "dot"].includes(badgeVariant) && (
             <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">

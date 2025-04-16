@@ -3,7 +3,7 @@
 import { format, parseISO } from "date-fns";
 import { Calendar, Clock, Text, User } from "lucide-react";
 
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 import type { IEvent } from "@/calendar/interfaces";
 
@@ -17,52 +17,48 @@ export function EventDetailsDialog({ event, children }: IProps) {
   const endDate = parseISO(event.endDate);
 
   return (
-    <Dialog.Root>
-      <Dialog.Trigger asChild>{children}</Dialog.Trigger>
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <Dialog.Content size="xs">
-        <Dialog.Close />
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{event.title}</DialogTitle>
+        </DialogHeader>
 
-        <Dialog.Header>
-          <Dialog.Title>{event.title}</Dialog.Title>
-        </Dialog.Header>
-
-        <Dialog.Body>
-          <div className="space-y-4">
-            <div className="flex items-start gap-2">
-              <User className="mt-1 size-4 shrink-0 text-t-secondary" />
-              <div>
-                <p className="text-sm font-medium">Responsible</p>
-                <p className="text-sm text-t-secondary">{event.user.name}</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2">
-              <Calendar className="mt-1 size-4 shrink-0 text-t-secondary" />
-              <div>
-                <p className="text-sm font-medium">Start Date</p>
-                <p className="text-sm text-t-secondary">{format(startDate, "MMM d, yyyy h:mm a")}</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2">
-              <Clock className="mt-1 size-4 shrink-0 text-t-secondary" />
-              <div>
-                <p className="text-sm font-medium">End Date</p>
-                <p className="text-sm text-t-secondary">{format(endDate, "MMM d, yyyy h:mm a")}</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2">
-              <Text className="mt-1 size-4 shrink-0 text-t-secondary" />
-              <div>
-                <p className="text-sm font-medium">Description</p>
-                <p className="text-sm text-t-secondary">{event.description}</p>
-              </div>
+        <div className="space-y-4">
+          <div className="flex items-start gap-2">
+            <User className="mt-1 size-4 shrink-0" />
+            <div>
+              <p className="text-sm font-medium">Responsible</p>
+              <p className="text-sm text-muted-foreground">{event.user.name}</p>
             </div>
           </div>
-        </Dialog.Body>
-      </Dialog.Content>
-    </Dialog.Root>
+
+          <div className="flex items-start gap-2">
+            <Calendar className="mt-1 size-4 shrink-0" />
+            <div>
+              <p className="text-sm font-medium">Start Date</p>
+              <p className="text-sm text-muted-foreground">{format(startDate, "MMM d, yyyy h:mm a")}</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-2">
+            <Clock className="mt-1 size-4 shrink-0" />
+            <div>
+              <p className="text-sm font-medium">End Date</p>
+              <p className="text-sm text-muted-foreground">{format(endDate, "MMM d, yyyy h:mm a")}</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-2">
+            <Text className="mt-1 size-4 shrink-0" />
+            <div>
+              <p className="text-sm font-medium">Description</p>
+              <p className="text-sm text-muted-foreground">{event.description}</p>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

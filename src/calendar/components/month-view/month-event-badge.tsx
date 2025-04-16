@@ -5,13 +5,13 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
 
-import { cn } from "@/utils/helpers/cn.helper";
+import { cn } from "@/lib/utils";
 
 import type { IEvent } from "@/calendar/interfaces";
 import type { VariantProps } from "class-variance-authority";
 
 const eventBadgeVariants = cva(
-  "mx-1 flex size-auto h-6.5 select-none items-center justify-between gap-1.5 truncate whitespace-nowrap rounded-md border px-2 text-xs",
+  "mx-1 flex size-auto h-6.5 select-none items-center justify-between gap-1.5 truncate whitespace-nowrap rounded-md border px-2 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
   {
     variants: {
       color: {
@@ -24,12 +24,12 @@ const eventBadgeVariants = cva(
         orange: "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300 [&_.event-dot]:fill-orange-600",
 
         // Dot variants
-        "blue-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-blue-600",
-        "green-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-green-600",
-        "red-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-red-600",
-        "orange-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-orange-600",
-        "purple-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-purple-600",
-        "yellow-dot": "border-b-primary bg-bg-secondary text-t-primary [&_.event-dot]:fill-yellow-600",
+        "blue-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-blue-600",
+        "green-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-green-600",
+        "red-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-red-600",
+        "orange-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-orange-600",
+        "purple-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-purple-600",
+        "yellow-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-yellow-600",
       },
       multiDayPosition: {
         first: "relative z-10 mr-0 w-[calc(100%_-_3px)] rounded-r-none border-r-0 [&>span]:mr-2.5",
@@ -83,9 +83,16 @@ export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDa
 
   const eventBadgeClasses = cn(eventBadgeVariants({ color, multiDayPosition: position, className }));
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (e.currentTarget instanceof HTMLElement) e.currentTarget.click();
+    }
+  };
+
   return (
     <EventDetailsDialog event={event}>
-      <div role="button" tabIndex={0} className={eventBadgeClasses}>
+      <div role="button" tabIndex={0} className={eventBadgeClasses} onKeyDown={handleKeyDown}>
         <div className="flex items-center gap-1.5 truncate">
           {!["middle", "last"].includes(position) && ["mixed", "dot"].includes(badgeVariant) && (
             <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">

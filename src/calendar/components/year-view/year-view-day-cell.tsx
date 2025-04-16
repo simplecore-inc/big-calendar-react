@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { cn } from "@/utils/helpers/cn.helper";
+import { cn } from "@/lib/utils";
 
 import type { IEvent } from "@/calendar/interfaces";
 
@@ -29,10 +29,13 @@ export function YearViewDayCell({ day, date, events }: IProps) {
     <button
       onClick={handleClick}
       type="button"
-      className="flex h-11 flex-1 flex-col items-center justify-start gap-0.5 rounded-md pt-1 hover:bg-bg-primary-hover"
+      className="flex h-11 flex-1 flex-col items-center justify-start gap-0.5 rounded-md pt-1 hover:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
     >
       <div
-        className={cn("flex size-6 items-center justify-center rounded-full text-xs font-medium", isToday(date) && "bg-primary-600 font-semibold text-white")}
+        className={cn(
+          "flex size-6 items-center justify-center rounded-full text-xs font-medium",
+          isToday(date) && "bg-primary font-semibold text-primary-foreground"
+        )}
       >
         {day}
       </div>
@@ -56,8 +59,18 @@ export function YearViewDayCell({ day, date, events }: IProps) {
             ))
           ) : (
             <>
-              <div className="size-1.5 rounded-full bg-primary-600" />
-              <span className="text-[7px] text-t-tertiary">+{eventCount - 1}</span>
+              <div
+                className={cn(
+                  "size-1.5 rounded-full",
+                  events[0].color === "blue" && "bg-blue-600",
+                  events[0].color === "green" && "bg-green-600",
+                  events[0].color === "red" && "bg-red-600",
+                  events[0].color === "yellow" && "bg-yellow-600",
+                  events[0].color === "purple" && "bg-purple-600",
+                  events[0].color === "orange" && "bg-orange-600"
+                )}
+              />
+              <span className="text-[7px] text-muted-foreground">+{eventCount - 1}</span>
             </>
           )}
         </div>

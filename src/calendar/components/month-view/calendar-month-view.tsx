@@ -32,7 +32,7 @@ export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
       <div className="grid grid-cols-7 divide-x">
         {WEEK_DAYS.map(day => (
           <div key={day} className="flex items-center justify-center py-2">
-            <span className="text-xs font-medium text-t-quaternary">{day}</span>
+            <span className="text-xs font-medium text-muted-foreground">{day}</span>
           </div>
         ))}
       </div>

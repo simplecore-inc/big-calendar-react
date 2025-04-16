@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-import { cn } from "@/utils/helpers/cn.helper";
+import { cn } from "@/lib/utils";
 
 import type { TEventColor } from "@/calendar/types";
 

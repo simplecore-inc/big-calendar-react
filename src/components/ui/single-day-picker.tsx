@@ -3,8 +3,8 @@ import { format } from "date-fns";
 import { useDisclosure } from "@/hooks/use-disclosure";
 
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { DayPicker } from "@/components/old-ui/day-picker";
 
 import { cn } from "@/utils/helpers/cn.helper";
 
@@ -13,13 +13,13 @@ import type { ButtonHTMLAttributes } from "react";
 // ================================== //
 
 type TProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onSelect" | "value"> & {
-  readonly onSelect: (value: Date | undefined) => void;
-  readonly value?: Date | undefined;
-  readonly placeholder: string;
-  readonly labelVariant?: "P" | "PP" | "PPP";
+  onSelect: (value: Date | undefined) => void;
+  value?: Date | undefined;
+  placeholder: string;
+  labelVariant?: "P" | "PP" | "PPP";
 };
 
-function SingleDayPickerInput({ id, onSelect, className, placeholder, labelVariant = "PPP", value, ...props }: TProps) {
+function SingleDayPicker({ id, onSelect, className, placeholder, labelVariant = "PPP", value, ...props }: TProps) {
   const { isOpen, onClose, onToggle } = useDisclosure();
 
   const handleSelect = (date: Date | undefined) => {
@@ -41,8 +41,8 @@ function SingleDayPickerInput({ id, onSelect, className, placeholder, labelVaria
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent align="start" className="p-2">
-        <DayPicker className="p-1" mode="single" selected={value} onSelect={handleSelect} initialFocus />
+      <PopoverContent align="center" className="w-fit p-0">
+        <Calendar mode="single" selected={value} onSelect={handleSelect} initialFocus />
       </PopoverContent>
     </Popover>
   );
@@ -50,4 +50,4 @@ function SingleDayPickerInput({ id, onSelect, className, placeholder, labelVaria
 
 // ================================== //
 
-export { SingleDayPickerInput };
+export { SingleDayPicker };

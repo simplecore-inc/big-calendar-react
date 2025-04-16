@@ -8,12 +8,11 @@ import { useDisclosure } from "@/hooks/use-disclosure";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { TimeInput } from "@/components/ui/time-input";
+import { SingleDayPicker } from "@/components/ui/single-day-picker";
 import { Form, FormField, FormLabel, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogHeader, DialogClose, DialogContent, DialogTrigger, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-
-import { TimeInput } from "@/components/old-ui/time-input";
-import { SingleDayPickerInput } from "@/components/old-ui/single-day-picker-input";
 
 import { eventSchema } from "@/calendar/schemas";
 
@@ -85,7 +84,7 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
                     <FormLabel htmlFor="startDate">Start Date</FormLabel>
 
                     <FormControl>
-                      <SingleDayPickerInput
+                      <SingleDayPicker
                         id="startDate"
                         value={field.value}
                         onSelect={date => field.onChange(date as Date)}
@@ -124,7 +123,7 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
                   <FormItem className="flex-1">
                     <FormLabel>End Date</FormLabel>
                     <FormControl>
-                      <SingleDayPickerInput
+                      <SingleDayPicker
                         value={field.value}
                         onSelect={date => field.onChange(date as Date)}
                         placeholder="Select a date"

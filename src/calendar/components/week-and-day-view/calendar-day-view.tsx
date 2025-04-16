@@ -3,8 +3,8 @@ import { parseISO, areIntervalsOverlapping, format, isWithinInterval } from "dat
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { DayPicker } from "@/components/ui/day-picker";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { DayPicker } from "@/components/old-ui/day-picker";
+import { ScrollArea } from "@/components/old-ui/scroll-area";
 
 import { AddEventDialog } from "@/calendar/components/dialogs/add-event-dialog";
 import { EventBlock } from "@/calendar/components/week-and-day-view/event-block";

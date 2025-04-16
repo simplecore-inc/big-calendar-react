@@ -4,7 +4,7 @@ import { parseISO, format, endOfDay, startOfDay, isSameMonth } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/old-ui/scroll-area";
 import { AgendaDayGroup } from "@/calendar/components/agenda-view/agenda-day-group";
 
 import type { IEvent } from "@/calendar/interfaces";

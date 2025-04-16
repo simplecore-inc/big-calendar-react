@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker as ReactDayPicker } from "react-day-picker";
 
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/old-ui/button";
 
 import { cn } from "@/utils/helpers/cn.helper";
 

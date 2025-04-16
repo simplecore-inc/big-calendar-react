@@ -3,9 +3,9 @@ import { Info } from "lucide-react";
 
 import { useDisclosure } from "@/hooks/use-disclosure";
 
-import { Button } from "@/components/ui/button";
-import { Popover } from "@/components/ui/popover";
-import { DayPicker } from "@/components/ui/day-picker";
+import { Button } from "@/components/old-ui/button";
+import { Popover } from "@/components/old-ui/popover";
+import { DayPicker } from "@/components/old-ui/day-picker";
 
 import { cn } from "@/utils/helpers/cn.helper";
 

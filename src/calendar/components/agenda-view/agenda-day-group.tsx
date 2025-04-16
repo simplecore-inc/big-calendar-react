@@ -1,6 +1,6 @@
 import { differenceInDays, format, parseISO, startOfDay } from "date-fns";
 
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/components/old-ui/separator";
 import { AgendaEventCard } from "@/calendar/components/agenda-view/agenda-event-card";
 
 import type { IEvent } from "@/calendar/interfaces";

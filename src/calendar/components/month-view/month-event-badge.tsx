@@ -83,9 +83,16 @@ export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDa
 
   const eventBadgeClasses = cn(eventBadgeVariants({ color, multiDayPosition: position, className }));
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (e.currentTarget instanceof HTMLElement) e.currentTarget.click();
+    }
+  };
+
   return (
     <EventDetailsDialog event={event}>
-      <div role="button" tabIndex={0} className={eventBadgeClasses}>
+      <div role="button" tabIndex={0} className={eventBadgeClasses} onKeyDown={handleKeyDown}>
         <div className="flex items-center gap-1.5 truncate">
           {!["middle", "last"].includes(position) && ["mixed", "dot"].includes(badgeVariant) && (
             <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">

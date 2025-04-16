@@ -4,8 +4,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/old-ui/badge";
-import { Button } from "@/components/old-ui/button";
 
 import { getEventsCount, navigateDate, rangeText } from "@/calendar/helpers";
 
@@ -42,7 +42,7 @@ export function DateNavigator({ view, events }: IProps) {
           <ChevronLeft />
         </Button>
 
-        <p className="text-sm text-t-tertiary">{rangeText(view, selectedDate)}</p>
+        <p className="text-sm text-muted-foreground">{rangeText(view, selectedDate)}</p>
 
         <Button variant="outline" className="size-6.5 px-0 [&_svg]:size-4.5" onClick={handleNext}>
           <ChevronRight />

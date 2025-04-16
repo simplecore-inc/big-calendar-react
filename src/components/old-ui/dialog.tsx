@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import { cva } from "class-variance-authority";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
-import { Button } from "@/components/old-ui/button";
+import { Button } from "@/components/ui/button";
 
 import { cn } from "@/utils/helpers/cn.helper";
 
@@ -51,7 +51,7 @@ type TDialogCloseProps = ComponentPropsWithoutRef<typeof DialogPrimitive.Close>;
 const DialogClose = forwardRef<TDialogCloseRef, TDialogCloseProps>(({ className, children, ...props }, ref) => (
   <DialogPrimitive.Close ref={ref} className={cn("", className)} asChild {...props}>
     {children || (
-      <Button variant="ghost" size="icon-xxxs" className="absolute right-2.5 top-2.5">
+      <Button variant="ghost" className="absolute right-2.5 top-2.5 size-6">
         <X className="size-4" />
         <span className="sr-only">Close</span>
       </Button>
@@ -140,7 +140,7 @@ type TDialogDescriptionProps = ComponentPropsWithoutRef<typeof DialogPrimitive.D
 
 const DialogDescription = forwardRef<TDialogDescriptionRef, TDialogDescriptionProps>(({ className, children }, ref) => {
   return (
-    <DialogPrimitive.Description ref={ref} className={cn("text-sm text-t-secondary", className)}>
+    <DialogPrimitive.Description ref={ref} className={cn("text-t-secondary text-sm", className)}>
       {children}
     </DialogPrimitive.Description>
   );

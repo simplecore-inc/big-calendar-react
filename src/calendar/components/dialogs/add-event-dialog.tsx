@@ -9,7 +9,7 @@ import { Form } from "@/components/old-ui/form";
 import { Input } from "@/components/old-ui/input";
 import { Select } from "@/components/old-ui/select";
 import { Dialog } from "@/components/old-ui/dialog";
-import { Button } from "@/components/old-ui/button";
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/old-ui/textarea";
 import { TimeInput } from "@/components/old-ui/time-input";
 import { SingleDayPickerInput } from "@/components/old-ui/single-day-picker-input";

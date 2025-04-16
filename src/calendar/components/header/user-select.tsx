@@ -1,46 +1,46 @@
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { Avatar } from "@/components/old-ui/avatar";
-import { Select } from "@/components/old-ui/select";
-import { AvatarGroup } from "@/components/old-ui/avatar-group";
+import { AvatarGroup } from "@/components/ui/avatar-group";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function UserSelect() {
   const { users, selectedUserId, setSelectedUserId } = useCalendar();
 
   return (
-    <Select.Root value={selectedUserId} onValueChange={setSelectedUserId}>
-      <Select.Trigger className="flex-1 md:w-48">
-        <Select.Value />
-      </Select.Trigger>
+    <Select value={selectedUserId} onValueChange={setSelectedUserId}>
+      <SelectTrigger className="flex-1 md:w-48">
+        <SelectValue />
+      </SelectTrigger>
 
-      <Select.Content viewportClassName="w-64" align="end">
-        <Select.Item value="all">
+      <SelectContent align="end">
+        <SelectItem value="all">
           <div className="flex items-center gap-1">
             <AvatarGroup max={2}>
               {users.map(user => (
-                <Avatar.Root key={user.id} className="size-6 text-xxs">
-                  <Avatar.Image src={user.picturePath ?? undefined} alt={user.name} />
-                  <Avatar.Fallback className="text-xxs">{user.name[0]}</Avatar.Fallback>
-                </Avatar.Root>
+                <Avatar key={user.id} className="size-6 text-xxs">
+                  <AvatarImage src={user.picturePath ?? undefined} alt={user.name} />
+                  <AvatarFallback className="text-xxs">{user.name[0]}</AvatarFallback>
+                </Avatar>
               ))}
             </AvatarGroup>
             All
           </div>
-        </Select.Item>
+        </SelectItem>
 
         {users.map(user => (
-          <Select.Item key={user.id} value={user.id} className="flex-1">
+          <SelectItem key={user.id} value={user.id} className="flex-1">
             <div className="flex items-center gap-2">
-              <Avatar.Root key={user.id} className="size-6">
-                <Avatar.Image src={user.picturePath ?? undefined} alt={user.name} />
-                <Avatar.Fallback className="text-xxs">{user.name[0]}</Avatar.Fallback>
-              </Avatar.Root>
+              <Avatar key={user.id} className="size-6">
+                <AvatarImage src={user.picturePath ?? undefined} alt={user.name} />
+                <AvatarFallback className="text-xxs">{user.name[0]}</AvatarFallback>
+              </Avatar>
 
               <p className="truncate">{user.name}</p>
             </div>
-          </Select.Item>
+          </SelectItem>
         ))}
-      </Select.Content>
-    </Select.Root>
+      </SelectContent>
+    </Select>
   );
 }

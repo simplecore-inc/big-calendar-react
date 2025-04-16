@@ -4,8 +4,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/old-ui/badge";
 
 import { getEventsCount, navigateDate, rangeText } from "@/calendar/helpers";
 
@@ -34,7 +34,9 @@ export function DateNavigator({ view, events }: IProps) {
         <span className="text-lg font-semibold">
           {month} {year}
         </span>
-        <Badge>{eventCount} events</Badge>
+        <Badge variant="outline" className="px-1.5">
+          {eventCount} events
+        </Badge>
       </div>
 
       <div className="flex items-center gap-2">

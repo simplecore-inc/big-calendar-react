@@ -107,11 +107,11 @@ src/
 
 1. Copy the required folders to your project:
 
-   ```
-   src/calendar/         # Core calendar functionality
-   src/components/ui/    # UI components used by the calendar
-   src/hooks/            # Required hooks like use-disclosure
-   ```
+```
+src/calendar/         # Core calendar functionality
+src/components/ui/    # UI components used by the calendar
+src/hooks/            # Required hooks like use-disclosure
+```
 
 2. Install dependencies
 
@@ -121,37 +121,37 @@ npm install
 
 ### Basic setup
 
-1. **Set up the CalendarProvider**
+1. **Set up the `CalendarProvider`**
 
    Wrap your application or page with the `CalendarProvider`:
 
-   ```tsx
-   import { CalendarProvider } from "@/calendar/contexts/calendar-context";
+```tsx
+import { CalendarProvider } from "@/calendar/contexts/calendar-context";
 
-   // Fetch your events and users data
-   const events = await getEvents();
-   const users = await getUsers();
+// Fetch your events and users data
+const events = await getEvents();
+const users = await getUsers();
 
-   export default function Layout({ children }) {
-     return (
-       <CalendarProvider users={users} events={events}>
-         {children}
-       </CalendarProvider>
-     );
-   }
-   ```
+export default function Layout({ children }) {
+ return (
+   <CalendarProvider users={users} events={events}>
+     {children}
+   </CalendarProvider>
+ );
+}
+```
 
-2. **Add a CalendarView**
+2. **Add a `CalendarView`**
 
    Use the `ClientContainer` to render a specific view:
 
-   ```tsx
-   import { ClientContainer } from "@/calendar/components/client-container";
+```tsx
+import { ClientContainer } from "@/calendar/components/client-container";
 
-   export default function CalendarPage() {
-     return <ClientContainer view="month" />;
-   }
-   ```
+export default function CalendarPage() {
+ return <ClientContainer view="month" />;
+}
+```
 
 ### Views configuration
 
@@ -180,32 +180,32 @@ The calendar supports five different views, each can be used with the `ClientCon
 
    Events should follow this interface (you can modify it as you want, but the calendar will expect these fields):
 
-   ```tsx
-   interface IEvent {
-     id: string;
-     title: string;
-     description: string;
-     startDate: string; // ISO string
-     endDate: string; // ISO string
-     color: "blue" | "green" | "red" | "yellow" | "purple" | "orange";
-     user: {
-       id: string;
-       name: string;
-     };
-   }
-   ```
+```tsx
+interface IEvent {
+ id: string;
+ title: string;
+ description: string;
+ startDate: string; // ISO string
+ endDate: string; // ISO string
+ color: "blue" | "green" | "red" | "yellow" | "purple" | "orange";
+ user: {
+   id: string;
+   name: string;
+ };
+}
+```
 
 2. **Users format**
 
    Users should follow this interface (you can modify it as you want, but the calendar will expect these fields):
 
-   ```tsx
-   interface IUser {
-     id: string;
-     name: string;
-     picturePath?: string; // Optional avatar image
-   }
-   ```
+```tsx
+interface IUser {
+ id: string;
+ name: string;
+ picturePath?: string; // Optional avatar image
+}
+```
 
 ### Customizing the calendar
 
@@ -213,12 +213,12 @@ The calendar supports five different views, each can be used with the `ClientCon
 
    You can control the event display style with the `ChangeBadgeVariantInput` component:
 
-   ```tsx
-   import { ChangeBadgeVariantInput } from "@/calendar/components/change-badge-variant-input";
+```tsx
+import { ChangeBadgeVariantInput } from "@/calendar/components/change-badge-variant-input";
 
-   // Place this anywhere in your project tree inside the CalendarProvider
-   <ChangeBadgeVariantInput />;
-   ```
+// Place this anywhere in your project tree inside the CalendarProvider
+<ChangeBadgeVariantInput />;
+```
 
 2. **Creating events**
 

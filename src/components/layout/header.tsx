@@ -16,7 +16,11 @@ export function Header() {
             <p className="text-lg font-medium leading-6">Big calendar</p>
             <p className="text-sm text-foreground">
               Built with Next.js and Tailwind by{" "}
-              <Link href="https://github.com/lramos33" target="_blank" className="inline-flex gap-0.5 text-sm underline">
+              <Link
+                href="https://github.com/lramos33"
+                target="_blank"
+                className="inline-flex gap-0.5 text-sm underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
                 lramos33
                 <ArrowUpRight size={12} className="text-foreground" />
               </Link>
@@ -25,7 +29,11 @@ export function Header() {
         </div>
 
         <div className="hidden items-center gap-4 md:flex">
-          <Link href="https://github.com/lramos33/big-calendar" target="_blank" className="inline-flex gap-0.5 text-sm hover:underline">
+          <Link
+            href="https://github.com/lramos33/big-calendar"
+            target="_blank"
+            className="inline-flex gap-0.5 text-sm hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          >
             View on GitHub
             <ArrowUpRight size={14} className="text-foreground" />
           </Link>

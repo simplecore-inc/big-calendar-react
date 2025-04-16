@@ -12,7 +12,7 @@ import type { IEvent } from "@/calendar/interfaces";
 import type { VariantProps } from "class-variance-authority";
 
 const calendarWeekEventCardVariants = cva(
-  "flex select-none flex-col gap-0.5 truncate whitespace-nowrap rounded-md border px-2 py-1.5 text-xs focus-visible:outline-offset-2",
+  "flex select-none flex-col gap-0.5 truncate whitespace-nowrap rounded-md border px-2 py-1.5 text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
   {
     variants: {
       color: {

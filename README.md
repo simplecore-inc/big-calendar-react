@@ -113,11 +113,7 @@ src/components/ui/    # UI components used by the calendar
 src/hooks/            # Required hooks like use-disclosure
 ```
 
-2. Install dependencies
-
-```bash
-npm install
-```
+2. Install dependencies missing in your project
 
 ### Basic setup
 

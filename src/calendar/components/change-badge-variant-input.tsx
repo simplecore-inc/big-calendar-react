@@ -2,7 +2,7 @@
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
-import { Select } from "@/components/old-ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function ChangeBadgeVariantInput() {
   const { badgeVariant, setBadgeVariant } = useCalendar();
@@ -11,17 +11,17 @@ export function ChangeBadgeVariantInput() {
     <div className="space-y-1">
       <p className="text-sm font-semibold">Change badge variant</p>
 
-      <Select.Root value={badgeVariant} onValueChange={setBadgeVariant}>
-        <Select.Trigger className="w-48">
-          <Select.Value />
-        </Select.Trigger>
+      <Select value={badgeVariant} onValueChange={setBadgeVariant}>
+        <SelectTrigger className="w-48">
+          <SelectValue />
+        </SelectTrigger>
 
-        <Select.Content viewportClassName="w-64" align="end">
-          <Select.Item value="dot">Dot</Select.Item>
-          <Select.Item value="colored">Colored</Select.Item>
-          <Select.Item value="mixed">Mixed</Select.Item>
-        </Select.Content>
-      </Select.Root>
+        <SelectContent>
+          <SelectItem value="dot">Dot</SelectItem>
+          <SelectItem value="colored">Colored</SelectItem>
+          <SelectItem value="mixed">Mixed</SelectItem>
+        </SelectContent>
+      </Select>
     </div>
   );
 }

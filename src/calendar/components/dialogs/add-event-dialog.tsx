@@ -48,8 +48,6 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent>
-        <DialogClose />
-
         <DialogHeader>
           <DialogTitle>Add New Event</DialogTitle>
           <DialogDescription>

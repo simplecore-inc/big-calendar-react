@@ -5,12 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useDisclosure } from "@/hooks/use-disclosure";
 
-import { Form } from "@/components/old-ui/form";
-import { Input } from "@/components/old-ui/input";
-import { Select } from "@/components/old-ui/select";
-import { Dialog } from "@/components/old-ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/old-ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
+import { Form, FormField, FormLabel, FormItem, FormControl, FormMessage } from "@/components/ui/form";
+import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogHeader, DialogClose, DialogContent, DialogTrigger, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+
 import { TimeInput } from "@/components/old-ui/time-input";
 import { SingleDayPickerInput } from "@/components/old-ui/single-day-picker-input";
 
@@ -39,214 +40,209 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
   });
 
   const onSubmit = (_values: TEventFormData) => {
-    // This is just and example of how to use the form. In a real application, you would call the API to create the event.
     onClose();
     form.reset();
   };
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={onToggle}>
-      <Dialog.Trigger asChild>{children}</Dialog.Trigger>
+    <Dialog open={isOpen} onOpenChange={onToggle}>
+      <DialogTrigger asChild>{children}</DialogTrigger>
 
-      <Dialog.Content>
-        <Dialog.Close />
+      <DialogContent>
+        <DialogClose />
 
-        <Dialog.Header>
-          <Dialog.Title>Add New Event</Dialog.Title>
-          <Dialog.Description>Create a new event for your calendar.</Dialog.Description>
-        </Dialog.Header>
+        <DialogHeader>
+          <DialogTitle>Add New Event</DialogTitle>
+          <DialogDescription>
+            This is just and example of how to use the form. In a real application, you would call the API to create the event
+          </DialogDescription>
+        </DialogHeader>
 
-        <Dialog.Body>
-          <Form.Root {...form}>
-            <form id="event-form" onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
-              <Form.Field
+        <Form {...form}>
+          <form id="event-form" onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel htmlFor="title">Title</FormLabel>
+
+                  <FormControl>
+                    <Input id="title" placeholder="Enter a title" data-invalid={fieldState.invalid} {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex items-start gap-2">
+              <FormField
                 control={form.control}
-                name="title"
+                name="startDate"
                 render={({ field, fieldState }) => (
-                  <Form.Item>
-                    <Form.Label htmlFor="title" required>
-                      Title
-                    </Form.Label>
+                  <FormItem className="flex-1">
+                    <FormLabel htmlFor="startDate">Start Date</FormLabel>
 
-                    <Form.Control>
-                      <Input id="title" placeholder="Enter a title" data-invalid={fieldState.invalid} {...field} />
-                    </Form.Control>
+                    <FormControl>
+                      <SingleDayPickerInput
+                        id="startDate"
+                        value={field.value}
+                        onSelect={date => field.onChange(date as Date)}
+                        placeholder="Select a date"
+                        data-invalid={fieldState.invalid}
+                      />
+                    </FormControl>
 
-                    <Form.ErrorMessage />
-                  </Form.Item>
+                    <FormMessage />
+                  </FormItem>
                 )}
               />
 
-              <div className="flex items-start gap-2">
-                <Form.Field
-                  control={form.control}
-                  name="startDate"
-                  render={({ field, fieldState }) => (
-                    <Form.Item className="flex-1">
-                      <Form.Label htmlFor="startDate" required>
-                        Start Date
-                      </Form.Label>
-
-                      <Form.Control>
-                        <SingleDayPickerInput
-                          id="startDate"
-                          value={field.value}
-                          onSelect={date => field.onChange(date as Date)}
-                          placeholder="Select a date"
-                          data-invalid={fieldState.invalid}
-                        />
-                      </Form.Control>
-
-                      <Form.ErrorMessage />
-                    </Form.Item>
-                  )}
-                />
-
-                <Form.Field
-                  control={form.control}
-                  name="startTime"
-                  render={({ field, fieldState }) => (
-                    <Form.Item className="flex-1">
-                      <Form.Label required>Start Time</Form.Label>
-
-                      <Form.Control>
-                        <TimeInput value={field.value as TimeValue} onChange={field.onChange} hourCycle={12} data-invalid={fieldState.invalid} />
-                      </Form.Control>
-
-                      <Form.ErrorMessage />
-                    </Form.Item>
-                  )}
-                />
-              </div>
-
-              <div className="flex items-start gap-2">
-                <Form.Field
-                  control={form.control}
-                  name="endDate"
-                  render={({ field, fieldState }) => (
-                    <Form.Item className="flex-1">
-                      <Form.Label required>End Date</Form.Label>
-                      <Form.Control>
-                        <SingleDayPickerInput
-                          value={field.value}
-                          onSelect={date => field.onChange(date as Date)}
-                          placeholder="Select a date"
-                          data-invalid={fieldState.invalid}
-                        />
-                      </Form.Control>
-                      <Form.ErrorMessage />
-                    </Form.Item>
-                  )}
-                />
-
-                <Form.Field
-                  control={form.control}
-                  name="endTime"
-                  render={({ field, fieldState }) => (
-                    <Form.Item className="flex-1">
-                      <Form.Label required>End Time</Form.Label>
-                      <Form.Control>
-                        <TimeInput value={field.value as TimeValue} onChange={field.onChange} hourCycle={12} data-invalid={fieldState.invalid} />
-                      </Form.Control>
-                      <Form.ErrorMessage />
-                    </Form.Item>
-                  )}
-                />
-              </div>
-
-              <Form.Field
+              <FormField
                 control={form.control}
-                name="variant"
+                name="startTime"
                 render={({ field, fieldState }) => (
-                  <Form.Item>
-                    <Form.Label required>Variant</Form.Label>
-                    <Form.Control>
-                      <Select.Root value={field.value} onValueChange={field.onChange}>
-                        <Select.Trigger data-invalid={fieldState.invalid}>
-                          <Select.Value placeholder="Select an option" />
-                        </Select.Trigger>
+                  <FormItem className="flex-1">
+                    <FormLabel>Start Time</FormLabel>
 
-                        <Select.Content>
-                          <Select.Item value="blue">
-                            <div className="flex items-center gap-2">
-                              <div className="size-3.5 rounded-full bg-blue-600 dark:bg-blue-700" />
-                              Blue
-                            </div>
-                          </Select.Item>
+                    <FormControl>
+                      <TimeInput value={field.value as TimeValue} onChange={field.onChange} hourCycle={12} data-invalid={fieldState.invalid} />
+                    </FormControl>
 
-                          <Select.Item value="green">
-                            <div className="flex items-center gap-2">
-                              <div className="size-3.5 rounded-full bg-green-600 dark:bg-green-700" />
-                              Green
-                            </div>
-                          </Select.Item>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-                          <Select.Item value="red">
-                            <div className="flex items-center gap-2">
-                              <div className="size-3.5 rounded-full bg-red-600 dark:bg-red-700" />
-                              Red
-                            </div>
-                          </Select.Item>
-
-                          <Select.Item value="yellow">
-                            <div className="flex items-center gap-2">
-                              <div className="size-3.5 rounded-full bg-yellow-600 dark:bg-yellow-700" />
-                              Yellow
-                            </div>
-                          </Select.Item>
-
-                          <Select.Item value="purple">
-                            <div className="flex items-center gap-2">
-                              <div className="size-3.5 rounded-full bg-purple-600 dark:bg-purple-700" />
-                              Purple
-                            </div>
-                          </Select.Item>
-
-                          <Select.Item value="gray">
-                            <div className="flex items-center gap-2">
-                              <div className="size-3.5 rounded-full bg-gray-600 dark:bg-gray-700" />
-                              Gray
-                            </div>
-                          </Select.Item>
-                        </Select.Content>
-                      </Select.Root>
-                    </Form.Control>
-                    <Form.ErrorMessage />
-                  </Form.Item>
+            <div className="flex items-start gap-2">
+              <FormField
+                control={form.control}
+                name="endDate"
+                render={({ field, fieldState }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>End Date</FormLabel>
+                    <FormControl>
+                      <SingleDayPickerInput
+                        value={field.value}
+                        onSelect={date => field.onChange(date as Date)}
+                        placeholder="Select a date"
+                        data-invalid={fieldState.invalid}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
               />
 
-              <Form.Field
+              <FormField
                 control={form.control}
-                name="description"
+                name="endTime"
                 render={({ field, fieldState }) => (
-                  <Form.Item>
-                    <Form.Label>Description</Form.Label>
-
-                    <Form.Control>
-                      <Textarea {...field} value={field.value} data-invalid={fieldState.invalid} />
-                    </Form.Control>
-
-                    <Form.ErrorMessage />
-                  </Form.Item>
+                  <FormItem className="flex-1">
+                    <FormLabel>End Time</FormLabel>
+                    <FormControl>
+                      <TimeInput value={field.value as TimeValue} onChange={field.onChange} hourCycle={12} data-invalid={fieldState.invalid} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
               />
-            </form>
-          </Form.Root>
-        </Dialog.Body>
+            </div>
 
-        <Dialog.Footer>
-          <Dialog.Close asChild>
+            <FormField
+              control={form.control}
+              name="variant"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Variant</FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger data-invalid={fieldState.invalid}>
+                        <SelectValue placeholder="Select an option" />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        <SelectItem value="blue">
+                          <div className="flex items-center gap-2">
+                            <div className="size-3.5 rounded-full bg-blue-600 dark:bg-blue-700" />
+                            Blue
+                          </div>
+                        </SelectItem>
+
+                        <SelectItem value="green">
+                          <div className="flex items-center gap-2">
+                            <div className="size-3.5 rounded-full bg-green-600 dark:bg-green-700" />
+                            Green
+                          </div>
+                        </SelectItem>
+
+                        <SelectItem value="red">
+                          <div className="flex items-center gap-2">
+                            <div className="size-3.5 rounded-full bg-red-600 dark:bg-red-700" />
+                            Red
+                          </div>
+                        </SelectItem>
+
+                        <SelectItem value="yellow">
+                          <div className="flex items-center gap-2">
+                            <div className="size-3.5 rounded-full bg-yellow-600 dark:bg-yellow-700" />
+                            Yellow
+                          </div>
+                        </SelectItem>
+
+                        <SelectItem value="purple">
+                          <div className="flex items-center gap-2">
+                            <div className="size-3.5 rounded-full bg-purple-600 dark:bg-purple-700" />
+                            Purple
+                          </div>
+                        </SelectItem>
+
+                        <SelectItem value="gray">
+                          <div className="flex items-center gap-2">
+                            <div className="size-3.5 rounded-full bg-gray-600 dark:bg-gray-700" />
+                            Gray
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+
+                  <FormControl>
+                    <Textarea {...field} value={field.value} data-invalid={fieldState.invalid} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+
+        <DialogFooter>
+          <DialogClose asChild>
             <Button type="button" variant="outline">
               Cancel
             </Button>
-          </Dialog.Close>
+          </DialogClose>
 
           <Button form="event-form" type="submit">
             Create Event
           </Button>
-        </Dialog.Footer>
-      </Dialog.Content>
-    </Dialog.Root>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

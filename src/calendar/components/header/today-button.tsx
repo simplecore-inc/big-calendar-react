@@ -9,7 +9,10 @@ export function TodayButton() {
   const handleClick = () => setSelectedDate(today);
 
   return (
-    <button className="flex size-14 flex-col items-start overflow-hidden rounded-lg border" onClick={handleClick}>
+    <button
+      className="flex size-14 flex-col items-start overflow-hidden rounded-lg border focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+      onClick={handleClick}
+    >
       <p className="flex h-6 w-full items-center justify-center bg-primary text-center text-xs font-semibold text-primary-foreground">
         {formatDate(today, "MMM").toUpperCase()}
       </p>

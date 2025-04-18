@@ -21,7 +21,7 @@ interface ICalendarContext {
 const CalendarContext = createContext({} as ICalendarContext);
 
 export function CalendarProvider({ children, users, events }: { children: React.ReactNode; users: IUser[]; events: IEvent[] }) {
-  const [badgeVariant, setBadgeVariant] = useState<TBadgeVariant>("dot");
+  const [badgeVariant, setBadgeVariant] = useState<TBadgeVariant>("colored");
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedUserId, setSelectedUserId] = useState<IUser["id"] | "all">("all");

@@ -3,6 +3,7 @@ import { endOfDay, format, isSameDay, parseISO, startOfDay } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
+import { DraggableEvent } from "@/calendar/components/dnd/draggable-event";
 import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
 
 import { cn } from "@/lib/utils";
@@ -91,29 +92,31 @@ export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDa
   };
 
   return (
-    <EventDetailsDialog event={event}>
-      <div role="button" tabIndex={0} className={eventBadgeClasses} onKeyDown={handleKeyDown}>
-        <div className="flex items-center gap-1.5 truncate">
-          {!["middle", "last"].includes(position) && ["mixed", "dot"].includes(badgeVariant) && (
-            <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">
-              <circle cx="4" cy="4" r="4" />
-            </svg>
-          )}
+    <DraggableEvent event={event}>
+      <EventDetailsDialog event={event}>
+        <div role="button" tabIndex={0} className={eventBadgeClasses} onKeyDown={handleKeyDown}>
+          <div className="flex items-center gap-1.5 truncate">
+            {!["middle", "last"].includes(position) && ["mixed", "dot"].includes(badgeVariant) && (
+              <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">
+                <circle cx="4" cy="4" r="4" />
+              </svg>
+            )}
 
-          {renderBadgeText && (
-            <p className="flex-1 truncate font-semibold">
-              {eventCurrentDay && (
-                <span className="text-xs">
-                  Day {eventCurrentDay} of {eventTotalDays} •{" "}
-                </span>
-              )}
-              {event.title}
-            </p>
-          )}
+            {renderBadgeText && (
+              <p className="flex-1 truncate font-semibold">
+                {eventCurrentDay && (
+                  <span className="text-xs">
+                    Day {eventCurrentDay} of {eventTotalDays} •{" "}
+                  </span>
+                )}
+                {event.title}
+              </p>
+            )}
+          </div>
+
+          {renderBadgeText && <span>{format(new Date(event.startDate), "h:mm a")}</span>}
         </div>
-
-        {renderBadgeText && <span>{format(new Date(event.startDate), "h:mm a")}</span>}
-      </div>
-    </EventDetailsDialog>
+      </EventDetailsDialog>
+    </DraggableEvent>
   );
 }

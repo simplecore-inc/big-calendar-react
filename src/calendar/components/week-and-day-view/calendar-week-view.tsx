@@ -75,13 +75,21 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                         <div key={hour} className="relative" style={{ height: "96px" }}>
                           {index !== 0 && <div className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>}
                           <AddEventDialog startDate={day} startTime={{ hour, minute: 0 }}>
-                            <div className="absolute inset-x-0 top-0 h-[48px] cursor-pointer transition-colors hover:bg-accent" />
+                            <div className="absolute inset-x-0 top-0 h-[24px] cursor-pointer transition-colors hover:bg-accent" />
+                          </AddEventDialog>
+
+                          <AddEventDialog startDate={day} startTime={{ hour, minute: 15 }}>
+                            <div className="absolute inset-x-0 top-[24px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
                           </AddEventDialog>
 
                           <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed"></div>
 
                           <AddEventDialog startDate={day} startTime={{ hour, minute: 30 }}>
-                            <div className="absolute inset-x-0 top-[48px] h-[48px] cursor-pointer transition-colors hover:bg-accent" />
+                            <div className="absolute inset-x-0 top-[48px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
+                          </AddEventDialog>
+
+                          <AddEventDialog startDate={day} startTime={{ hour, minute: 45 }}>
+                            <div className="absolute inset-x-0 top-[72px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
                           </AddEventDialog>
                         </div>
                       ))}

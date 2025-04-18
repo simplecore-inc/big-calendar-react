@@ -5,6 +5,8 @@ import { isSameDay, parseISO } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
+import { DndProviderWrapper } from "@/calendar/components/dnd/dnd-provider";
+
 import { CalendarHeader } from "@/calendar/components/header/calendar-header";
 import { CalendarYearView } from "@/calendar/components/year-view/calendar-year-view";
 import { CalendarMonthView } from "@/calendar/components/month-view/calendar-month-view";
@@ -90,11 +92,14 @@ export function ClientContainer({ view }: IProps) {
   return (
     <div className="rounded-xl border">
       <CalendarHeader view={view} events={filteredEvents} />
-      {view === "day" && <CalendarDayView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
-      {view === "month" && <CalendarMonthView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
-      {view === "week" && <CalendarWeekView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
-      {view === "year" && <CalendarYearView allEvents={eventStartDates} />}
-      {view === "agenda" && <CalendarAgendaView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
+
+      <DndProviderWrapper>
+        {view === "day" && <CalendarDayView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
+        {view === "month" && <CalendarMonthView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
+        {view === "week" && <CalendarWeekView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
+        {view === "year" && <CalendarYearView allEvents={eventStartDates} />}
+        {view === "agenda" && <CalendarAgendaView singleDayEvents={singleDayEvents} multiDayEvents={multiDayEvents} />}
+      </DndProviderWrapper>
     </div>
   );
 }

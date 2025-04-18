@@ -3,6 +3,7 @@ import { endOfDay, format, isSameDay, parseISO, startOfDay } from "date-fns";
 
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
+import { DraggableEvent } from "@/calendar/components/dnd/draggable-event";
 import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
 
 import { cn } from "@/lib/utils";
@@ -22,14 +23,16 @@ const eventBadgeVariants = cva(
         yellow: "border-yellow-200 bg-yellow-50 text-yellow-700 dark:border-yellow-800 dark:bg-yellow-950 dark:text-yellow-300 [&_.event-dot]:fill-yellow-600",
         purple: "border-purple-200 bg-purple-50 text-purple-700 dark:border-purple-800 dark:bg-purple-950 dark:text-purple-300 [&_.event-dot]:fill-purple-600",
         orange: "border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300 [&_.event-dot]:fill-orange-600",
+        gray: "border-neutral-200 bg-neutral-50 text-neutral-900 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300 [&_.event-dot]:fill-neutral-600",
 
         // Dot variants
         "blue-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-blue-600",
         "green-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-green-600",
         "red-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-red-600",
-        "orange-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-orange-600",
-        "purple-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-purple-600",
         "yellow-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-yellow-600",
+        "purple-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-purple-600",
+        "orange-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-orange-600",
+        "gray-dot": "bg-neutral-50 dark:bg-neutral-900 [&_.event-dot]:fill-neutral-600",
       },
       multiDayPosition: {
         first: "relative z-10 mr-0 w-[calc(100%_-_3px)] rounded-r-none border-r-0 [&>span]:mr-2.5",
@@ -91,29 +94,31 @@ export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDa
   };
 
   return (
-    <EventDetailsDialog event={event}>
-      <div role="button" tabIndex={0} className={eventBadgeClasses} onKeyDown={handleKeyDown}>
-        <div className="flex items-center gap-1.5 truncate">
-          {!["middle", "last"].includes(position) && ["mixed", "dot"].includes(badgeVariant) && (
-            <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">
-              <circle cx="4" cy="4" r="4" />
-            </svg>
-          )}
+    <DraggableEvent event={event}>
+      <EventDetailsDialog event={event}>
+        <div role="button" tabIndex={0} className={eventBadgeClasses} onKeyDown={handleKeyDown}>
+          <div className="flex items-center gap-1.5 truncate">
+            {!["middle", "last"].includes(position) && ["mixed", "dot"].includes(badgeVariant) && (
+              <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">
+                <circle cx="4" cy="4" r="4" />
+              </svg>
+            )}
 
-          {renderBadgeText && (
-            <p className="flex-1 truncate font-semibold">
-              {eventCurrentDay && (
-                <span className="text-xs">
-                  Day {eventCurrentDay} of {eventTotalDays} •{" "}
-                </span>
-              )}
-              {event.title}
-            </p>
-          )}
+            {renderBadgeText && (
+              <p className="flex-1 truncate font-semibold">
+                {eventCurrentDay && (
+                  <span className="text-xs">
+                    Day {eventCurrentDay} of {eventTotalDays} •{" "}
+                  </span>
+                )}
+                {event.title}
+              </p>
+            )}
+          </div>
+
+          {renderBadgeText && <span>{format(new Date(event.startDate), "h:mm a")}</span>}
         </div>
-
-        {renderBadgeText && <span>{format(new Date(event.startDate), "h:mm a")}</span>}
-      </div>
-    </EventDetailsDialog>
+      </EventDetailsDialog>
+    </DraggableEvent>
   );
 }

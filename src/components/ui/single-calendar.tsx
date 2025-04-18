@@ -1,18 +1,24 @@
 "use client";
 
 import * as React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+import { cn } from "@/lib/utils";
 
-function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
+import type { DayPickerSingleProps } from "react-day-picker";
+
+function SingleCalendar({ className, classNames, showOutsideDays = true, selected, ...props }: DayPickerSingleProps) {
+  const [currentMonth, setCurrentMonth] = React.useState<Date | undefined>(selected instanceof Date ? selected : undefined);
+
   return (
     <DayPicker
+      selected={selected}
       showOutsideDays={showOutsideDays}
+      month={currentMonth}
+      onMonthChange={setCurrentMonth}
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -29,9 +35,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         row: "flex w-full mt-2",
         cell: cn(
           "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected].day-range-end)]:rounded-r-md",
-          props.mode === "range"
-            ? "[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md"
-            : "[&:has([aria-selected])]:rounded-md"
+          "[&:has([aria-selected])]:rounded-md"
         ),
         day: cn(buttonVariants({ variant: "ghost" }), "h-8 w-8 p-0 font-normal aria-selected:opacity-100"),
         day_range_start: "day-range-start",
@@ -52,6 +56,6 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
     />
   );
 }
-Calendar.displayName = "Calendar";
+SingleCalendar.displayName = "Calendar";
 
-export { Calendar };
+export { SingleCalendar };

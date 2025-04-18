@@ -177,9 +177,11 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
                 render={({ field, fieldState }) => (
                   <FormItem className="flex-1">
                     <FormLabel>End Time</FormLabel>
+
                     <FormControl>
                       <TimeInput value={field.value as TimeValue} onChange={field.onChange} hourCycle={12} data-invalid={fieldState.invalid} />
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}

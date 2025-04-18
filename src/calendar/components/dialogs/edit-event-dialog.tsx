@@ -260,6 +260,13 @@ export function EditEventDialog({ children, event }: IProps) {
                           </div>
                         </SelectItem>
 
+                        <SelectItem value="orange">
+                          <div className="flex items-center gap-2">
+                            <div className="size-3.5 rounded-full bg-orange-600 dark:bg-orange-700" />
+                            Orange
+                          </div>
+                        </SelectItem>
+
                         <SelectItem value="gray">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-gray-600 dark:bg-gray-700" />

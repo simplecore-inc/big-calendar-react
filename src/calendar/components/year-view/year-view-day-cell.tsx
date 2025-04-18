@@ -53,7 +53,8 @@ export function YearViewDayCell({ day, date, events }: IProps) {
                   event.color === "red" && "bg-red-600",
                   event.color === "yellow" && "bg-yellow-600",
                   event.color === "purple" && "bg-purple-600",
-                  event.color === "orange" && "bg-orange-600"
+                  event.color === "orange" && "bg-orange-600",
+                  event.color === "gray" && "bg-neutral-600"
                 )}
               />
             ))

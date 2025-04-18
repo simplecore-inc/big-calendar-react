@@ -26,7 +26,7 @@ export const USERS_MOCK: IUser[] = [
   },
 ];
 
-const COLORS: TEventColor[] = ["blue", "green", "red", "yellow", "purple", "orange"];
+const COLORS: TEventColor[] = ["blue", "green", "red", "yellow", "purple", "orange", "gray"];
 
 const EVENTS = [
   "Doctor's appointment",

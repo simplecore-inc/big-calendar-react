@@ -150,10 +150,10 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
 
             <FormField
               control={form.control}
-              name="variant"
+              name="color"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>Variant</FormLabel>
+                  <FormLabel>Color</FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger data-invalid={fieldState.invalid}>
@@ -193,6 +193,13 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-purple-600 dark:bg-purple-700" />
                             Purple
+                          </div>
+                        </SelectItem>
+
+                        <SelectItem value="orange">
+                          <div className="flex items-center gap-2">
+                            <div className="size-3.5 rounded-full bg-orange-600 dark:bg-orange-700" />
+                            Orange
                           </div>
                         </SelectItem>
 

@@ -14,6 +14,7 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
 ## Features
 
 - 📅 Multiple calendar views:
+
   - Agenda view
   - Year view
   - Month view
@@ -21,16 +22,26 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
   - Day view with hourly breakdown
 
 - 🎨 Event customization:
+
   - Multiple color options for events
   - Three badge display variants (dot, colored and mixed)
   - Support for single and multi-day events
 
+- 🔄 Drag and Drop:
+
+  - Easily reschedule events by dragging and dropping
+  - Move events between days in month view
+  - Adjust event timing in week/day views
+  - Visual feedback during dragging operations
+
 - 👥 User management:
+
   - Filter events by user
   - View all users's events simultaneously
   - User avatars and profile integration
 
 - ⚡ Real-time features:
+
   - Live time indicator
   - Current event highlighting
   - Dynamic event positioning
@@ -88,8 +99,9 @@ src/
 ├── app/
 ├── calendar/                     # All files related to calendar are in this folder
 │   ├── components/
-│   │   ├── dialogs/              # Dialogs components
 │   │   ├── agenda-view/          # Agenda view components
+│   │   ├── dialogs/              # Dialogs components
+│   │   ├── dnd/                  # Drag and drop components
 │   │   ├── header/               # Calendar header components
 │   │   ├── month-view/           # Month view components
 │   │   ├── week-and-day-view/    # Week and day view components
@@ -133,11 +145,11 @@ const events = await getEvents();
 const users = await getUsers();
 
 export default function Layout({ children }) {
- return (
-   <CalendarProvider users={users} events={events}>
-     {children}
-   </CalendarProvider>
- );
+  return (
+    <CalendarProvider users={users} events={events}>
+      {children}
+    </CalendarProvider>
+  );
 }
 ```
 
@@ -149,7 +161,7 @@ export default function Layout({ children }) {
 import { ClientContainer } from "@/calendar/components/client-container";
 
 export default function CalendarPage() {
- return <ClientContainer view="month" />;
+  return <ClientContainer view="month" />;
 }
 ```
 
@@ -182,16 +194,16 @@ The calendar supports five different views, each can be used with the `ClientCon
 
 ```tsx
 interface IEvent {
- id: string;
- title: string;
- description: string;
- startDate: string; // ISO string
- endDate: string; // ISO string
- color: "blue" | "green" | "red" | "yellow" | "purple" | "orange";
- user: {
-   id: string;
-   name: string;
- };
+  id: string;
+  title: string;
+  description: string;
+  startDate: string; // ISO string
+  endDate: string; // ISO string
+  color: "blue" | "green" | "red" | "yellow" | "purple" | "orange";
+  user: {
+    id: string;
+    name: string;
+  };
 }
 ```
 
@@ -201,9 +213,9 @@ interface IEvent {
 
 ```tsx
 interface IUser {
- id: string;
- name: string;
- picturePath?: string; // Optional avatar image
+  id: string;
+  name: string;
+  picturePath?: string; // Optional avatar image
 }
 ```
 

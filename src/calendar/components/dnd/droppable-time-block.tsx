@@ -8,14 +8,16 @@ import { useUpdateEvent } from "@/calendar/hooks/use-update-event";
 import { cn } from "@/lib/utils";
 import { ItemTypes } from "@/calendar/components/dnd/draggable-event";
 
-import type { IEvent, ICalendarCell } from "@/calendar/interfaces";
+import type { IEvent } from "@/calendar/interfaces";
 
-interface DroppableDayCellProps {
-  cell: ICalendarCell;
+interface DroppableTimeBlockProps {
+  date: Date;
+  hour: number;
+  minute: number;
   children: React.ReactNode;
 }
 
-export function DroppableDayCell({ cell, children }: DroppableDayCellProps) {
+export function DroppableTimeBlock({ date, hour, minute, children }: DroppableTimeBlockProps) {
   const { updateEvent } = useUpdateEvent();
 
   const [{ isOver, canDrop }, drop] = useDrop(
@@ -29,8 +31,8 @@ export function DroppableDayCell({ cell, children }: DroppableDayCellProps) {
 
         const eventDurationMs = differenceInMilliseconds(eventEndDate, eventStartDate);
 
-        const newStartDate = new Date(cell.date);
-        newStartDate.setHours(eventStartDate.getHours(), eventStartDate.getMinutes(), eventStartDate.getSeconds(), eventStartDate.getMilliseconds());
+        const newStartDate = new Date(date);
+        newStartDate.setHours(hour, minute, 0, 0);
         const newEndDate = new Date(newStartDate.getTime() + eventDurationMs);
 
         updateEvent({
@@ -46,11 +48,11 @@ export function DroppableDayCell({ cell, children }: DroppableDayCellProps) {
         canDrop: monitor.canDrop(),
       }),
     }),
-    [cell.date, updateEvent]
+    [date, hour, minute, updateEvent]
   );
 
   return (
-    <div ref={drop as unknown as React.RefObject<HTMLDivElement>} className={cn(isOver && canDrop && "bg-accent/50")}>
+    <div ref={drop as unknown as React.RefObject<HTMLDivElement>} className={cn("h-[24px]", isOver && canDrop && "bg-accent/50")}>
       {children}
     </div>
   );

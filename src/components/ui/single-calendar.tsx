@@ -13,6 +13,10 @@ import type { DayPickerSingleProps } from "react-day-picker";
 function SingleCalendar({ className, classNames, showOutsideDays = true, selected, ...props }: DayPickerSingleProps) {
   const [currentMonth, setCurrentMonth] = React.useState<Date | undefined>(selected instanceof Date ? selected : undefined);
 
+  React.useEffect(() => {
+    if (selected instanceof Date) setCurrentMonth(selected);
+  }, [selected]);
+
   return (
     <DayPicker
       selected={selected}

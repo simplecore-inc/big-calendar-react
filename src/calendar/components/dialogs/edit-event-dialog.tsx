@@ -227,49 +227,49 @@ export function EditEventDialog({ children, event }: IProps) {
                       <SelectContent>
                         <SelectItem value="blue">
                           <div className="flex items-center gap-2">
-                            <div className="size-3.5 rounded-full bg-blue-600 dark:bg-blue-700" />
+                            <div className="size-3.5 rounded-full bg-blue-600" />
                             Blue
                           </div>
                         </SelectItem>
 
                         <SelectItem value="green">
                           <div className="flex items-center gap-2">
-                            <div className="size-3.5 rounded-full bg-green-600 dark:bg-green-700" />
+                            <div className="size-3.5 rounded-full bg-green-600" />
                             Green
                           </div>
                         </SelectItem>
 
                         <SelectItem value="red">
                           <div className="flex items-center gap-2">
-                            <div className="size-3.5 rounded-full bg-red-600 dark:bg-red-700" />
+                            <div className="size-3.5 rounded-full bg-red-600" />
                             Red
                           </div>
                         </SelectItem>
 
                         <SelectItem value="yellow">
                           <div className="flex items-center gap-2">
-                            <div className="size-3.5 rounded-full bg-yellow-600 dark:bg-yellow-700" />
+                            <div className="size-3.5 rounded-full bg-yellow-600" />
                             Yellow
                           </div>
                         </SelectItem>
 
                         <SelectItem value="purple">
                           <div className="flex items-center gap-2">
-                            <div className="size-3.5 rounded-full bg-purple-600 dark:bg-purple-700" />
+                            <div className="size-3.5 rounded-full bg-purple-600" />
                             Purple
                           </div>
                         </SelectItem>
 
                         <SelectItem value="orange">
                           <div className="flex items-center gap-2">
-                            <div className="size-3.5 rounded-full bg-orange-600 dark:bg-orange-700" />
+                            <div className="size-3.5 rounded-full bg-orange-600" />
                             Orange
                           </div>
                         </SelectItem>
 
                         <SelectItem value="gray">
                           <div className="flex items-center gap-2">
-                            <div className="size-3.5 rounded-full bg-gray-600 dark:bg-gray-700" />
+                            <div className="size-3.5 rounded-full bg-neutral-600" />
                             Gray
                           </div>
                         </SelectItem>

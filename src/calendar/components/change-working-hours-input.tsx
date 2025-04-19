@@ -46,12 +46,17 @@ export function ChangeWorkingHoursInput() {
     const updatedWorkingHours = { ...localWorkingHours };
 
     for (const dayId in updatedWorkingHours) {
-      const day = updatedWorkingHours[dayId];
+      const day = updatedWorkingHours[parseInt(dayId)];
+      const isDayActive = localWorkingHours[parseInt(dayId)].from > 0 || localWorkingHours[parseInt(dayId)].to > 0;
 
-      if (day.from === 0 && day.to === 0) {
-        updatedWorkingHours[dayId] = { from: 0, to: 24 };
-      } else if (day.to === 0 && day.from > 0) {
-        updatedWorkingHours[dayId] = { ...day, to: 24 };
+      if (isDayActive) {
+        if (day.from === 0 && day.to === 0) {
+          updatedWorkingHours[dayId] = { from: 0, to: 24 };
+        } else if (day.to === 0 && day.from > 0) {
+          updatedWorkingHours[dayId] = { ...day, to: 24 };
+        }
+      } else {
+        updatedWorkingHours[dayId] = { from: 0, to: 0 };
       }
     }
 

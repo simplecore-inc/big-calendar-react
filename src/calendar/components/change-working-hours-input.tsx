@@ -78,7 +78,7 @@ export function ChangeWorkingHoursInput() {
             </TooltipTrigger>
 
             <TooltipContent className="max-w-80 text-center">
-              <p>This will apply a dashed background to the calendar cells that fall outside the working hours — only for week and day views.</p>
+              <p>This will apply a dashed background to the hour cells that fall outside the working hours — only for week and day views.</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

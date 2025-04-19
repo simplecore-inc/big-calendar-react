@@ -10,12 +10,15 @@ const config: Config = {
       fontFamily: {
         inter: "var(--font-inter)",
       },
+
       fontSize: {
         xxs: ["0.625rem", "1rem"],
       },
+
       maxWidth: {
         "8xl": "90rem",
       },
+
       screens: {
         xs: "460px",
         sm: "576px",
@@ -24,6 +27,7 @@ const config: Config = {
         xl: "1280px",
         "2xl": "1440px",
       },
+
       spacing: {
         "18": "4.5rem",
         "4.5": "1.125rem",
@@ -31,11 +35,17 @@ const config: Config = {
         "6.5": "1.625rem",
         "8.5": "2.125rem",
       },
+
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+
+      backgroundImage: {
+        "calendar-disabled-hour": "repeating-linear-gradient(-60deg, hsl(var(--border)) 0 0.5px, transparent 0.5px 8px)",
+      },
+
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

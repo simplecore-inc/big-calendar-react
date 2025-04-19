@@ -4,6 +4,7 @@ import { CalendarProvider } from "@/calendar/contexts/calendar-context";
 
 import { ChangeBadgeVariantInput } from "@/calendar/components/change-badge-variant-input";
 import { ChangeVisibleHoursInput } from "@/calendar/components/change-visible-hours-input";
+import { ChangeWorkingHoursInput } from "@/calendar/components/change-working-hours-input";
 
 import { getEvents, getUsers } from "@/calendar/requests";
 
@@ -23,6 +24,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <div className="flex flex-col gap-6">
           <ChangeBadgeVariantInput />
           <ChangeVisibleHoursInput />
+          <ChangeWorkingHoursInput />
         </div>
       </div>
     </CalendarProvider>

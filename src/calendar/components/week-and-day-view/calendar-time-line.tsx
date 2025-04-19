@@ -1,8 +1,11 @@
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 
+import { useCalendar } from "@/calendar/contexts/calendar-context";
+
 export function CalendarTimeline() {
-  // TO DO: hide this
+  const { visibleHours } = useCalendar();
+
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -12,12 +15,20 @@ export function CalendarTimeline() {
 
   const getCurrentTimePosition = () => {
     const minutes = currentTime.getHours() * 60 + currentTime.getMinutes();
-    return (minutes / 1440) * 100;
+
+    const visibleStartMinutes = visibleHours.from * 60;
+    const visibleEndMinutes = visibleHours.to * 60;
+    const visibleRangeMinutes = visibleEndMinutes - visibleStartMinutes;
+
+    return ((minutes - visibleStartMinutes) / visibleRangeMinutes) * 100;
   };
 
   const formatCurrentTime = () => {
     return format(currentTime, "h:mm a");
   };
+
+  const currentHour = currentTime.getHours();
+  if (currentHour < visibleHours.from || currentHour >= visibleHours.to) return null;
 
   return (
     <div className="pointer-events-none absolute inset-x-0 z-50 border-t border-primary" style={{ top: `${getCurrentTimePosition()}%` }}>

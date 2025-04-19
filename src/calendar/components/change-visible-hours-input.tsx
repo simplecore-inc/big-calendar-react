@@ -7,6 +7,7 @@ import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { Button } from "@/components/ui/button";
 import { TimeInput } from "@/components/ui/time-input";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
 import type { TimeValue } from "react-aria-components";
 
@@ -25,7 +26,18 @@ export function ChangeVisibleHoursInput() {
     <div className="space-y-2">
       <div className="flex items-center gap-2">
         <p className="text-sm font-semibold">Change visible hours</p>
-        <Info className="size-3" />
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Info className="size-3" />
+            </TooltipTrigger>
+
+            <TooltipContent className="max-w-80 text-center">
+              <p>If an event falls outside the specified visible hours, the visible hours will automatically adjust to include that event.</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       <div className="flex items-center gap-4">

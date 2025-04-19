@@ -23,7 +23,7 @@ export function ChangeVisibleHoursInput() {
   };
 
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
         <p className="text-sm font-semibold">Change visible hours</p>
 
@@ -45,8 +45,11 @@ export function ChangeVisibleHoursInput() {
         <TimeInput id="start-time" hourCycle={12} granularity="hour" value={from as TimeValue} onChange={setFrom as (value: TimeValue | null) => void} />
         <p>To</p>
         <TimeInput id="end-time" hourCycle={12} granularity="hour" value={to as TimeValue} onChange={setTo as (value: TimeValue | null) => void} />
-        <Button onClick={handleApply}>Apply</Button>
       </div>
+
+      <Button className="mt-4 w-fit" onClick={handleApply}>
+        Apply
+      </Button>
     </div>
   );
 }

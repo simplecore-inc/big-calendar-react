@@ -8,7 +8,7 @@ export function ChangeBadgeVariantInput() {
   const { badgeVariant, setBadgeVariant } = useCalendar();
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       <p className="text-sm font-semibold">Change badge variant</p>
 
       <Select value={badgeVariant} onValueChange={setBadgeVariant}>

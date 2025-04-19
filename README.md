@@ -9,7 +9,6 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
 ![image](public/preview_3.png)
 ![image](public/preview_4.png)
 ![image](public/preview_5.png)
-![image](public/preview_6.png)
 
 ## Features
 
@@ -45,6 +44,12 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
   - Live time indicator
   - Current event highlighting
   - Dynamic event positioning
+
+- ⏰ Time customization:
+
+  - Configurable working hours with distinct styling
+  - Adjustable visible hours range
+  - Focus on relevant time periods
 
 - 🎯 UI/UX features:
   - Responsive design for all screen sizes

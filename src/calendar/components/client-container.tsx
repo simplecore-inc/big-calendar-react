@@ -90,7 +90,7 @@ export function ClientContainer({ view }: IProps) {
   }, [filteredEvents]);
 
   return (
-    <div className="rounded-xl border">
+    <div className="overflow-hidden rounded-xl border">
       <CalendarHeader view={view} events={filteredEvents} />
 
       <DndProviderWrapper>

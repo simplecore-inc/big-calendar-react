@@ -178,7 +178,7 @@ const mockGenerator = (numberOfEvents: number): IEvent[] => {
     }
 
     // Set time between 8 AM and 8 PM
-    startDate.setHours(8 + Math.floor(Math.random() * 12), Math.floor(Math.random() * 60), 0, 0);
+    startDate.setHours(8 + Math.floor(Math.random() * 8), Math.floor(Math.random() * 4) * 15, 0, 0);
 
     const endDate = new Date(startDate);
 
@@ -201,10 +201,10 @@ const mockGenerator = (numberOfEvents: number): IEvent[] => {
         continue;
       }
 
-      endDate.setHours(8 + Math.floor(Math.random() * 12), Math.floor(Math.random() * 60), 0, 0);
+      endDate.setHours(8 + Math.floor(Math.random() * 12), Math.floor(Math.random() * 4) * 15, 0, 0);
     } else {
-      // Same-day event: Add 1-3 hours
-      endDate.setHours(endDate.getHours() + Math.floor(Math.random() * 3) + 1);
+      const durationMinutes = (Math.floor(Math.random() * 11) + 2) * 15; // 30 to 180 minutes, multiple of 15
+      endDate.setTime(endDate.getTime() + durationMinutes * 60 * 1000);
     }
 
     result.push({

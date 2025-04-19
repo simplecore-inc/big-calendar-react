@@ -34,7 +34,7 @@ const WORKING_HOURS = {
   6: { from: 8, to: 12 },
 };
 
-const VISIBLE_HOURS = { from: 6, to: 18 };
+const VISIBLE_HOURS = { from: 7, to: 18 };
 
 export function CalendarProvider({ children, users, events }: { children: React.ReactNode; users: IUser[]; events: IEvent[] }) {
   const [badgeVariant, setBadgeVariant] = useState<TBadgeVariant>("colored");

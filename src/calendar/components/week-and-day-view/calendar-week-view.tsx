@@ -10,7 +10,8 @@ import { DroppableTimeBlock } from "@/calendar/components/dnd/droppable-time-blo
 import { CalendarTimeline } from "@/calendar/components/week-and-day-view/calendar-time-line";
 import { WeekViewMultiDayEventsRow } from "@/calendar/components/week-and-day-view/week-view-multi-day-events-row";
 
-import { groupEvents, getEventBlockStyle } from "@/calendar/helpers";
+import { cn } from "@/lib/utils";
+import { groupEvents, getEventBlockStyle, isWorkingHour, getVisibleHours } from "@/calendar/helpers";
 
 import type { IEvent } from "@/calendar/interfaces";
 
@@ -20,11 +21,12 @@ interface IProps {
 }
 
 export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
-  const { selectedDate } = useCalendar();
+  const { selectedDate, workingHours, visibleHours } = useCalendar();
+
+  const { hours, earliestEventHour, latestEventHour } = getVisibleHours(visibleHours, singleDayEvents);
 
   const weekStart = startOfWeek(selectedDate);
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
-  const hours = Array.from({ length: 24 }, (_, i) => i);
 
   return (
     <>
@@ -51,7 +53,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
         </div>
 
         <ScrollArea className="h-[736px]" type="always">
-          <div className="flex">
+          <div className="flex overflow-hidden">
             {/* Hours column */}
             <div className="relative w-18">
               {hours.map((hour, index) => (
@@ -72,41 +74,45 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
 
                   return (
                     <div key={dayIndex} className="relative">
-                      {hours.map((hour, index) => (
-                        <div key={hour} className="relative" style={{ height: "96px" }}>
-                          {index !== 0 && <div className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>}
+                      {hours.map((hour, index) => {
+                        const isDisabled = !isWorkingHour(day, hour, workingHours);
 
-                          <DroppableTimeBlock date={day} hour={hour} minute={0}>
-                            <AddEventDialog startDate={day} startTime={{ hour, minute: 0 }}>
-                              <div className="absolute inset-x-0 top-0 h-[24px] cursor-pointer transition-colors hover:bg-accent" />
-                            </AddEventDialog>
-                          </DroppableTimeBlock>
+                        return (
+                          <div key={hour} className={cn("relative", isDisabled && "bg-calendar-disabled-hour")} style={{ height: "96px" }}>
+                            {index !== 0 && <div className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>}
 
-                          <DroppableTimeBlock date={day} hour={hour} minute={15}>
-                            <AddEventDialog startDate={day} startTime={{ hour, minute: 15 }}>
-                              <div className="absolute inset-x-0 top-[24px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
-                            </AddEventDialog>
-                          </DroppableTimeBlock>
+                            <DroppableTimeBlock date={day} hour={hour} minute={0}>
+                              <AddEventDialog startDate={day} startTime={{ hour, minute: 0 }}>
+                                <div className="absolute inset-x-0 top-0 h-[24px] cursor-pointer transition-colors hover:bg-accent" />
+                              </AddEventDialog>
+                            </DroppableTimeBlock>
 
-                          <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed"></div>
+                            <DroppableTimeBlock date={day} hour={hour} minute={15}>
+                              <AddEventDialog startDate={day} startTime={{ hour, minute: 15 }}>
+                                <div className="absolute inset-x-0 top-[24px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
+                              </AddEventDialog>
+                            </DroppableTimeBlock>
 
-                          <DroppableTimeBlock date={day} hour={hour} minute={30}>
-                            <AddEventDialog startDate={day} startTime={{ hour, minute: 30 }}>
-                              <div className="absolute inset-x-0 top-[48px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
-                            </AddEventDialog>
-                          </DroppableTimeBlock>
+                            <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed"></div>
 
-                          <DroppableTimeBlock date={day} hour={hour} minute={45}>
-                            <AddEventDialog startDate={day} startTime={{ hour, minute: 45 }}>
-                              <div className="absolute inset-x-0 top-[72px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
-                            </AddEventDialog>
-                          </DroppableTimeBlock>
-                        </div>
-                      ))}
+                            <DroppableTimeBlock date={day} hour={hour} minute={30}>
+                              <AddEventDialog startDate={day} startTime={{ hour, minute: 30 }}>
+                                <div className="absolute inset-x-0 top-[48px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
+                              </AddEventDialog>
+                            </DroppableTimeBlock>
+
+                            <DroppableTimeBlock date={day} hour={hour} minute={45}>
+                              <AddEventDialog startDate={day} startTime={{ hour, minute: 45 }}>
+                                <div className="absolute inset-x-0 top-[72px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
+                              </AddEventDialog>
+                            </DroppableTimeBlock>
+                          </div>
+                        );
+                      })}
 
                       {groupedEvents.map((group, groupIndex) =>
                         group.map(event => {
-                          let style = getEventBlockStyle(event, day, groupIndex, groupedEvents.length);
+                          let style = getEventBlockStyle(event, day, groupIndex, groupedEvents.length, { from: earliestEventHour, to: latestEventHour });
                           const hasOverlap = groupedEvents.some(
                             (otherGroup, otherIndex) =>
                               otherIndex !== groupIndex &&

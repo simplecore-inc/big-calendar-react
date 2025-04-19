@@ -30,7 +30,7 @@ const WORKING_HOURS = {
   3: { from: 8, to: 17 },
   4: { from: 8, to: 17 },
   5: { from: 8, to: 17 },
-  6: { from: 0, to: 0 },
+  6: { from: 8, to: 12 },
 };
 
 const VISIBLE_HOURS = { from: 8, to: 21 };

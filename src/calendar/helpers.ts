@@ -23,10 +23,11 @@ import {
   subYears,
   addYears,
   isSameYear,
+  isWithinInterval,
 } from "date-fns";
 
-import type { TCalendarView } from "@/calendar/types";
 import type { ICalendarCell, IEvent } from "@/calendar/interfaces";
+import type { TCalendarView, TVisibleHours, TWorkingHours } from "@/calendar/types";
 
 // ================ Header helper functions ================ //
 
@@ -87,6 +88,11 @@ export function getEventsCount(events: IEvent[], date: Date, view: TCalendarView
 
 // ================ Week and day view helper functions ================ //
 
+export function getCurrentEvents(events: IEvent[]) {
+  const now = new Date();
+  return events.filter(event => isWithinInterval(now, { start: parseISO(event.startDate), end: parseISO(event.endDate) })) || null;
+}
+
 export function groupEvents(dayEvents: IEvent[]) {
   const sortedEvents = dayEvents.sort((a, b) => parseISO(a.startDate).getTime() - parseISO(b.startDate).getTime());
   const groups: IEvent[][] = [];
@@ -112,17 +118,52 @@ export function groupEvents(dayEvents: IEvent[]) {
   return groups;
 }
 
-export function getEventBlockStyle(event: IEvent, day: Date, groupIndex: number, groupSize: number) {
+export function getEventBlockStyle(event: IEvent, day: Date, groupIndex: number, groupSize: number, visibleHoursRange?: { from: number; to: number }) {
   const startDate = parseISO(event.startDate);
   const dayStart = new Date(day.setHours(0, 0, 0, 0));
   const eventStart = startDate < dayStart ? dayStart : startDate;
   const startMinutes = differenceInMinutes(eventStart, dayStart);
 
-  const top = (startMinutes / 1440) * 100;
+  let top;
+
+  if (visibleHoursRange) {
+    const visibleStartMinutes = visibleHoursRange.from * 60;
+    const visibleEndMinutes = visibleHoursRange.to * 60;
+    const visibleRangeMinutes = visibleEndMinutes - visibleStartMinutes;
+    top = ((startMinutes - visibleStartMinutes) / visibleRangeMinutes) * 100;
+  } else {
+    top = (startMinutes / 1440) * 100;
+  }
+
   const width = 100 / groupSize;
   const left = groupIndex * width;
 
   return { top: `${top}%`, width: `${width}%`, left: `${left}%` };
+}
+
+export function isWorkingHour(day: Date, hour: number, workingHours: TWorkingHours) {
+  const dayIndex = day.getDay() as keyof typeof workingHours;
+  const dayHours = workingHours[dayIndex];
+  return hour >= dayHours.from && hour < dayHours.to;
+}
+
+export function getVisibleHours(visibleHours: TVisibleHours, singleDayEvents: IEvent[]) {
+  let earliestEventHour = visibleHours.from;
+  let latestEventHour = visibleHours.to;
+
+  singleDayEvents.forEach(event => {
+    const startHour = parseISO(event.startDate).getHours();
+    const endTime = parseISO(event.endDate);
+    const endHour = endTime.getHours() + (endTime.getMinutes() > 0 ? 1 : 0);
+    if (startHour < earliestEventHour) earliestEventHour = startHour;
+    if (endHour > latestEventHour) latestEventHour = endHour;
+  });
+
+  latestEventHour = Math.min(latestEventHour, 24);
+
+  const hours = Array.from({ length: latestEventHour - earliestEventHour }, (_, i) => i + earliestEventHour);
+
+  return { hours, earliestEventHour, latestEventHour };
 }
 
 // ================ Month view helper functions ================ //

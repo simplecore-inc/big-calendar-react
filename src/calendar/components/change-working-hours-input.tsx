@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Moon } from "lucide-react";
+import { Info, Moon } from "lucide-react";
 import { useCalendar } from "@/calendar/contexts/calendar-context";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,9 @@ import { Switch } from "@/components/ui/switch";
 import { TimeInput } from "@/components/ui/time-input";
 
 import type { TimeValue } from "react-aria-components";
+import { TooltipContent } from "@/components/ui/tooltip";
+import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const DAYS_OF_WEEK = [
   { index: 0, name: "Sunday" },
@@ -65,7 +68,21 @@ export function ChangeWorkingHoursInput() {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-sm font-semibold">Change working hours</p>
+      <div className="flex items-center gap-2">
+        <p className="text-sm font-semibold">Change working hours</p>
+
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger>
+              <Info className="size-3" />
+            </TooltipTrigger>
+
+            <TooltipContent className="max-w-80 text-center">
+              <p>This will apply a dashed background to the calendar cells that fall outside the working hours — only for week and day views.</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
       <div className="space-y-4">
         {DAYS_OF_WEEK.map(day => {

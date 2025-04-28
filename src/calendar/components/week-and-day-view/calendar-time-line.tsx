@@ -1,11 +1,12 @@
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+interface IProps {
+  firstVisibleHour: number;
+  lastVisibleHour: number;
+}
 
-export function CalendarTimeline() {
-  const { visibleHours } = useCalendar();
-
+export function CalendarTimeline({ firstVisibleHour, lastVisibleHour }: IProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -16,8 +17,8 @@ export function CalendarTimeline() {
   const getCurrentTimePosition = () => {
     const minutes = currentTime.getHours() * 60 + currentTime.getMinutes();
 
-    const visibleStartMinutes = visibleHours.from * 60;
-    const visibleEndMinutes = visibleHours.to * 60;
+    const visibleStartMinutes = firstVisibleHour * 60;
+    const visibleEndMinutes = lastVisibleHour * 60;
     const visibleRangeMinutes = visibleEndMinutes - visibleStartMinutes;
 
     return ((minutes - visibleStartMinutes) / visibleRangeMinutes) * 100;
@@ -28,7 +29,7 @@ export function CalendarTimeline() {
   };
 
   const currentHour = currentTime.getHours();
-  if (currentHour < visibleHours.from || currentHour >= visibleHours.to) return null;
+  if (currentHour < firstVisibleHour || currentHour >= lastVisibleHour) return null;
 
   return (
     <div className="pointer-events-none absolute inset-x-0 z-50 border-t border-primary" style={{ top: `${getCurrentTimePosition()}%` }}>

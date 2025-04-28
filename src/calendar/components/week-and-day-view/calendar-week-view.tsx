@@ -138,7 +138,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                 })}
               </div>
 
-              <CalendarTimeline />
+              <CalendarTimeline firstVisibleHour={earliestEventHour} lastVisibleHour={latestEventHour} />
             </div>
           </div>
         </ScrollArea>

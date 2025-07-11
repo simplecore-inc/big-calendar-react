@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -47,6 +48,13 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
     onClose();
     form.reset();
   };
+
+  useEffect(() => {
+    form.reset({
+      startDate,
+      startTime,
+    });
+  }, [startDate, startTime, form.reset]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onToggle}>

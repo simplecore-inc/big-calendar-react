@@ -9,20 +9,18 @@
 > | Commands | `next dev/build/start` | Vite-based scripts + `vitest` |
 > | Config files | `next.config.mjs` and Next-specific setup | `vite.config.ts`, `vitest.config.ts`, ESLint/Prettier updates |
 >
-> [!NOTE]
-> Major changes
+> ### Major changes
 > - Removed `src/app/**`; rebuilt file-based routing under `src/routes/**`
 > - Dropped Next.js dependency; switched to Vite build/preview (`vite`, `vite preview`)
 > - Replaced React Context with Zustand + TanStack Query for state/data
 > - Added testing/dev tooling: Vitest + Testing Library
 > - Switched configuration: removed `next.config.mjs`; added Vite/Vitest configs and updated ESLint
 >
-> [!TIP]
-> Next.js-specific guidance in the original README does not directly apply here. Use the Getting started and Project structure sections below, which are updated for Vite + TanStack Router.
+> ### Note
 >
-> [!INFO]
-> Original repository: https://github.com/lramos33/big-calendar (MIT License)
-
+> - Next.js-specific guidance in the original README does not directly apply here. Use the Getting started and Project structure sections below, which are updated for Vite + TanStack Router.
+> - Original repository: https://github.com/lramos33/big-calendar (MIT License)
+>
 
 # Big Calendar
 

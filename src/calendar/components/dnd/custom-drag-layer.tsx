@@ -1,5 +1,3 @@
-"use client";
-
 import { useDragLayer } from "react-dnd";
 
 import type { IEvent } from "@/calendar/interfaces";

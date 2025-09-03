@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarDate } from "@/stores/calendar-store";
 
 import { DayCell } from "@/calendar/components/month-view/day-cell";
 
@@ -16,7 +16,7 @@ interface IProps {
 const WEEK_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
-  const { selectedDate } = useCalendar();
+  const { selectedDate } = useCalendarDate();
 
   const allEvents = [...multiDayEvents, ...singleDayEvents];
 

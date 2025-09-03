@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 import { format, differenceInMinutes, parseISO } from "date-fns";
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarPreferences } from "@/stores/calendar-store";
 
 import { DraggableEvent } from "@/calendar/components/dnd/draggable-event";
 import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
@@ -47,7 +47,7 @@ interface IProps extends HTMLAttributes<HTMLDivElement>, Omit<VariantProps<typeo
 }
 
 export function EventBlock({ event, className }: IProps) {
-  const { badgeVariant } = useCalendar();
+  const { badgeVariant } = useCalendarPreferences();
 
   const start = parseISO(event.startDate);
   const end = parseISO(event.endDate);
@@ -65,10 +65,15 @@ export function EventBlock({ event, className }: IProps) {
     }
   };
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // Allow drag to start by not preventing default
+    e.stopPropagation();
+  };
+
   return (
     <DraggableEvent event={event}>
       <EventDetailsDialog event={event}>
-        <div role="button" tabIndex={0} className={calendarWeekEventCardClasses} style={{ height: `${heightInPixels}px` }} onKeyDown={handleKeyDown}>
+        <div role="button" tabIndex={0} className={calendarWeekEventCardClasses} style={{ height: `${heightInPixels}px` }} onKeyDown={handleKeyDown} onMouseDown={handleMouseDown}>
           <div className="flex items-center gap-1.5 truncate">
             {["mixed", "dot"].includes(badgeVariant) && (
               <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">

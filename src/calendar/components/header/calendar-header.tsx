@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { useMemo, Suspense, lazy } from "react";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Columns, Grid3x3, List, Plus, Grid2x2, CalendarRange } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -6,29 +7,50 @@ import { Button } from "@/components/ui/button";
 import { UserSelect } from "@/calendar/components/header/user-select";
 import { TodayButton } from "@/calendar/components/header/today-button";
 import { DateNavigator } from "@/calendar/components/header/date-navigator";
-import { AddEventDialog } from "@/calendar/components/dialogs/add-event-dialog";
+
+// Lazy load dialog component
+const AddEventDialog = lazy(() => 
+  import("@/calendar/components/dialogs/add-event-dialog").then(module => ({
+    default: module.AddEventDialog
+  }))
+);
 
 import type { IEvent } from "@/calendar/interfaces";
 import type { TCalendarView } from "@/calendar/types";
 
 interface IProps {
-  view: TCalendarView;
   events: IEvent[];
 }
 
-export function CalendarHeader({ view, events }: IProps) {
+export function CalendarHeader({ events }: IProps) {
+  const location = useLocation();
+
+  // Extract view from router path
+  const view = useMemo(() => {
+    const pathSegments = location.pathname.split('/');
+    const viewSegment = pathSegments[pathSegments.length - 1];
+    
+    // Validate that it's a valid calendar view
+    const validViews: TCalendarView[] = ['month', 'week', 'day', 'year', 'agenda'];
+    if (validViews.includes(viewSegment as TCalendarView)) {
+      return viewSegment as TCalendarView;
+    }
+    
+    // Default to month view if invalid
+    return 'month' as TCalendarView;
+  }, [location.pathname]);
   return (
     <div className="flex flex-col gap-4 border-b p-4 lg:flex-row lg:items-center lg:justify-between">
       <div className="flex items-center gap-3">
         <TodayButton />
-        <DateNavigator view={view} events={events} />
+        <DateNavigator events={events} />
       </div>
 
       <div className="flex flex-col items-center gap-1.5 sm:flex-row sm:justify-between">
         <div className="flex w-full items-center gap-1.5">
           <div className="inline-flex first:rounded-r-none last:rounded-l-none [&:not(:first-child):not(:last-child)]:rounded-none">
             <Button asChild aria-label="View by day" size="icon" variant={view === "day" ? "default" : "outline"} className="rounded-r-none [&_svg]:size-5">
-              <Link href="/day-view">
+              <Link to="/calendar/day">
                 <List strokeWidth={1.8} />
               </Link>
             </Button>
@@ -40,7 +62,7 @@ export function CalendarHeader({ view, events }: IProps) {
               variant={view === "week" ? "default" : "outline"}
               className="-ml-px rounded-none [&_svg]:size-5"
             >
-              <Link href="/week-view">
+              <Link to="/calendar/week">
                 <Columns strokeWidth={1.8} />
               </Link>
             </Button>
@@ -52,7 +74,7 @@ export function CalendarHeader({ view, events }: IProps) {
               variant={view === "month" ? "default" : "outline"}
               className="-ml-px rounded-none [&_svg]:size-5"
             >
-              <Link href="/month-view">
+              <Link to="/calendar/month">
                 <Grid2x2 strokeWidth={1.8} />
               </Link>
             </Button>
@@ -64,7 +86,7 @@ export function CalendarHeader({ view, events }: IProps) {
               variant={view === "year" ? "default" : "outline"}
               className="-ml-px rounded-none [&_svg]:size-5"
             >
-              <Link href="/year-view">
+              <Link to="/calendar/year">
                 <Grid3x3 strokeWidth={1.8} />
               </Link>
             </Button>
@@ -76,7 +98,7 @@ export function CalendarHeader({ view, events }: IProps) {
               variant={view === "agenda" ? "default" : "outline"}
               className="-ml-px rounded-l-none [&_svg]:size-5"
             >
-              <Link href="/agenda-view">
+              <Link to="/calendar/agenda">
                 <CalendarRange strokeWidth={1.8} />
               </Link>
             </Button>
@@ -85,12 +107,19 @@ export function CalendarHeader({ view, events }: IProps) {
           <UserSelect />
         </div>
 
-        <AddEventDialog>
-          <Button className="w-full sm:w-auto">
+        <Suspense fallback={
+          <Button className="w-full sm:w-auto" disabled>
             <Plus />
             Add Event
           </Button>
-        </AddEventDialog>
+        }>
+          <AddEventDialog>
+            <Button className="w-full sm:w-auto">
+              <Plus />
+              Add Event
+            </Button>
+          </AddEventDialog>
+        </Suspense>
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowUpRight, Calendar } from "lucide-react";
 
 import { ToggleTheme } from "@/components/layout/change-theme";
@@ -16,32 +15,34 @@ export function Header() {
           <div className="space-y-1">
             <p className="text-lg font-medium leading-6">Big calendar</p>
             <p className="text-sm text-foreground">
-              Built with Next.js and Tailwind by{" "}
-              <Link
+              Built with React and Tailwind by{" "}
+              <a
                 href="https://github.com/lramos33"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex gap-0.5 text-sm underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               >
                 lramos33
                 <ArrowUpRight size={12} className="text-foreground" />
-              </Link>
+              </a>
             </p>
           </div>
         </div>
 
         <div className="hidden items-center gap-4 md:flex">
-          <Link
+          <a
             href="https://github.com/lramos33/big-calendar"
             target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex gap-0.5 text-sm hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             View on GitHub
             <ArrowUpRight size={14} className="text-foreground" />
-          </Link>
+          </a>
 
           <div className="flex items-center gap-2">
             <Button size="icon" asChild variant="ghost">
-              <Link href="https://x.com/leoo_ramos1" target="_blank">
+              <a href="https://x.com/leoo_ramos1" target="_blank" rel="noopener noreferrer" aria-label="Follow on X (Twitter)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -57,7 +58,7 @@ export function Header() {
                   <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
                   <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
                 </svg>
-              </Link>
+              </a>
             </Button>
 
             <ToggleTheme />

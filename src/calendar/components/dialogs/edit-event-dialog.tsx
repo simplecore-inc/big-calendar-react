@@ -1,12 +1,10 @@
-"use client";
-
 import { parseISO } from "date-fns";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useDisclosure } from "@/hooks/use-disclosure";
-import { useCalendar } from "@/calendar/contexts/calendar-context";
-import { useUpdateEvent } from "@/calendar/hooks/use-update-event";
+import { useUsers } from "@/hooks/use-users";
+import { useUpdateEvent } from "@/hooks/use-events";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,6 +21,7 @@ import { eventSchema } from "@/calendar/schemas";
 import type { IEvent } from "@/calendar/interfaces";
 import type { TimeValue } from "react-aria-components";
 import type { TEventFormData } from "@/calendar/schemas";
+import type { SubmitHandler } from "react-hook-form";
 
 interface IProps {
   children: React.ReactNode;
@@ -31,10 +30,8 @@ interface IProps {
 
 export function EditEventDialog({ children, event }: IProps) {
   const { isOpen, onClose, onToggle } = useDisclosure();
-
-  const { users } = useCalendar();
-
-  const { updateEvent } = useUpdateEvent();
+  const { data: users = [] } = useUsers();
+  const updateEventMutation = useUpdateEvent();
 
   const form = useForm<TEventFormData>({
     resolver: zodResolver(eventSchema),
@@ -50,28 +47,33 @@ export function EditEventDialog({ children, event }: IProps) {
     },
   });
 
-  const onSubmit = (values: TEventFormData) => {
-    const user = users.find(user => user.id === values.user);
+  const onSubmit: SubmitHandler<TEventFormData> = async (values: TEventFormData) => {
+    try {
+      const user = users.find(user => user.id === values.user);
 
-    if (!user) throw new Error("User not found");
+      if (!user) throw new Error("User not found");
 
-    const startDateTime = new Date(values.startDate);
-    startDateTime.setHours(values.startTime.hour, values.startTime.minute);
+      const startDateTime = new Date(values.startDate);
+      startDateTime.setHours(values.startTime.hour, values.startTime.minute);
 
-    const endDateTime = new Date(values.endDate);
-    endDateTime.setHours(values.endTime.hour, values.endTime.minute);
+      const endDateTime = new Date(values.endDate);
+      endDateTime.setHours(values.endTime.hour, values.endTime.minute);
 
-    updateEvent({
-      ...event,
-      user,
-      title: values.title,
-      color: values.color,
-      description: values.description,
-      startDate: startDateTime.toISOString(),
-      endDate: endDateTime.toISOString(),
-    });
+      await updateEventMutation.mutateAsync({
+        ...event,
+        user,
+        title: values.title,
+        color: values.color,
+        description: values.description,
+        startDate: startDateTime.toISOString(),
+        endDate: endDateTime.toISOString(),
+      });
 
-    onClose();
+      onClose();
+    } catch (_error) {
+      // Error is handled by the mutation hook
+      // Error handling is already done in the mutation hook
+    }
   };
 
   return (
@@ -306,8 +308,8 @@ export function EditEventDialog({ children, event }: IProps) {
             </Button>
           </DialogClose>
 
-          <Button form="event-form" type="submit">
-            Save changes
+          <Button form="event-form" type="submit" disabled={updateEventMutation.isPending}>
+            {updateEventMutation.isPending ? 'Saving...' : 'Save changes'}
           </Button>
         </DialogFooter>
       </DialogContent>

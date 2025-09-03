@@ -1,11 +1,9 @@
-"use client";
-
 import { format, parseISO } from "date-fns";
 import { Calendar, Clock, Text, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { EditEventDialog } from "@/calendar/components/dialogs/edit-event-dialog";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 import type { IEvent } from "@/calendar/interfaces";
 
@@ -26,6 +24,9 @@ export function EventDetailsDialog({ event, children }: IProps) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{event.title}</DialogTitle>
+            <DialogDescription>
+              View event details and information
+            </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">

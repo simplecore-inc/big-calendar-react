@@ -1,6 +1,7 @@
 import { startOfWeek, addDays, format, parseISO, isSameDay, areIntervalsOverlapping } from "date-fns";
+import { useMemo } from "react";
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarDate, useCalendarPreferences } from "@/stores/calendar-store";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -21,12 +22,31 @@ interface IProps {
 }
 
 export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
-  const { selectedDate, workingHours, visibleHours } = useCalendar();
+  const { selectedDate } = useCalendarDate();
+  const { workingHours, visibleHours } = useCalendarPreferences();
 
   const { hours, earliestEventHour, latestEventHour } = getVisibleHours(visibleHours, singleDayEvents);
 
   const weekStart = startOfWeek(selectedDate);
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
+
+  const hourLabels = useMemo(() => hours.map(h => format(new Date().setHours(h, 0, 0, 0), "hh a")), [hours]);
+
+  const parsedSingleDayEvents = useMemo(
+    () => singleDayEvents.map(e => ({ event: e, start: parseISO(e.startDate), end: parseISO(e.endDate) })),
+    [singleDayEvents]
+  );
+
+  const dayEventsMap = useMemo(() => {
+    return weekDays.map(day => {
+      const dayEvents = parsedSingleDayEvents
+        .filter(pe => isSameDay(pe.start, day) || isSameDay(pe.end, day))
+        .map(pe => pe.event);
+      return dayEvents;
+    });
+  }, [parsedSingleDayEvents, weekDays]);
+
+  const groupedEventsMap = useMemo(() => dayEventsMap.map(dayEvents => groupEvents(dayEvents)), [dayEventsMap]);
 
   return (
     <>
@@ -59,7 +79,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
               {hours.map((hour, index) => (
                 <div key={hour} className="relative" style={{ height: "96px" }}>
                   <div className="absolute -top-3 right-2 flex h-6 items-center">
-                    {index !== 0 && <span className="text-xs text-muted-foreground">{format(new Date().setHours(hour, 0, 0, 0), "hh a")}</span>}
+                    {index !== 0 && <span className="text-xs text-muted-foreground">{hourLabels[index]}</span>}
                   </div>
                 </div>
               ))}
@@ -69,8 +89,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
             <div className="relative flex-1 border-l">
               <div className="grid grid-cols-7 divide-x">
                 {weekDays.map((day, dayIndex) => {
-                  const dayEvents = singleDayEvents.filter(event => isSameDay(parseISO(event.startDate), day) || isSameDay(parseISO(event.endDate), day));
-                  const groupedEvents = groupEvents(dayEvents);
+                  const groupedEvents = groupedEventsMap[dayIndex];
 
                   return (
                     <div key={dayIndex} className="relative">

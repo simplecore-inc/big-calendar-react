@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { CalendarX2 } from "lucide-react";
 import { parseISO, format, endOfDay, startOfDay, isSameMonth } from "date-fns";
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarDate } from "@/stores/calendar-store";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AgendaDayGroup } from "@/calendar/components/agenda-view/agenda-day-group";
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export function CalendarAgendaView({ singleDayEvents, multiDayEvents }: IProps) {
-  const { selectedDate } = useCalendar();
+  const { selectedDate } = useCalendarDate();
 
   const eventsByDay = useMemo(() => {
     const allDates = new Map<string, { date: Date; events: IEvent[]; multiDayEvents: IEvent[] }>();

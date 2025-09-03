@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { formatDate } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useLocation } from "@tanstack/react-router";
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarDate } from "@/stores/calendar-store";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,12 +14,27 @@ import type { IEvent } from "@/calendar/interfaces";
 import type { TCalendarView } from "@/calendar/types";
 
 interface IProps {
-  view: TCalendarView;
   events: IEvent[];
 }
 
-export function DateNavigator({ view, events }: IProps) {
-  const { selectedDate, setSelectedDate } = useCalendar();
+export function DateNavigator({ events }: IProps) {
+  const location = useLocation();
+  const { selectedDate, setSelectedDate } = useCalendarDate();
+
+  // Extract view from router path
+  const view = useMemo(() => {
+    const pathSegments = location.pathname.split('/');
+    const viewSegment = pathSegments[pathSegments.length - 1];
+    
+    // Validate that it's a valid calendar view
+    const validViews: TCalendarView[] = ['month', 'week', 'day', 'year', 'agenda'];
+    if (validViews.includes(viewSegment as TCalendarView)) {
+      return viewSegment as TCalendarView;
+    }
+    
+    // Default to month view if invalid
+    return 'month' as TCalendarView;
+  }, [location.pathname]);
 
   const month = formatDate(selectedDate, "MMMM");
   const year = selectedDate.getFullYear();

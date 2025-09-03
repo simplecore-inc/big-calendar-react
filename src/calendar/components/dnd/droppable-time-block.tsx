@@ -1,9 +1,7 @@
-"use client";
-
 import { useDrop } from "react-dnd";
-import { parseISO, differenceInMilliseconds } from "date-fns";
+import { startTransition, useRef, useEffect, useState } from "react";
 
-import { useUpdateEvent } from "@/calendar/hooks/use-update-event";
+import { useUpdateEvent } from "@/hooks/use-events";
 
 import { cn } from "@/lib/utils";
 import { ItemTypes } from "@/calendar/components/dnd/draggable-event";
@@ -18,41 +16,72 @@ interface DroppableTimeBlockProps {
 }
 
 export function DroppableTimeBlock({ date, hour, minute, children }: DroppableTimeBlockProps) {
-  const { updateEvent } = useUpdateEvent();
+  const updateEventMutation = useUpdateEvent();
+  const rafRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [isHighlighted, setIsHighlighted] = useState(false);
 
-  const [{ isOver, canDrop }, drop] = useDrop(
+  const [{ isOver }, drop] = useDrop(
     () => ({
       accept: ItemTypes.EVENT,
-      drop: (item: { event: IEvent }) => {
+      drop: (item: { event: IEvent; durationMs?: number }) => {
         const droppedEvent = item.event;
-
-        const eventStartDate = parseISO(droppedEvent.startDate);
-        const eventEndDate = parseISO(droppedEvent.endDate);
-
-        const eventDurationMs = differenceInMilliseconds(eventEndDate, eventStartDate);
+        const eventDurationMs = item.durationMs ?? 0;
 
         const newStartDate = new Date(date);
         newStartDate.setHours(hour, minute, 0, 0);
         const newEndDate = new Date(newStartDate.getTime() + eventDurationMs);
 
-        updateEvent({
+        const updatedEvent = {
           ...droppedEvent,
           startDate: newStartDate.toISOString(),
           endDate: newEndDate.toISOString(),
-        });
+        };
+
+        // Defer mutation to next tick to avoid blocking drop completion
+        setTimeout(() => {
+          startTransition(() => {
+            updateEventMutation.mutate(updatedEvent, {
+              onError: (_error) => {
+                // Error is handled by the mutation hook
+              },
+            });
+          });
+        }, 0);
 
         return { moved: true };
       },
       collect: monitor => ({
         isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
       }),
     }),
-    [date, hour, minute, updateEvent]
+    [date, hour, minute, updateEventMutation]
   );
 
+  // Connect drop target to the container ref
+  useEffect(() => {
+    drop(containerRef);
+  }, [drop]);
+
+  // Throttle highlight updates with rAF
+  useEffect(() => {
+    if (rafRef.current != null) {
+      cancelAnimationFrame(rafRef.current);
+    }
+    
+    rafRef.current = requestAnimationFrame(() => {
+      setIsHighlighted(isOver);
+    });
+
+    return () => {
+      if (rafRef.current != null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [isOver]);
+
   return (
-    <div ref={drop as unknown as React.RefObject<HTMLDivElement>} className={cn("h-[24px]", isOver && canDrop && "bg-accent/50")}>
+    <div ref={containerRef} className={cn("h-[24px] relative", isHighlighted && "bg-accent/50")}>
       {children}
     </div>
   );

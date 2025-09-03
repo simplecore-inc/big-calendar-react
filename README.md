@@ -1,10 +1,33 @@
+> [!IMPORTANT]
+> This repository is a "Vite + React SPA" port and refinement of the original project. The table below highlights the key differences.
+>
+> | Area | Original (lramos33/big-calendar) | This repository |
+> | --- | --- | --- |
+> | Build/Runtime | Next.js 14 | Vite 5 + React 19 |
+> | Routing | Next App Router (`src/app`) | TanStack Router (`src/routes`) |
+> | State/Data | React Context | Zustand + TanStack Query |
+> | Commands | `next dev/build/start` | Vite-based scripts + `vitest` |
+> | Config files | `next.config.mjs` and Next-specific setup | `vite.config.ts`, `vitest.config.ts`, ESLint/Prettier updates |
+>
+> [!NOTE]
+> Major changes
+> - Removed `src/app/**`; rebuilt file-based routing under `src/routes/**`
+> - Dropped Next.js dependency; switched to Vite build/preview (`vite`, `vite preview`)
+> - Replaced React Context with Zustand + TanStack Query for state/data
+> - Added testing/dev tooling: Vitest + Testing Library
+> - Switched configuration: removed `next.config.mjs`; added Vite/Vitest configs and updated ESLint
+>
+> [!TIP]
+> Next.js-specific guidance in the original README does not directly apply here. Use the Getting started and Project structure sections below, which are updated for Vite + TanStack Router.
+>
+> [!INFO]
+> Original repository: https://github.com/lramos33/big-calendar (MIT License)
+
+
 # Big Calendar
 
-A feature-rich calendar application built with Next.js, TypeScript, and Tailwind CSS. This project provides a modern, responsive interface for managing events and schedules with multiple viewing options.
+A feature-rich calendar application built with Vite, React, TypeScript, and Tailwind CSS. This project provides a modern, responsive interface for managing events and schedules with multiple viewing options.
 
-<p align="center">
-  <a href="https://www.buymeacoffee.com/lramos33" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
-</p>
 
 ## Preview
 
@@ -63,19 +86,23 @@ A feature-rich calendar application built with Next.js, TypeScript, and Tailwind
 
 ## Tech stack
 
-- **Framework**: Next.js 14
+- **Build Tool**: Vite 5
+- **Framework**: React 19
 - **Language**: TypeScript
-- **Styling**: Tailwind v3
+- **Routing**: TanStack Router
+- **State Management**: Zustand + TanStack Query
+- **Styling**: Tailwind CSS v3
 - **Date Management**: date-fns
-- **UI Components**: shadcn/ui
-- **State Management**: React Context
+- **UI Components**: shadcn/ui + Radix UI
+- **Drag & Drop**: react-dnd
+- **Form Handling**: React Hook Form + Zod
 
 ## Getting started
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/lramos33/big-calendar.git
+git clone https://github.com/simplecore-inc/big-calendar-react.git
 cd calendar-app
 ```
 
@@ -91,13 +118,14 @@ npm install
 npm run dev
 ```
 
-or
+4. Open your browser and navigate to `http://localhost:3000` to view the application.
+
+## Build for production
 
 ```bash
-npm run turbo
+npm run build
+npm run preview
 ```
-
-4. Open your browser and navigate to `http://localhost:3000` to view the application.
 
 ## Project structure
 
@@ -105,21 +133,47 @@ The project structure is organized as follows:
 
 ```
 src/
-├── app/
-├── calendar/                     # All files related to calendar are in this folder
+├── routes/                       # TanStack Router routes
+│   ├── __root.tsx               # Root layout with providers
+│   ├── index.tsx                # Home route (redirects to calendar)
+│   └── calendar/                # Calendar routes
+│       ├── month.tsx            # Month view route
+│       ├── week.tsx             # Week view route
+│       ├── day.tsx              # Day view route
+│       ├── year.tsx             # Year view route
+│       └── agenda.tsx           # Agenda view route
+├── stores/                       # Zustand state management
+│   ├── calendar-store.ts        # Calendar state (view, date, user selection)
+│   └── theme-store.ts           # Theme state (dark/light mode)
+├── hooks/                        # Custom hooks
+│   ├── use-events.ts            # TanStack Query hooks for events
+│   ├── use-users.ts             # TanStack Query hooks for users
+│   └── use-disclosure.ts        # UI state management hook
+├── calendar/                     # Calendar components and logic
 │   ├── components/
 │   │   ├── agenda-view/          # Agenda view components
-│   │   ├── dialogs/              # Dialogs components
+│   │   ├── dialogs/              # Event dialogs (add/edit/details)
 │   │   ├── dnd/                  # Drag and drop components
-│   │   ├── header/               # Calendar header components
+│   │   ├── header/               # Calendar header and navigation
 │   │   ├── month-view/           # Month view components
 │   │   ├── week-and-day-view/    # Week and day view components
 │   │   └── year-view/            # Year view components
-│   ├── contexts/                 # Calendar context and state management
-│   ├── helpers/                  # Utility functions
-│   ├── interfaces/               # TypeScript interfaces
-│   └── types/                    # TypeScript types
-└── components/                   # Components not related to calendar eg: ui and layout components
+│   ├── helpers.ts                # Utility functions
+│   ├── interfaces.ts             # TypeScript interfaces
+│   ├── types.ts                  # TypeScript types
+│   ├── schemas.ts                # Zod validation schemas
+│   └── requests.ts               # API functions
+├── components/                   # Shared components
+│   ├── ui/                      # shadcn/ui components
+│   └── layout/                  # Layout components
+├── lib/                          # Utilities
+│   ├── utils.ts                 # General utilities
+│   ├── query-client.ts          # TanStack Query configuration
+│   ├── navigation.ts            # Navigation utilities
+│   └── performance.ts           # Performance monitoring
+└── styles/                       # Styling
+    ├── globals.css              # Global styles
+    └── fonts.ts                 # Font configurations
 ```
 
 ## How to implement in your project
@@ -131,65 +185,67 @@ src/
 ```
 src/calendar/         # Core calendar functionality
 src/components/ui/    # UI components used by the calendar
-src/hooks/            # Required hooks like use-disclosure
+src/hooks/            # Custom hooks for data fetching
+src/stores/           # Zustand stores for state management
+src/lib/              # Utility functions
 ```
 
-2. Install dependencies missing in your project
+2. Install the required dependencies:
+
+```bash
+npm install @tanstack/react-router @tanstack/react-query zustand
+npm install react-dnd react-dnd-html5-backend date-fns
+npm install react-hook-form @hookform/resolvers zod
+npm install @radix-ui/react-dialog @radix-ui/react-select # ... other Radix UI components
+```
 
 ### Basic setup
 
-1. **Set up the `CalendarProvider`**
+1. **Set up TanStack Query**
 
-   Wrap your application or page with the `CalendarProvider`:
+   Wrap your application with the QueryClient provider:
 
 ```tsx
-import { CalendarProvider } from "@/calendar/contexts/calendar-context";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-// Fetch your events and users data
-const events = await getEvents();
-const users = await getUsers();
+const queryClient = new QueryClient();
 
-export default function Layout({ children }) {
+export default function App() {
   return (
-    <CalendarProvider users={users} events={events}>
-      {children}
-    </CalendarProvider>
+    <QueryClientProvider client={queryClient}>
+      {/* Your app content */}
+    </QueryClientProvider>
   );
 }
 ```
 
-2. **Add a `CalendarView`**
+2. **Set up Zustand stores**
 
-   Use the `ClientContainer` to render a specific view:
+   The calendar uses Zustand for state management. The stores are automatically initialized when imported.
+
+3. **Add a Calendar View**
+
+   Use the `ClientContainer` to render the calendar:
 
 ```tsx
 import { ClientContainer } from "@/calendar/components/client-container";
 
 export default function CalendarPage() {
-  return <ClientContainer view="month" />;
+  return <ClientContainer />;
 }
 ```
 
 ### Views configuration
 
-The calendar supports five different views, each can be used with the `ClientContainer` component:
+The calendar supports five different views through routing. The view is determined by the current route:
 
-```tsx
-// Day view
-<ClientContainer view="day" />
+- `/calendar/day` - Day view
+- `/calendar/week` - Week view  
+- `/calendar/month` - Month view
+- `/calendar/year` - Year view
+- `/calendar/agenda` - Agenda view
 
-// Week view
-<ClientContainer view="week" />
-
-// Month view
-<ClientContainer view="month" />
-
-// Year view
-<ClientContainer view="year" />
-
-// Agenda view
-<ClientContainer view="agenda" />
-```
+The `ClientContainer` automatically detects the current view from the router and renders the appropriate calendar view.
 
 ### Data structure
 
@@ -241,15 +297,23 @@ import { ChangeBadgeVariantInput } from "@/calendar/components/change-badge-vari
 
    Implement your own event creation by modifying the `onSubmit` handler in the `AddEventDialog` component.
 
-### Using the Calendar Context
+### Using the Calendar State
 
-You can access and control the calendar state from any component using the `useCalendar` hook:
+You can access and control the calendar state from any component using Zustand hooks:
 
 ```tsx
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarDate, useCalendarUser, useCalendarPreferences } from "@/stores/calendar-store";
+import { useEvents, useUsers } from "@/hooks/use-events";
 
 function MyComponent() {
-  const { selectedDate, setSelectedDate, selectedUserId, setSelectedUserId, events, users, badgeVariant, setBadgeVariant } = useCalendar();
+  // Calendar state
+  const { selectedDate, setSelectedDate } = useCalendarDate();
+  const { selectedUserId, setSelectedUserId } = useCalendarUser();
+  const { badgeVariant, setBadgeVariant } = useCalendarPreferences();
+  
+  // Data fetching
+  const { data: events } = useEvents();
+  const { data: users } = useUsers();
 
   // Your component logic
 }
@@ -258,27 +322,30 @@ function MyComponent() {
 ### Example implementation
 
 ```tsx
-// pages/calendar.tsx
-import { CalendarProvider } from "@/calendar/contexts/calendar-context";
+// routes/calendar/month.tsx
+import { createFileRoute } from '@tanstack/react-router';
 import { ClientContainer } from "@/calendar/components/client-container";
-import { ChangeBadgeVariantInput } from "@/calendar/components/change-badge-variant-input";
 
-export default function CalendarPage({ events, users }) {
-  return (
-    <CalendarProvider events={events} users={users}>
-      <div className="mx-auto flex max-w-screen-2xl flex-col gap-4 p-4">
-        <ClientContainer view="month" />
-        <ChangeBadgeVariantInput />
-      </div>
-    </CalendarProvider>
-  );
+export const Route = createFileRoute('/calendar/month')({
+  component: MonthView,
+});
+
+function MonthView() {
+  return <ClientContainer />;
 }
 ```
 
-## Contributing
+```tsx
+// components/layout/calendar-layout.tsx
+import { ClientContainer } from "@/calendar/components/client-container";
+import { ChangeBadgeVariantInput } from "@/calendar/components/change-badge-variant-input";
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-<p align="center">
-  Made by Leonardo Ramos 👋 <a href="https://x.com/leoo_ramos1">Get in touch!</a>
-<p>
+export function CalendarLayout({ children }) {
+  return (
+    <div className="mx-auto flex max-w-screen-2xl flex-col gap-4 p-4">
+      {children}
+      <ChangeBadgeVariantInput />
+    </div>
+  );
+}
+```

@@ -1,33 +1,31 @@
-"use client";
-
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-
-import { setTheme } from "@/cookies/set";
+import { useThemeStore } from "@/stores/theme-store";
 
 export function ToggleTheme() {
-  const [currentTheme, setCurrentTheme] = useState<"light" | "dark">();
+  const { theme, toggleTheme, applyTheme } = useThemeStore();
 
+  // Apply theme on mount to ensure consistency
   useEffect(() => {
-    const currentTheme = document.documentElement.classList.contains("dark") ? "dark" : "light";
-    setCurrentTheme(currentTheme);
+    applyTheme(theme);
+  }, [theme, applyTheme]);
+
+  // Show skeleton during hydration to prevent hydration mismatch
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
-  const toggleTheme = () => {
-    const newTheme = currentTheme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    setCurrentTheme(newTheme);
-  };
-
-  if (!currentTheme) return <Skeleton className="size-9" />;
+  if (!mounted) return <Skeleton className="size-9" />;
 
   return (
     <Button variant="ghost" size="icon" onClick={toggleTheme}>
-      {currentTheme === "light" && <Sun />}
-      {currentTheme === "dark" && <Moon />}
+      {theme === "light" && <Sun />}
+      {theme === "dark" && <Moon />}
     </Button>
   );
 }

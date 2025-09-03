@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 import { endOfDay, format, isSameDay, parseISO, startOfDay } from "date-fns";
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarPreferences } from "@/stores/calendar-store";
 
 import { DraggableEvent } from "@/calendar/components/dnd/draggable-event";
 import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
@@ -57,7 +57,7 @@ interface IProps extends Omit<VariantProps<typeof eventBadgeVariants>, "color" |
 }
 
 export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDays, className, position: propPosition }: IProps) {
-  const { badgeVariant } = useCalendar();
+  const { badgeVariant } = useCalendarPreferences();
 
   const itemStart = startOfDay(parseISO(event.startDate));
   const itemEnd = endOfDay(parseISO(event.endDate));
@@ -93,10 +93,15 @@ export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDa
     }
   };
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // Allow drag to start by not preventing default
+    e.stopPropagation();
+  };
+
   return (
     <DraggableEvent event={event}>
       <EventDetailsDialog event={event}>
-        <div role="button" tabIndex={0} className={eventBadgeClasses} onKeyDown={handleKeyDown}>
+        <div role="button" tabIndex={0} className={eventBadgeClasses} onKeyDown={handleKeyDown} onMouseDown={handleMouseDown}>
           <div className="flex items-center gap-1.5 truncate">
             {!["middle", "last"].includes(position) && ["mixed", "dot"].includes(badgeVariant) && (
               <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">

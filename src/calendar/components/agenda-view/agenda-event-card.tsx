@@ -4,7 +4,7 @@ import { format, parseISO } from "date-fns";
 import { cva } from "class-variance-authority";
 import { Clock, Text, User } from "lucide-react";
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarPreferences } from "@/stores/calendar-store";
 
 import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
 
@@ -48,7 +48,7 @@ interface IProps {
 }
 
 export function AgendaEventCard({ event, eventCurrentDay, eventTotalDays }: IProps) {
-  const { badgeVariant } = useCalendar();
+  const { badgeVariant } = useCalendarPreferences();
 
   const startDate = parseISO(event.startDate);
   const endDate = parseISO(event.endDate);

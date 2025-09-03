@@ -1,60 +1,118 @@
-import { forwardRef } from "react";
-import { DateInput, DateSegment, TimeField } from "react-aria-components";
+import * as React from "react"
+import { cn } from "@/lib/utils"
 
-import { cn } from "@/lib/utils";
+interface TimeValue {
+  hour: number
+  minute: number
+}
 
-import type { TimeFieldProps, TimeValue } from "react-aria-components";
+interface TimeInputProps {
+  value?: TimeValue
+  onChange?: (value: TimeValue | null) => void
+  hourCycle?: 12 | 24
+  granularity?: string
+  className?: string
+  id?: string
+  "data-invalid"?: boolean
+  "aria-label"?: string
+}
 
-// ================================== //
+const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
+  ({ value, onChange, hourCycle = 24, granularity: _granularity, className, id, "data-invalid": dataInvalid, "aria-label": ariaLabel, ...props }, ref) => {
+    // Convert 24-hour to 12-hour format for display
+    const get12HourFormat = (hour24: number) => {
+      if (hourCycle === 24) return { hour: hour24, period: null }
+      const period = hour24 >= 12 ? 'PM' : 'AM'
+      let hour12 = hour24 % 12
+      if (hour12 === 0) hour12 = 12
+      return { hour: hour12, period }
+    }
 
-type TTimeInputRef = HTMLDivElement;
-type TTimeInputProps = Omit<TimeFieldProps<TimeValue>, "isDisabled" | "isInvalid"> & {
-  readonly dateInputClassName?: string;
-  readonly segmentClassName?: string;
-  readonly disabled?: boolean;
-  readonly "data-invalid"?: boolean;
-};
+    // Convert 12-hour to 24-hour format for storage
+    const get24HourFormat = (hour12: number, period: string) => {
+      if (hourCycle === 24) return hour12
+      if (period === 'AM') {
+        return hour12 === 12 ? 0 : hour12
+      } else {
+        return hour12 === 12 ? 12 : hour12 + 12
+      }
+    }
 
-const TimeInput = forwardRef<TTimeInputRef, TTimeInputProps>(
-  ({ className, dateInputClassName, segmentClassName, disabled, "data-invalid": dataInvalid, ...props }, ref) => {
+    const currentHour24 = value?.hour || 0
+    const { hour: displayHour, period } = get12HourFormat(currentHour24)
+
+    const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const hour = parseInt(e.target.value, 10)
+      if (!isNaN(hour) && onChange && value) {
+        if (hourCycle === 12 && period) {
+          const hour24 = get24HourFormat(hour, period)
+          onChange({ ...value, hour: hour24 })
+        } else {
+          onChange({ ...value, hour })
+        }
+      }
+    }
+
+    const handleMinuteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const minute = parseInt(e.target.value, 10)
+      if (!isNaN(minute) && onChange && value) {
+        onChange({ ...value, minute })
+      }
+    }
+
+    const handlePeriodToggle = () => {
+      if (hourCycle === 12 && onChange && value) {
+        const newPeriod = period === 'AM' ? 'PM' : 'AM'
+        const hour24 = get24HourFormat(displayHour, newPeriod)
+        onChange({ ...value, hour: hour24 })
+      }
+    }
+
     return (
-      <TimeField
+      <div
         ref={ref}
-        className={cn("relative", className)}
-        isDisabled={disabled}
-        isInvalid={dataInvalid}
+        id={id}
+        className={cn(
+          "flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+          dataInvalid && "border-destructive",
+          className
+        )}
         {...props}
-        aria-label="Time"
-        shouldForceLeadingZeros
       >
-        <DateInput
-          className={cn(
-            "peer inline-flex h-9 w-full items-center overflow-hidden whitespace-nowrap rounded-md border bg-background px-3 py-2 text-sm shadow-black",
-            "data-[focus-within]:outline-none data-[focus-within]:ring-1 data-[focus-within]:ring-ring",
-            "data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
-            dateInputClassName
-          )}
-        >
-          {segment => (
-            <DateSegment
-              segment={segment}
-              className={cn(
-                "inline rounded p-0.5 caret-transparent outline outline-0",
-                "data-[focused]:bg-foreground/10 data-[focused]:text-foreground",
-                "data-[placeholder]:text-muted-foreground",
-                "data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
-                segmentClassName
-              )}
-            />
-          )}
-        </DateInput>
-      </TimeField>
-    );
+        {hourCycle === 12 && (
+          <button
+            type="button"
+            onClick={handlePeriodToggle}
+            className="mr-2 rounded px-2 py-1 text-xs font-medium hover:bg-accent focus:outline-none focus:ring-1 focus:ring-ring"
+            aria-label="Toggle AM/PM"
+          >
+            {period}
+          </button>
+        )}
+        <input
+          type="number"
+          min={hourCycle === 12 ? 1 : 0}
+          max={hourCycle === 12 ? 12 : 23}
+          value={hourCycle === 12 ? displayHour : currentHour24}
+          onChange={handleHourChange}
+          className="w-8 bg-transparent text-center outline-none"
+          aria-label={ariaLabel ? `${ariaLabel} hour` : "Hour"}
+        />
+        <span className="mx-1">:</span>
+        <input
+          type="number"
+          min={0}
+          max={59}
+          value={value?.minute || 0}
+          onChange={handleMinuteChange}
+          className="w-8 bg-transparent text-center outline-none"
+          aria-label={ariaLabel ? `${ariaLabel} minute` : "Minute"}
+        />
+      </div>
+    )
   }
-);
+)
+TimeInput.displayName = "TimeInput"
 
-TimeInput.displayName = "TimeInput";
-
-// ================================== //
-
-export { TimeInput };
+export { TimeInput }
+export type { TimeValue }

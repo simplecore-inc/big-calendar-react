@@ -1,8 +1,8 @@
 import { useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { format, isSameDay, parseISO, getDaysInMonth, startOfMonth } from "date-fns";
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarDate } from "@/stores/calendar-store";
 
 import { YearViewDayCell } from "@/calendar/components/year-view/year-view-day-cell";
 
@@ -14,8 +14,8 @@ interface IProps {
 }
 
 export function YearViewMonth({ month, events }: IProps) {
-  const { push } = useRouter();
-  const { setSelectedDate } = useCalendar();
+  const navigate = useNavigate();
+  const { setSelectedDate } = useCalendarDate();
 
   const monthName = format(month, "MMMM");
 
@@ -33,7 +33,7 @@ export function YearViewMonth({ month, events }: IProps) {
 
   const handleClick = () => {
     setSelectedDate(new Date(month.getFullYear(), month.getMonth(), 1));
-    push("/month-view");
+    navigate({ to: "/calendar/month" });
   };
 
   return (

@@ -1,8 +1,7 @@
-"use client";
-
 import { useDrag } from "react-dnd";
 import { useRef, useEffect } from "react";
 import { getEmptyImage } from "react-dnd-html5-backend";
+import { parseISO, differenceInMilliseconds } from "date-fns";
 
 import { cn } from "@/lib/utils";
 
@@ -25,7 +24,10 @@ export function DraggableEvent({ event, children }: DraggableEventProps) {
     item: () => {
       const width = ref.current?.offsetWidth || 0;
       const height = ref.current?.offsetHeight || 0;
-      return { event, children, width, height };
+      const start = parseISO(event.startDate);
+      const end = parseISO(event.endDate);
+      const durationMs = differenceInMilliseconds(end, start);
+      return { event, children, width, height, durationMs };
     },
     collect: monitor => ({ isDragging: monitor.isDragging() }),
   }));
@@ -38,7 +40,7 @@ export function DraggableEvent({ event, children }: DraggableEventProps) {
   drag(ref);
 
   return (
-    <div ref={ref} className={cn(isDragging && "opacity-40")}>
+    <div ref={ref} className={cn(isDragging && "opacity-40")} draggable>
       {children}
     </div>
   );

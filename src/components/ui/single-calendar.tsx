@@ -49,8 +49,8 @@ function SingleCalendar({ className, classNames, showOutsideDays = true, selecte
         ...classNames,
       }}
       components={{
-        IconLeft: ({ className, ...props }) => <ChevronLeft className={cn("h-4 w-4", className)} {...props} />,
-        IconRight: ({ className, ...props }) => <ChevronRight className={cn("h-4 w-4", className)} {...props} />,
+        IconLeft: ({ className, ...props }: { className?: string; [key: string]: unknown }) => <ChevronLeft className={cn("h-4 w-4", className)} {...props} />,
+        IconRight: ({ className, ...props }: { className?: string; [key: string]: unknown }) => <ChevronRight className={cn("h-4 w-4", className)} {...props} />,
       }}
       {...props}
     />

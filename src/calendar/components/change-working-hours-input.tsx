@@ -1,14 +1,12 @@
-"use client";
-
 import { useState } from "react";
 import { Info, Moon } from "lucide-react";
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarPreferences } from "@/stores/calendar-store";
 
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { TimeInput } from "@/components/ui/time-input";
 
-import type { TimeValue } from "react-aria-components";
+import type { TimeValue } from "@/components/ui/time-input";
 import { TooltipContent } from "@/components/ui/tooltip";
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,7 +22,7 @@ const DAYS_OF_WEEK = [
 ];
 
 export function ChangeWorkingHoursInput() {
-  const { workingHours, setWorkingHours } = useCalendar();
+  const { workingHours, setWorkingHours } = useCalendarPreferences();
 
   const [localWorkingHours, setLocalWorkingHours] = useState({ ...workingHours });
 

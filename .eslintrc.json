@@ -1,10 +1,31 @@
 {
-  "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended", "plugin:tailwindcss/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:tailwindcss/recommended"
+  ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "tailwindcss"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": ["@typescript-eslint", "react", "react-hooks", "tailwindcss"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
     // Warn when console statements are used
     "no-console": "warn",
+    
+    // Allow require in test files
+    "@typescript-eslint/no-require-imports": "off",
 
     // Enforce the use of the `import type` syntax for type imports
     "@typescript-eslint/consistent-type-imports": "error",
@@ -21,6 +42,10 @@
         "caughtErrorsIgnorePattern": "^_"
       }
     ],
+
+    // React 17+ JSX Transform
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-uses-react": "off",
 
     // Prevent usage of dangerous JSX props
     "react/no-danger": "error",
@@ -52,17 +77,7 @@
       }
     ],
 
-    // Ensure consistent use of file extension within the import path
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "ts": "never",
-        "tsx": "never",
-        "js": "never",
-        "jsx": "never"
-      }
-    ],
+
 
     // Enforce using `@/` alias for imports from the `src/` directory
     "no-restricted-imports": [
@@ -95,6 +110,24 @@
   "overrides": [
     {
       "files": ["src/components/**/*.{js,jsx,ts,tsx}"],
+      "rules": {
+        "react/no-multi-comp": "off"
+      }
+    },
+    {
+      "files": ["src/__tests__/**/*.{js,jsx,ts,tsx}", "**/*.test.{js,jsx,ts,tsx}", "**/*.spec.{js,jsx,ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": "off",
+        "@typescript-eslint/no-require-imports": "off",
+        "react/no-multi-comp": "off",
+        "react/function-component-definition": "off",
+        "react/display-name": "off",
+        "no-console": "off",
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      "files": ["src/routes/**/*.{js,jsx,ts,tsx}", "src/calendar/components/client-container.tsx"],
       "rules": {
         "react/no-multi-comp": "off"
       }

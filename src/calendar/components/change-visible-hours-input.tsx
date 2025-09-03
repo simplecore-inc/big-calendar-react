@@ -1,21 +1,27 @@
-"use client";
-
 import { useState } from "react";
 import { Info } from "lucide-react";
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarPreferences } from "@/stores/calendar-store";
 
 import { Button } from "@/components/ui/button";
 import { TimeInput } from "@/components/ui/time-input";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 
-import type { TimeValue } from "react-aria-components";
+import type { TimeValue } from "@/components/ui/time-input";
 
 export function ChangeVisibleHoursInput() {
-  const { visibleHours, setVisibleHours } = useCalendar();
+  const { visibleHours, setVisibleHours } = useCalendarPreferences();
 
-  const [from, setFrom] = useState<{ hour: number; minute: number }>({ hour: visibleHours.from, minute: 0 });
-  const [to, setTo] = useState<{ hour: number; minute: number }>({ hour: visibleHours.to, minute: 0 });
+  const [from, setFrom] = useState<TimeValue>({ hour: visibleHours.from, minute: 0 });
+  const [to, setTo] = useState<TimeValue>({ hour: visibleHours.to, minute: 0 });
+
+  const handleFromChange = (value: TimeValue | null) => {
+    if (value) setFrom(value);
+  };
+
+  const handleToChange = (value: TimeValue | null) => {
+    if (value) setTo(value);
+  };
 
   const handleApply = () => {
     const toHour = to.hour === 0 ? 24 : to.hour;
@@ -42,9 +48,9 @@ export function ChangeVisibleHoursInput() {
 
       <div className="flex items-center gap-4">
         <p>From</p>
-        <TimeInput id="start-time" hourCycle={12} granularity="hour" value={from as TimeValue} onChange={setFrom as (value: TimeValue | null) => void} />
+        <TimeInput id="start-time" hourCycle={12} value={from} onChange={handleFromChange} aria-label="Start time" />
         <p>To</p>
-        <TimeInput id="end-time" hourCycle={12} granularity="hour" value={to as TimeValue} onChange={setTo as (value: TimeValue | null) => void} />
+        <TimeInput id="end-time" hourCycle={12} value={to} onChange={handleToChange} aria-label="End time" />
       </div>
 
       <Button className="mt-4 w-fit" onClick={handleApply}>

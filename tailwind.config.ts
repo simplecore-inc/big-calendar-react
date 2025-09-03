@@ -3,7 +3,10 @@ import animatePlugin from "tailwindcss-animate";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: ["./src/**/*.tsx"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   darkMode: "class",
   theme: {
     extend: {

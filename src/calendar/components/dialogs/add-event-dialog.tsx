@@ -1,11 +1,10 @@
-"use client";
-
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useDisclosure } from "@/hooks/use-disclosure";
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useUsers } from "@/hooks/use-users";
+import { useCreateEvent } from "@/hooks/use-events";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -21,6 +20,7 @@ import { eventSchema } from "@/calendar/schemas";
 
 import type { TimeValue } from "react-aria-components";
 import type { TEventFormData } from "@/calendar/schemas";
+import type { SubmitHandler } from "react-hook-form";
 
 interface IProps {
   children: React.ReactNode;
@@ -29,32 +29,63 @@ interface IProps {
 }
 
 export function AddEventDialog({ children, startDate, startTime }: IProps) {
-  const { users } = useCalendar();
-
+  const { data: users = [] } = useUsers();
   const { isOpen, onClose, onToggle } = useDisclosure();
+  const createEventMutation = useCreateEvent();
 
   const form = useForm<TEventFormData>({
     resolver: zodResolver(eventSchema),
     defaultValues: {
       title: "",
       description: "",
-      startDate: typeof startDate !== "undefined" ? startDate : undefined,
-      startTime: typeof startTime !== "undefined" ? startTime : undefined,
+      user: "",
+      color: undefined,
+      startDate: startDate || new Date(),
+      endDate: startDate || new Date(),
+      startTime: startTime || { hour: 9, minute: 0 },
+      endTime: startTime ? { hour: startTime.hour + 1, minute: startTime.minute } : { hour: 10, minute: 0 },
     },
   });
 
-  const onSubmit = (_values: TEventFormData) => {
-    // TO DO: Create use-add-event hook
-    onClose();
-    form.reset();
+  const onSubmit: SubmitHandler<TEventFormData> = async (values: TEventFormData) => {
+    try {
+      // Find the selected user
+      const selectedUser = users.find(user => user.id === values.user);
+      if (!selectedUser) {
+        throw new Error('Selected user not found');
+      }
+
+      // Create the event data
+      const eventData = {
+        title: values.title,
+        description: values.description,
+        startDate: values.startDate!.toISOString(),
+        endDate: values.endDate!.toISOString(),
+        color: values.color!,
+        user: selectedUser,
+      };
+
+      await createEventMutation.mutateAsync(eventData);
+      onClose();
+      form.reset();
+    } catch (_error) {
+      // Error is handled by the mutation hook
+      // Error handling is already done in the mutation hook
+    }
   };
 
   useEffect(() => {
     form.reset({
-      startDate,
-      startTime,
+      title: "",
+      description: "",
+      user: "",
+      color: undefined,
+      startDate: startDate || new Date(),
+      endDate: startDate || new Date(),
+      startTime: startTime || { hour: 9, minute: 0 },
+      endTime: startTime ? { hour: startTime.hour + 1, minute: startTime.minute } : { hour: 10, minute: 0 },
     });
-  }, [startDate, startTime, form.reset]);
+  }, [startDate, startTime, form]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onToggle}>
@@ -77,7 +108,7 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
                 <FormItem>
                   <FormLabel>Responsible</FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
+                    <Select value={field.value ?? ""} onValueChange={field.onChange}>
                       <SelectTrigger data-invalid={fieldState.invalid}>
                         <SelectValue placeholder="Select an option" />
                       </SelectTrigger>
@@ -203,7 +234,7 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
                 <FormItem>
                   <FormLabel>Color</FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
+                    <Select value={field.value ?? ""} onValueChange={field.onChange}>
                       <SelectTrigger data-invalid={fieldState.invalid}>
                         <SelectValue placeholder="Select an option" />
                       </SelectTrigger>
@@ -290,8 +321,8 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
             </Button>
           </DialogClose>
 
-          <Button form="event-form" type="submit">
-            Create Event
+          <Button form="event-form" type="submit" disabled={createEventMutation.isPending}>
+            {createEventMutation.isPending ? 'Creating...' : 'Create Event'}
           </Button>
         </DialogFooter>
       </DialogContent>

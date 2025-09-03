@@ -1,11 +1,13 @@
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendarUser } from "@/stores/calendar-store";
+import { useUsers } from "@/hooks/use-users";
 
 import { AvatarGroup } from "@/components/ui/avatar-group";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function UserSelect() {
-  const { users, selectedUserId, setSelectedUserId } = useCalendar();
+  const { selectedUserId, setSelectedUserId } = useCalendarUser();
+  const { data: users = [] } = useUsers();
 
   return (
     <Select value={selectedUserId} onValueChange={setSelectedUserId}>

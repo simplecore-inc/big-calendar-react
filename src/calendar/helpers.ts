@@ -28,11 +28,15 @@ import {
 
 import type { ICalendarCell, IEvent } from "@/calendar/interfaces";
 import type { TCalendarView, TVisibleHours, TWorkingHours } from "@/calendar/types";
+import { getDateLocale } from "@/lib/date-locale";
+import { formatDate, formatDateRange } from "@/lib/date-formats";
+import i18n from "i18next";
 
 // ================ Header helper functions ================ //
 
 export function rangeText(view: TCalendarView, date: Date) {
-  const formatString = "MMM d, yyyy";
+  const locale = getDateLocale(i18n.language);
+  const language = i18n.language;
   let start: Date;
   let end: Date;
 
@@ -50,16 +54,25 @@ export function rangeText(view: TCalendarView, date: Date) {
       end = endOfMonth(date);
       break;
     case "week":
-      start = startOfWeek(date);
-      end = endOfWeek(date);
+      start = startOfWeek(date, { locale });
+      end = endOfWeek(date, { locale });
       break;
     case "day":
-      return format(date, formatString);
+      return formatDate(date, "fullDate", language, locale);
     default:
-      return "Error while formatting ";
+      return "";
   }
 
-  return `${format(start, formatString)} - ${format(end, formatString)}`;
+  // Special handling for year view
+  if (view === "year") {
+    if (language === "ko") {
+      return `${format(start, "yyyy년", { locale })}`;
+    } else {
+      return format(start, "yyyy", { locale });
+    }
+  }
+
+  return formatDateRange(start, end, language, locale);
 }
 
 export function navigateDate(date: Date, view: TCalendarView, direction: "previous" | "next"): Date {
@@ -75,11 +88,12 @@ export function navigateDate(date: Date, view: TCalendarView, direction: "previo
 }
 
 export function getEventsCount(events: IEvent[], date: Date, view: TCalendarView): number {
+  const locale = getDateLocale(i18n.language);
   const compareFns = {
     agenda: isSameMonth,
     year: isSameYear,
     day: isSameDay,
-    week: isSameWeek,
+    week: (d1: Date, d2: Date) => isSameWeek(d1, d2, { locale }),
     month: isSameMonth,
   };
 
@@ -169,11 +183,16 @@ export function getVisibleHours(visibleHours: TVisibleHours, singleDayEvents: IE
 // ================ Month view helper functions ================ //
 
 export function getCalendarCells(selectedDate: Date): ICalendarCell[] {
+  const locale = getDateLocale(i18n.language);
   const currentYear = selectedDate.getFullYear();
   const currentMonth = selectedDate.getMonth();
 
   const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
-  const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
+  const getFirstDayOfMonth = (year: number, month: number) => {
+    const firstDay = new Date(year, month, 1);
+    const weekStart = startOfWeek(firstDay, { locale });
+    return differenceInDays(firstDay, weekStart);
+  };
 
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
   const firstDayOfMonth = getFirstDayOfMonth(currentYear, currentMonth);

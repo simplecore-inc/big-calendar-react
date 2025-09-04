@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { useCalendarUser } from "@/stores/calendar-store";
 import { useUsers } from "@/hooks/use-users";
 
@@ -8,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export function UserSelect() {
   const { selectedUserId, setSelectedUserId } = useCalendarUser();
   const { data: users = [] } = useUsers();
+  const { t } = useTranslation();
 
   return (
     <Select value={selectedUserId} onValueChange={setSelectedUserId}>
@@ -26,7 +29,7 @@ export function UserSelect() {
                 </Avatar>
               ))}
             </AvatarGroup>
-            All
+            {t("calendar.userSelect.all")}
           </div>
         </SelectItem>
 

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 
 import { useDisclosure } from "@/hooks/use-disclosure";
 import { useUsers } from "@/hooks/use-users";
@@ -12,7 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { TimeInput } from "@/components/ui/time-input";
 import { SingleDayPicker } from "@/components/ui/single-day-picker";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Form, FormField, FormLabel, FormItem, FormControl, FormMessage } from "@/components/ui/form";
+import { Form, FormField, FormLabel, FormItem, FormControl } from "@/components/ui/form";
+import { FormMessageTranslated } from "@/calendar/components/form-message-translated";
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogHeader, DialogClose, DialogContent, DialogTrigger, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 
@@ -29,6 +31,7 @@ interface IProps {
 }
 
 export function AddEventDialog({ children, startDate, startTime }: IProps) {
+  const { t } = useTranslation();
   const { data: users = [] } = useUsers();
   const { isOpen, onClose, onToggle } = useDisclosure();
   const createEventMutation = useCreateEvent();
@@ -52,7 +55,7 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
       // Find the selected user
       const selectedUser = users.find(user => user.id === values.user);
       if (!selectedUser) {
-        throw new Error('Selected user not found');
+        throw new Error("Selected user not found");
       }
 
       // Create the event data
@@ -93,7 +96,7 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New Event</DialogTitle>
+          <DialogTitle>{t("calendar.events.addEvent")}</DialogTitle>
           <DialogDescription>
             This is just and example of how to use the form. In a real application, you would call the API to create the event
           </DialogDescription>
@@ -106,11 +109,11 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
               name="user"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>Responsible</FormLabel>
+                  <FormLabel>{t("calendar.events.user")}</FormLabel>
                   <FormControl>
                     <Select value={field.value ?? ""} onValueChange={field.onChange}>
                       <SelectTrigger data-invalid={fieldState.invalid}>
-                        <SelectValue placeholder="Select an option" />
+                        <SelectValue placeholder={t("calendar.userSelect.selectOption")} />
                       </SelectTrigger>
 
                       <SelectContent>
@@ -129,7 +132,7 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
                       </SelectContent>
                     </Select>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessageTranslated />
                 </FormItem>
               )}
             />
@@ -139,13 +142,13 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
               name="title"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel htmlFor="title">Title</FormLabel>
+                  <FormLabel htmlFor="title">{t("calendar.events.title")}</FormLabel>
 
                   <FormControl>
-                    <Input id="title" placeholder="Enter a title" data-invalid={fieldState.invalid} {...field} />
+                    <Input id="title" placeholder={t("calendar.events.title")} data-invalid={fieldState.invalid} {...field} />
                   </FormControl>
 
-                  <FormMessage />
+                  <FormMessageTranslated />
                 </FormItem>
               )}
             />
@@ -156,19 +159,19 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
                 name="startDate"
                 render={({ field, fieldState }) => (
                   <FormItem className="flex-1">
-                    <FormLabel htmlFor="startDate">Start Date</FormLabel>
+                    <FormLabel htmlFor="startDate">{t("calendar.events.startDate")}</FormLabel>
 
                     <FormControl>
                       <SingleDayPicker
                         id="startDate"
                         value={field.value}
                         onSelect={date => field.onChange(date as Date)}
-                        placeholder="Select a date"
+                        placeholder={t("calendar.events.startDate")}
                         data-invalid={fieldState.invalid}
                       />
                     </FormControl>
 
-                    <FormMessage />
+                    <FormMessageTranslated />
                   </FormItem>
                 )}
               />
@@ -178,13 +181,13 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
                 name="startTime"
                 render={({ field, fieldState }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Start Time</FormLabel>
+                    <FormLabel>{t("calendar.events.startTime")}</FormLabel>
 
                     <FormControl>
                       <TimeInput value={field.value as TimeValue} onChange={field.onChange} hourCycle={12} data-invalid={fieldState.invalid} />
                     </FormControl>
 
-                    <FormMessage />
+                    <FormMessageTranslated />
                   </FormItem>
                 )}
               />
@@ -196,16 +199,16 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
                 name="endDate"
                 render={({ field, fieldState }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>End Date</FormLabel>
+                    <FormLabel>{t("calendar.events.endDate")}</FormLabel>
                     <FormControl>
                       <SingleDayPicker
                         value={field.value}
                         onSelect={date => field.onChange(date as Date)}
-                        placeholder="Select a date"
+                        placeholder={t("calendar.events.endDate")}
                         data-invalid={fieldState.invalid}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessageTranslated />
                   </FormItem>
                 )}
               />
@@ -215,13 +218,13 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
                 name="endTime"
                 render={({ field, fieldState }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>End Time</FormLabel>
+                    <FormLabel>{t("calendar.events.endTime")}</FormLabel>
 
                     <FormControl>
                       <TimeInput value={field.value as TimeValue} onChange={field.onChange} hourCycle={12} data-invalid={fieldState.invalid} />
                     </FormControl>
 
-                    <FormMessage />
+                    <FormMessageTranslated />
                   </FormItem>
                 )}
               />
@@ -232,66 +235,66 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
               name="color"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>Color</FormLabel>
+                  <FormLabel>{t("calendar.events.color")}</FormLabel>
                   <FormControl>
                     <Select value={field.value ?? ""} onValueChange={field.onChange}>
                       <SelectTrigger data-invalid={fieldState.invalid}>
-                        <SelectValue placeholder="Select an option" />
+                        <SelectValue placeholder={t("calendar.userSelect.selectOption")} />
                       </SelectTrigger>
 
                       <SelectContent>
                         <SelectItem value="blue">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-blue-600" />
-                            Blue
+                            {t("calendar.colors.blue")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="green">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-green-600" />
-                            Green
+                            {t("calendar.colors.green")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="red">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-red-600" />
-                            Red
+                            {t("calendar.colors.red")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="yellow">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-yellow-600" />
-                            Yellow
+                            {t("calendar.colors.yellow")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="purple">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-purple-600" />
-                            Purple
+                            {t("calendar.colors.purple")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="orange">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-orange-600" />
-                            Orange
+                            {t("calendar.colors.orange")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="gray">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-neutral-600" />
-                            Gray
+                            {t("calendar.colors.gray")}
                           </div>
                         </SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessageTranslated />
                 </FormItem>
               )}
             />
@@ -301,13 +304,13 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
               name="description"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>{t("calendar.events.description")}</FormLabel>
 
                   <FormControl>
-                    <Textarea {...field} value={field.value} data-invalid={fieldState.invalid} />
+                    <Textarea {...field} value={field.value} placeholder={t("calendar.events.description")} data-invalid={fieldState.invalid} />
                   </FormControl>
 
-                  <FormMessage />
+                  <FormMessageTranslated />
                 </FormItem>
               )}
             />
@@ -317,12 +320,12 @@ export function AddEventDialog({ children, startDate, startTime }: IProps) {
         <DialogFooter>
           <DialogClose asChild>
             <Button type="button" variant="outline">
-              Cancel
+              {t("common.cancel")}
             </Button>
           </DialogClose>
 
           <Button form="event-form" type="submit" disabled={createEventMutation.isPending}>
-            {createEventMutation.isPending ? 'Creating...' : 'Create Event'}
+            {createEventMutation.isPending ? t("common.creating") : t("common.save")}
           </Button>
         </DialogFooter>
       </DialogContent>

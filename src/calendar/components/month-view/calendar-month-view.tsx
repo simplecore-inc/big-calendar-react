@@ -1,10 +1,12 @@
 import { useMemo } from "react";
+import { format, startOfWeek, addDays } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 import { useCalendarDate } from "@/stores/calendar-store";
 
 import { DayCell } from "@/calendar/components/month-view/day-cell";
-
 import { getCalendarCells, calculateMonthEventPositions } from "@/calendar/helpers";
+import { getDateLocale } from "@/lib/date-locale";
 
 import type { IEvent } from "@/calendar/interfaces";
 
@@ -13,10 +15,10 @@ interface IProps {
   multiDayEvents: IEvent[];
 }
 
-const WEEK_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
 export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate } = useCalendarDate();
+  const { i18n } = useTranslation();
+  const locale = getDateLocale(i18n.language);
 
   const allEvents = [...multiDayEvents, ...singleDayEvents];
 
@@ -27,11 +29,20 @@ export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
     [multiDayEvents, singleDayEvents, selectedDate]
   );
 
+  // Generate week days based on locale
+  const weekDays = useMemo(() => {
+    const weekStart = startOfWeek(new Date(), { locale });
+    return Array.from({ length: 7 }, (_, i) => {
+      const day = addDays(weekStart, i);
+      return format(day, "EEE", { locale });
+    });
+  }, [locale]);
+
   return (
     <div>
       <div className="grid grid-cols-7 divide-x">
-        {WEEK_DAYS.map(day => (
-          <div key={day} className="flex items-center justify-center py-2">
+        {weekDays.map((day, index) => (
+          <div key={index} className="flex items-center justify-center py-2">
             <span className="text-xs font-medium text-muted-foreground">{day}</span>
           </div>
         ))}

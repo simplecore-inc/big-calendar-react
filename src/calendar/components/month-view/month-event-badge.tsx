@@ -1,7 +1,10 @@
 import { cva } from "class-variance-authority";
-import { endOfDay, format, isSameDay, parseISO, startOfDay } from "date-fns";
+import { endOfDay, isSameDay, parseISO, startOfDay } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 import { useCalendarPreferences } from "@/stores/calendar-store";
+import { getDateLocale } from "@/lib/date-locale";
+import { formatTime } from "@/lib/date-formats";
 
 import { DraggableEvent } from "@/calendar/components/dnd/draggable-event";
 import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
@@ -58,6 +61,8 @@ interface IProps extends Omit<VariantProps<typeof eventBadgeVariants>, "color" |
 
 export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDays, className, position: propPosition }: IProps) {
   const { badgeVariant } = useCalendarPreferences();
+  const { t, i18n } = useTranslation();
+  const locale = getDateLocale(i18n.language);
 
   const itemStart = startOfDay(parseISO(event.startDate));
   const itemEnd = endOfDay(parseISO(event.endDate));
@@ -111,17 +116,15 @@ export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDa
 
             {renderBadgeText && (
               <p className="flex-1 truncate font-semibold">
-                {eventCurrentDay && (
-                  <span className="text-xs">
-                    Day {eventCurrentDay} of {eventTotalDays} •{" "}
-                  </span>
+                {eventCurrentDay && eventTotalDays && (
+                  <span className="text-xs">{t("calendar.events.dayCount", { current: eventCurrentDay, total: eventTotalDays })} • </span>
                 )}
                 {event.title}
               </p>
             )}
           </div>
 
-          {renderBadgeText && <span>{format(new Date(event.startDate), "h:mm a")}</span>}
+          {renderBadgeText && <span>{formatTime(new Date(event.startDate), i18n.language, locale)}</span>}
         </div>
       </EventDetailsDialog>
     </DraggableEvent>

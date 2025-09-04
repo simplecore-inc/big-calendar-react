@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Info } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { useCalendarPreferences } from "@/stores/calendar-store";
 
@@ -10,6 +11,7 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/comp
 import type { TimeValue } from "@/components/ui/time-input";
 
 export function ChangeVisibleHoursInput() {
+  const { t } = useTranslation();
   const { visibleHours, setVisibleHours } = useCalendarPreferences();
 
   const [from, setFrom] = useState<TimeValue>({ hour: visibleHours.from, minute: 0 });
@@ -48,9 +50,9 @@ export function ChangeVisibleHoursInput() {
 
       <div className="flex items-center gap-4">
         <p>From</p>
-        <TimeInput id="start-time" hourCycle={12} value={from} onChange={handleFromChange} aria-label="Start time" />
+        <TimeInput id="start-time" hourCycle={12} value={from} onChange={handleFromChange} aria-label={t("settings.startTimeLabel")} />
         <p>To</p>
-        <TimeInput id="end-time" hourCycle={12} value={to} onChange={handleToChange} aria-label="End time" />
+        <TimeInput id="end-time" hourCycle={12} value={to} onChange={handleToChange} aria-label={t("settings.endTimeLabel")} />
       </div>
 
       <Button className="mt-4 w-fit" onClick={handleApply}>

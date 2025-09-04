@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { useCalendarPreferences } from "@/stores/calendar-store";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function ChangeBadgeVariantInput() {
+  const { t } = useTranslation();
   const { badgeVariant, setBadgeVariant } = useCalendarPreferences();
 
   return (
@@ -10,7 +12,7 @@ export function ChangeBadgeVariantInput() {
       <p className="text-sm font-semibold">Change badge variant</p>
 
       <Select value={badgeVariant} onValueChange={setBadgeVariant}>
-        <SelectTrigger className="w-48" aria-label="Badge variant">
+        <SelectTrigger className="w-48" aria-label={t("accessibility.selectBadgeVariant")}>
           <SelectValue />
         </SelectTrigger>
 

@@ -82,6 +82,13 @@ A feature-rich calendar application built with Vite, React, TypeScript, and Tail
   - Clean and modern interface
   - Dark mode support
 
+- 🌐 Internationalization & Localization:
+  - Multi-language support (English, Korean)
+  - Auto-detection of browser language preference
+  - Locale-specific date/time formatting
+  - Dynamic language switching
+  - Fully translated UI components and error messages
+
 ## Tech stack
 
 - **Build Tool**: Vite 5
@@ -94,6 +101,7 @@ A feature-rich calendar application built with Vite, React, TypeScript, and Tail
 - **UI Components**: shadcn/ui + Radix UI
 - **Drag & Drop**: react-dnd
 - **Form Handling**: React Hook Form + Zod
+- **Internationalization**: react-i18next
 
 ## Getting started
 
@@ -168,7 +176,14 @@ src/
 │   ├── utils.ts                 # General utilities
 │   ├── query-client.ts          # TanStack Query configuration
 │   ├── navigation.ts            # Navigation utilities
-│   └── performance.ts           # Performance monitoring
+│   ├── performance.ts           # Performance monitoring
+│   ├── date-formats.ts          # Locale-specific date formatting
+│   └── date-locale.ts           # Date-fns locale configuration
+├── i18n/                         # Internationalization
+│   ├── index.ts                 # i18next configuration
+│   └── locales/                 # Translation files
+│       ├── en.json              # English translations
+│       └── ko.json              # Korean translations
 └── styles/                       # Styling
     ├── globals.css              # Global styles
     └── fonts.ts                 # Font configurations
@@ -194,6 +209,7 @@ src/lib/              # Utility functions
 npm install @tanstack/react-router @tanstack/react-query zustand
 npm install react-dnd react-dnd-html5-backend date-fns
 npm install react-hook-form @hookform/resolvers zod
+npm install react-i18next i18next i18next-browser-languagedetector
 npm install @radix-ui/react-dialog @radix-ui/react-select # ... other Radix UI components
 ```
 
@@ -317,6 +333,112 @@ function MyComponent() {
 }
 ```
 
+### Internationalization (i18n)
+
+The calendar includes built-in internationalization support with the following features:
+
+1. **Language Detection**
+
+   The application automatically detects the user's browser language preference:
+
+```tsx
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    fallbackLng: 'en',
+    supportedLngs: ['en', 'ko'],
+    // ... other config
+  });
+```
+
+2. **Adding New Languages**
+
+   To add a new language, create a translation file in `src/i18n/locales/`:
+
+```json
+// src/i18n/locales/es.json
+{
+  "calendar": {
+    "views": {
+      "month": "Mes",
+      "week": "Semana",
+      "day": "Día",
+      "year": "Año",
+      "agenda": "Agenda"
+    },
+    "navigation": {
+      "today": "Hoy",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    }
+    // ... more translations
+  }
+}
+```
+
+3. **Using Translations in Components**
+
+```tsx
+import { useTranslation } from 'react-i18next';
+
+function MyComponent() {
+  const { t, i18n } = useTranslation();
+
+  return (
+    <div>
+      <h1>{t('calendar.title')}</h1>
+      <button onClick={() => i18n.changeLanguage('ko')}>
+        한국어
+      </button>
+    </div>
+  );
+}
+```
+
+4. **Date Localization**
+
+   Dates are automatically formatted according to the selected locale:
+
+```tsx
+import { getDateLocale } from '@/lib/date-locale';
+import { format } from 'date-fns';
+
+const locale = getDateLocale(i18n.language);
+const formattedDate = format(date, 'PP', { locale });
+```
+
+5. **Language Selector Component**
+
+   The calendar includes a ready-to-use language selector:
+
+```tsx
+import { LanguageSelector } from '@/components/language-selector';
+
+// Place this in your layout or header
+<LanguageSelector />
+```
+
+### Localization Features
+
+1. **Date and Time Formatting**
+   - Locale-specific date formats (MM/DD/YYYY for English, YYYY-MM-DD for Korean)
+   - Time formats (12-hour vs 24-hour clock)
+   - Week start days (Sunday vs Monday)
+
+2. **Number Formatting**
+   - Decimal separators
+   - Thousand separators
+   - Currency formatting
+
+3. **Text Direction**
+   - RTL language support ready
+   - Automatic text alignment based on language
+
 ### Example implementation
 
 ```tsx
@@ -337,10 +459,15 @@ function MonthView() {
 // components/layout/calendar-layout.tsx
 import { ClientContainer } from "@/calendar/components/client-container";
 import { ChangeBadgeVariantInput } from "@/calendar/components/change-badge-variant-input";
+import { LanguageSelector } from "@/components/language-selector";
 
 export function CalendarLayout({ children }) {
   return (
     <div className="mx-auto flex max-w-screen-2xl flex-col gap-4 p-4">
+      <div className="flex justify-between items-center">
+        <h1>Calendar</h1>
+        <LanguageSelector />
+      </div>
       {children}
       <ChangeBadgeVariantInput />
     </div>

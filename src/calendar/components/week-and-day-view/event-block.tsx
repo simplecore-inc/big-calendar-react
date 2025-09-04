@@ -1,7 +1,10 @@
 import { cva } from "class-variance-authority";
-import { format, differenceInMinutes, parseISO } from "date-fns";
+import { differenceInMinutes, parseISO } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 import { useCalendarPreferences } from "@/stores/calendar-store";
+import { getDateLocale } from "@/lib/date-locale";
+import { formatTimeRange } from "@/lib/date-formats";
 
 import { DraggableEvent } from "@/calendar/components/dnd/draggable-event";
 import { EventDetailsDialog } from "@/calendar/components/dialogs/event-details-dialog";
@@ -48,6 +51,8 @@ interface IProps extends HTMLAttributes<HTMLDivElement>, Omit<VariantProps<typeo
 
 export function EventBlock({ event, className }: IProps) {
   const { badgeVariant } = useCalendarPreferences();
+  const { i18n } = useTranslation();
+  const locale = getDateLocale(i18n.language);
 
   const start = parseISO(event.startDate);
   const end = parseISO(event.endDate);
@@ -73,7 +78,14 @@ export function EventBlock({ event, className }: IProps) {
   return (
     <DraggableEvent event={event}>
       <EventDetailsDialog event={event}>
-        <div role="button" tabIndex={0} className={calendarWeekEventCardClasses} style={{ height: `${heightInPixels}px` }} onKeyDown={handleKeyDown} onMouseDown={handleMouseDown}>
+        <div
+          role="button"
+          tabIndex={0}
+          className={calendarWeekEventCardClasses}
+          style={{ height: `${heightInPixels}px` }}
+          onKeyDown={handleKeyDown}
+          onMouseDown={handleMouseDown}
+        >
           <div className="flex items-center gap-1.5 truncate">
             {["mixed", "dot"].includes(badgeVariant) && (
               <svg width="8" height="8" viewBox="0 0 8 8" className="event-dot shrink-0">
@@ -84,11 +96,7 @@ export function EventBlock({ event, className }: IProps) {
             <p className="truncate font-semibold">{event.title}</p>
           </div>
 
-          {durationInMinutes > 25 && (
-            <p>
-              {format(start, "h:mm a")} - {format(end, "h:mm a")}
-            </p>
-          )}
+          {durationInMinutes > 25 && <p>{formatTimeRange(start, end, i18n.language, locale)}</p>}
         </div>
       </EventDetailsDialog>
     </DraggableEvent>

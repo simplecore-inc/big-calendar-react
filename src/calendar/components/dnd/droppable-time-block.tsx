@@ -1,5 +1,5 @@
+import { memo, useCallback, useMemo } from "react";
 import { useDrop } from "react-dnd";
-import { startTransition, useRef, useEffect, useState } from "react";
 
 import { useUpdateEvent } from "@/hooks/use-events";
 
@@ -15,74 +15,58 @@ interface DroppableTimeBlockProps {
   children: React.ReactNode;
 }
 
-export function DroppableTimeBlock({ date, hour, minute, children }: DroppableTimeBlockProps) {
+export const DroppableTimeBlock = memo(({ date, hour, minute, children }: DroppableTimeBlockProps) => {
   const updateEventMutation = useUpdateEvent();
-  const rafRef = useRef<number | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [isHighlighted, setIsHighlighted] = useState(false);
+
+  // Memoize the drop handler
+  const handleDrop = useCallback(
+    (item: { event: IEvent; durationMs?: number }) => {
+      const droppedEvent = item.event;
+      const eventDurationMs = item.durationMs ?? 0;
+
+      const newStartDate = new Date(date);
+      newStartDate.setHours(hour, minute, 0, 0);
+      const newEndDate = new Date(newStartDate.getTime() + eventDurationMs);
+
+      const updatedEvent = {
+        ...droppedEvent,
+        startDate: newStartDate.toISOString(),
+        endDate: newEndDate.toISOString(),
+      };
+
+      // Use microtask instead of setTimeout for better performance
+      queueMicrotask(() => {
+        updateEventMutation.mutate(updatedEvent, {
+          onError: _error => {
+            // Error is handled by the mutation hook
+          },
+        });
+      });
+
+      return { moved: true };
+    },
+    [date, hour, minute, updateEventMutation]
+  );
 
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept: ItemTypes.EVENT,
-      drop: (item: { event: IEvent; durationMs?: number }) => {
-        const droppedEvent = item.event;
-        const eventDurationMs = item.durationMs ?? 0;
-
-        const newStartDate = new Date(date);
-        newStartDate.setHours(hour, minute, 0, 0);
-        const newEndDate = new Date(newStartDate.getTime() + eventDurationMs);
-
-        const updatedEvent = {
-          ...droppedEvent,
-          startDate: newStartDate.toISOString(),
-          endDate: newEndDate.toISOString(),
-        };
-
-        // Defer mutation to next tick to avoid blocking drop completion
-        setTimeout(() => {
-          startTransition(() => {
-            updateEventMutation.mutate(updatedEvent, {
-              onError: (_error) => {
-                // Error is handled by the mutation hook
-              },
-            });
-          });
-        }, 0);
-
-        return { moved: true };
-      },
+      drop: handleDrop,
       collect: monitor => ({
         isOver: monitor.isOver(),
       }),
     }),
-    [date, hour, minute, updateEventMutation]
+    [handleDrop]
   );
 
-  // Connect drop target to the container ref
-  useEffect(() => {
-    drop(containerRef);
-  }, [drop]);
-
-  // Throttle highlight updates with rAF
-  useEffect(() => {
-    if (rafRef.current != null) {
-      cancelAnimationFrame(rafRef.current);
-    }
-    
-    rafRef.current = requestAnimationFrame(() => {
-      setIsHighlighted(isOver);
-    });
-
-    return () => {
-      if (rafRef.current != null) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [isOver]);
+  // Memoize className to prevent recalculation
+  const className = useMemo(() => cn("h-[24px] relative", isOver && "bg-accent/50"), [isOver]);
 
   return (
-    <div ref={containerRef} className={cn("h-[24px] relative", isHighlighted && "bg-accent/50")}>
+    <div ref={drop as unknown as React.Ref<HTMLDivElement>} className={className}>
       {children}
     </div>
   );
-}
+});
+
+DroppableTimeBlock.displayName = "DroppableTimeBlock";

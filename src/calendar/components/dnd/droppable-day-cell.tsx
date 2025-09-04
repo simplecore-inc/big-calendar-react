@@ -1,5 +1,5 @@
+import { memo, useCallback, useMemo } from "react";
 import { useDrop } from "react-dnd";
-import { startTransition, useRef, useEffect, useState } from "react";
 
 import { useUpdateEvent } from "@/hooks/use-events";
 
@@ -13,75 +13,59 @@ interface DroppableDayCellProps {
   children: React.ReactNode;
 }
 
-export function DroppableDayCell({ cell, children }: DroppableDayCellProps) {
+export const DroppableDayCell = memo(({ cell, children }: DroppableDayCellProps) => {
   const updateEventMutation = useUpdateEvent();
-  const rafRef = useRef<number | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [isHighlighted, setIsHighlighted] = useState(false);
+
+  // Memoize the drop handler
+  const handleDrop = useCallback(
+    (item: { event: IEvent; durationMs?: number }) => {
+      const droppedEvent = item.event;
+      const eventDurationMs = item.durationMs ?? 0;
+
+      const eventStartDate = new Date(droppedEvent.startDate);
+      const newStartDate = new Date(cell.date);
+      newStartDate.setHours(eventStartDate.getHours(), eventStartDate.getMinutes(), eventStartDate.getSeconds(), eventStartDate.getMilliseconds());
+      const newEndDate = new Date(newStartDate.getTime() + eventDurationMs);
+
+      const updatedEvent = {
+        ...droppedEvent,
+        startDate: newStartDate.toISOString(),
+        endDate: newEndDate.toISOString(),
+      };
+
+      // Use microtask instead of setTimeout for better performance
+      queueMicrotask(() => {
+        updateEventMutation.mutate(updatedEvent, {
+          onError: _error => {
+            // Error is handled by the mutation hook
+          },
+        });
+      });
+
+      return { moved: true };
+    },
+    [cell.date, updateEventMutation]
+  );
 
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept: ItemTypes.EVENT,
-      drop: (item: { event: IEvent; durationMs?: number }) => {
-        const droppedEvent = item.event;
-        const eventDurationMs = item.durationMs ?? 0;
-
-        const eventStartDate = new Date(droppedEvent.startDate);
-        const newStartDate = new Date(cell.date);
-        newStartDate.setHours(eventStartDate.getHours(), eventStartDate.getMinutes(), eventStartDate.getSeconds(), eventStartDate.getMilliseconds());
-        const newEndDate = new Date(newStartDate.getTime() + eventDurationMs);
-
-        const updatedEvent = {
-          ...droppedEvent,
-          startDate: newStartDate.toISOString(),
-          endDate: newEndDate.toISOString(),
-        };
-
-        // Defer mutation to next tick to avoid blocking drop completion
-        setTimeout(() => {
-          startTransition(() => {
-            updateEventMutation.mutate(updatedEvent, {
-              onError: (_error) => {
-                // Error is handled by the mutation hook
-              },
-            });
-          });
-        }, 0);
-
-        return { moved: true };
-      },
+      drop: handleDrop,
       collect: monitor => ({
         isOver: monitor.isOver(),
       }),
     }),
-    [cell.date, updateEventMutation]
+    [handleDrop]
   );
 
-  // Connect drop target to the container ref
-  useEffect(() => {
-    drop(containerRef);
-  }, [drop]);
-
-  // Throttle highlight updates with rAF
-  useEffect(() => {
-    if (rafRef.current != null) {
-      cancelAnimationFrame(rafRef.current);
-    }
-    
-    rafRef.current = requestAnimationFrame(() => {
-      setIsHighlighted(isOver);
-    });
-
-    return () => {
-      if (rafRef.current != null) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [isOver]);
+  // Memoize className to prevent recalculation
+  const className = useMemo(() => cn(isOver && "bg-accent/50"), [isOver]);
 
   return (
-    <div ref={containerRef} className={cn(isHighlighted && "bg-accent/50")}>
+    <div ref={drop as unknown as React.Ref<HTMLDivElement>} className={className}>
       {children}
     </div>
   );
-}
+});
+
+DroppableDayCell.displayName = "DroppableDayCell";

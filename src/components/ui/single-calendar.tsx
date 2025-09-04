@@ -3,8 +3,11 @@
 import * as React from "react";
 import { DayPicker } from "react-day-picker";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { format } from "date-fns";
 
 import { buttonVariants } from "@/components/ui/button";
+import { getDateLocale } from "@/lib/date-locale";
 
 import { cn } from "@/lib/utils";
 
@@ -12,6 +15,102 @@ import type { DayPickerSingleProps } from "react-day-picker";
 
 function SingleCalendar({ className, classNames, showOutsideDays = true, selected, ...props }: DayPickerSingleProps) {
   const [currentMonth, setCurrentMonth] = React.useState<Date | undefined>(selected instanceof Date ? selected : undefined);
+  const { i18n } = useTranslation();
+  const locale = getDateLocale(i18n.language);
+
+  // Custom formatters for different language date formats
+  const formatters = {
+    formatCaption: (date: Date) => {
+      // East Asian languages (Year first)
+      if (i18n.language === "ko") {
+        return format(date, "yyyy년 M월", { locale });
+      }
+      if (i18n.language === "ja") {
+        return format(date, "yyyy年M月", { locale });
+      }
+      if (i18n.language === "zh" || i18n.language === "zh-CN" || i18n.language === "zh-TW") {
+        return format(date, "yyyy年M月", { locale });
+      }
+
+      // European languages (various formats)
+      if (i18n.language === "de") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+      if (i18n.language === "fr") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+      if (i18n.language === "es") {
+        return format(date, "MMMM 'de' yyyy", { locale });
+      }
+      if (i18n.language === "it") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+      if (i18n.language === "pt" || i18n.language === "pt-BR") {
+        return format(date, "MMMM 'de' yyyy", { locale });
+      }
+      if (i18n.language === "ru") {
+        return format(date, "LLLL yyyy", { locale });
+      }
+      if (i18n.language === "nl") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+
+      // Middle Eastern & South Asian languages
+      if (i18n.language === "ar") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+      if (i18n.language === "hi") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+
+      // Southeast Asian languages
+      if (i18n.language === "th") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+      if (i18n.language === "vi") {
+        return format(date, "'Tháng' M 'năm' yyyy", { locale });
+      }
+      if (i18n.language === "id") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+
+      // Nordic languages
+      if (i18n.language === "sv") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+      if (i18n.language === "fi") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+      if (i18n.language === "da") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+      if (i18n.language === "no" || i18n.language === "nb") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+
+      // Eastern European languages
+      if (i18n.language === "pl") {
+        return format(date, "LLLL yyyy", { locale });
+      }
+      if (i18n.language === "cs") {
+        return format(date, "LLLL yyyy", { locale });
+      }
+      if (i18n.language === "hu") {
+        return format(date, "yyyy. MMMM", { locale });
+      }
+
+      // Turkish
+      if (i18n.language === "tr") {
+        return format(date, "MMMM yyyy", { locale });
+      }
+
+      // Default to English format
+      return format(date, "MMMM yyyy", { locale });
+    },
+    formatWeekdayName: (date: Date) => {
+      return format(date, "EEE", { locale });
+    },
+  };
 
   return (
     <DayPicker
@@ -19,6 +118,8 @@ function SingleCalendar({ className, classNames, showOutsideDays = true, selecte
       showOutsideDays={showOutsideDays}
       month={currentMonth}
       onMonthChange={setCurrentMonth}
+      locale={locale}
+      formatters={formatters}
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
@@ -50,7 +151,9 @@ function SingleCalendar({ className, classNames, showOutsideDays = true, selecte
       }}
       components={{
         IconLeft: ({ className, ...props }: { className?: string; [key: string]: unknown }) => <ChevronLeft className={cn("h-4 w-4", className)} {...props} />,
-        IconRight: ({ className, ...props }: { className?: string; [key: string]: unknown }) => <ChevronRight className={cn("h-4 w-4", className)} {...props} />,
+        IconRight: ({ className, ...props }: { className?: string; [key: string]: unknown }) => (
+          <ChevronRight className={cn("h-4 w-4", className)} {...props} />
+        ),
       }}
       {...props}
     />

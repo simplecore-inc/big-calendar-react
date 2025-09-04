@@ -1,6 +1,7 @@
 import { ArrowUpRight, Calendar } from "lucide-react";
 
 import { ToggleTheme } from "@/components/layout/change-theme";
+import { LanguageSelector } from "@/components/language-selector";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
@@ -61,6 +62,7 @@ export function Header() {
               </a>
             </Button>
 
+            <LanguageSelector />
             <ToggleTheme />
           </div>
         </div>

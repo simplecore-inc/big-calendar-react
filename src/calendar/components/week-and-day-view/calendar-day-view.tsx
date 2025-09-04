@@ -1,7 +1,10 @@
 import { Calendar, Clock, User } from "lucide-react";
 import { parseISO, areIntervalsOverlapping, format } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 import { useCalendarDate, useCalendarUser, useCalendarPreferences } from "@/stores/calendar-store";
+import { getDateLocale } from "@/lib/date-locale";
+import { formatDate, formatTimeRange } from "@/lib/date-formats";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SingleCalendar } from "@/components/ui/single-calendar";
@@ -26,6 +29,8 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate, setSelectedDate } = useCalendarDate();
   const { users } = useCalendarUser();
   const { visibleHours, workingHours } = useCalendarPreferences();
+  const { t, i18n } = useTranslation();
+  const locale = getDateLocale(i18n.language);
 
   const { hours, earliestEventHour, latestEventHour } = getVisibleHours(visibleHours, singleDayEvents);
 
@@ -52,7 +57,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           <div className="relative z-20 flex border-b">
             <div className="w-18"></div>
             <span className="flex-1 border-l py-2 text-center text-xs font-medium text-muted-foreground">
-              {format(selectedDate, "EE")} <span className="font-semibold text-foreground">{format(selectedDate, "d")}</span>
+              {format(selectedDate, "EE", { locale })} <span className="font-semibold text-foreground">{format(selectedDate, "d", { locale })}</span>
             </span>
           </div>
         </div>
@@ -64,7 +69,11 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
               {hours.map((hour, index) => (
                 <div key={hour} className="relative" style={{ height: "96px" }}>
                   <div className="absolute -top-3 right-2 flex h-6 items-center">
-                    {index !== 0 && <span className="text-xs text-muted-foreground">{format(new Date().setHours(hour, 0, 0, 0), "hh a")}</span>}
+                    {index !== 0 && (
+                      <span className="text-xs text-muted-foreground">
+                        {format(new Date().setHours(hour, 0, 0, 0), i18n.language === "ko" ? "HH시" : "hh a", { locale })}
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
@@ -141,13 +150,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
       </div>
 
       <div className="hidden w-64 divide-y border-l md:block">
-        <SingleCalendar 
-          className="mx-auto w-fit" 
-          mode="single" 
-          selected={selectedDate} 
-          onSelect={(date) => date && setSelectedDate(date)} 
-          initialFocus 
-        />
+        <SingleCalendar className="mx-auto w-fit" mode="single" selected={selectedDate} onSelect={date => date && setSelectedDate(date)} initialFocus />
 
         <div className="flex-1 space-y-3">
           {currentEvents.length > 0 ? (
@@ -157,10 +160,10 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                 <span className="relative inline-flex size-2.5 rounded-full bg-green-600"></span>
               </span>
 
-              <p className="text-sm font-semibold text-foreground">Happening now</p>
+              <p className="text-sm font-semibold text-foreground">{t("calendar.dayView.happeningNow")}</p>
             </div>
           ) : (
-            <p className="p-4 text-center text-sm italic text-muted-foreground">No appointments or consultations at the moment</p>
+            <p className="p-4 text-center text-sm italic text-muted-foreground">{t("calendar.dayView.noAppointments")}</p>
           )}
 
           {currentEvents.length > 0 && (
@@ -182,14 +185,12 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
 
                       <div className="flex items-center gap-1.5 text-muted-foreground">
                         <Calendar className="size-3.5" />
-                        <span className="text-sm">{format(new Date(), "MMM d, yyyy")}</span>
+                        <span className="text-sm">{formatDate(new Date(), "fullDate", i18n.language, locale)}</span>
                       </div>
 
                       <div className="flex items-center gap-1.5 text-muted-foreground">
                         <Clock className="size-3.5" />
-                        <span className="text-sm">
-                          {format(parseISO(event.startDate), "h:mm a")} - {format(parseISO(event.endDate), "h:mm a")}
-                        </span>
+                        <span className="text-sm">{formatTimeRange(parseISO(event.startDate), parseISO(event.endDate), i18n.language, locale)}</span>
                       </div>
                     </div>
                   );

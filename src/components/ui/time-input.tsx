@@ -1,72 +1,76 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
 
 interface TimeValue {
-  hour: number
-  minute: number
+  hour: number;
+  minute: number;
 }
 
 interface TimeInputProps {
-  value?: TimeValue
-  onChange?: (value: TimeValue | null) => void
-  hourCycle?: 12 | 24
-  granularity?: string
-  className?: string
-  id?: string
-  "data-invalid"?: boolean
-  "aria-label"?: string
+  value?: TimeValue;
+  onChange?: (value: TimeValue | null) => void;
+  hourCycle?: 12 | 24;
+  granularity?: string;
+  className?: string;
+  id?: string;
+  "data-invalid"?: boolean;
+  "aria-label"?: string;
 }
 
 const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
   ({ value, onChange, hourCycle = 24, granularity: _granularity, className, id, "data-invalid": dataInvalid, "aria-label": ariaLabel, ...props }, ref) => {
+    const { t } = useTranslation();
+
     // Convert 24-hour to 12-hour format for display
     const get12HourFormat = (hour24: number) => {
-      if (hourCycle === 24) return { hour: hour24, period: null }
-      const period = hour24 >= 12 ? 'PM' : 'AM'
-      let hour12 = hour24 % 12
-      if (hour12 === 0) hour12 = 12
-      return { hour: hour12, period }
-    }
+      if (hourCycle === 24) return { hour: hour24, period: null };
+      const isAfternoon = hour24 >= 12;
+      const periodKey = isAfternoon ? "pm" : "am";
+      let hour12 = hour24 % 12;
+      if (hour12 === 0) hour12 = 12;
+      return { hour: hour12, period: periodKey };
+    };
 
     // Convert 12-hour to 24-hour format for storage
-    const get24HourFormat = (hour12: number, period: string) => {
-      if (hourCycle === 24) return hour12
-      if (period === 'AM') {
-        return hour12 === 12 ? 0 : hour12
+    const get24HourFormat = (hour12: number, periodKey: string) => {
+      if (hourCycle === 24) return hour12;
+      if (periodKey === "am") {
+        return hour12 === 12 ? 0 : hour12;
       } else {
-        return hour12 === 12 ? 12 : hour12 + 12
+        return hour12 === 12 ? 12 : hour12 + 12;
       }
-    }
+    };
 
-    const currentHour24 = value?.hour || 0
-    const { hour: displayHour, period } = get12HourFormat(currentHour24)
+    const currentHour24 = value?.hour || 0;
+    const { hour: displayHour, period } = get12HourFormat(currentHour24);
 
     const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const hour = parseInt(e.target.value, 10)
+      const hour = parseInt(e.target.value, 10);
       if (!isNaN(hour) && onChange && value) {
         if (hourCycle === 12 && period) {
-          const hour24 = get24HourFormat(hour, period)
-          onChange({ ...value, hour: hour24 })
+          const hour24 = get24HourFormat(hour, period);
+          onChange({ ...value, hour: hour24 });
         } else {
-          onChange({ ...value, hour })
+          onChange({ ...value, hour });
         }
       }
-    }
+    };
 
     const handleMinuteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const minute = parseInt(e.target.value, 10)
+      const minute = parseInt(e.target.value, 10);
       if (!isNaN(minute) && onChange && value) {
-        onChange({ ...value, minute })
+        onChange({ ...value, minute });
       }
-    }
+    };
 
     const handlePeriodToggle = () => {
       if (hourCycle === 12 && onChange && value) {
-        const newPeriod = period === 'AM' ? 'PM' : 'AM'
-        const hour24 = get24HourFormat(displayHour, newPeriod)
-        onChange({ ...value, hour: hour24 })
+        const newPeriod = period === "am" ? "pm" : "am";
+        const hour24 = get24HourFormat(displayHour, newPeriod);
+        onChange({ ...value, hour: hour24 });
       }
-    }
+    };
 
     return (
       <div
@@ -79,14 +83,14 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
         )}
         {...props}
       >
-        {hourCycle === 12 && (
+        {hourCycle === 12 && period && (
           <button
             type="button"
             onClick={handlePeriodToggle}
             className="mr-2 rounded px-2 py-1 text-xs font-medium hover:bg-accent focus:outline-none focus:ring-1 focus:ring-ring"
-            aria-label="Toggle AM/PM"
+            aria-label={t("calendar.dateTime.toggleAmPm", "Toggle AM/PM")}
           >
-            {period}
+            {t(`calendar.dateTime.${period}`)}
           </button>
         )}
         <input
@@ -109,10 +113,10 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
           aria-label={ariaLabel ? `${ariaLabel} minute` : "Minute"}
         />
       </div>
-    )
+    );
   }
-)
-TimeInput.displayName = "TimeInput"
+);
+TimeInput.displayName = "TimeInput";
 
-export { TimeInput }
-export type { TimeValue }
+export { TimeInput };
+export type { TimeValue };

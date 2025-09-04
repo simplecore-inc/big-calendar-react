@@ -1,7 +1,9 @@
 import { startOfWeek, addDays, format, parseISO, isSameDay, areIntervalsOverlapping } from "date-fns";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useCalendarDate, useCalendarPreferences } from "@/stores/calendar-store";
+import { getDateLocale } from "@/lib/date-locale";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -24,13 +26,22 @@ interface IProps {
 export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate } = useCalendarDate();
   const { workingHours, visibleHours } = useCalendarPreferences();
+  const { t, i18n } = useTranslation();
+  const locale = getDateLocale(i18n.language);
 
   const { hours, earliestEventHour, latestEventHour } = getVisibleHours(visibleHours, singleDayEvents);
 
-  const weekStart = startOfWeek(selectedDate);
+  const weekStart = startOfWeek(selectedDate, { locale });
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
-  const hourLabels = useMemo(() => hours.map(h => format(new Date().setHours(h, 0, 0, 0), "hh a")), [hours]);
+  const hourLabels = useMemo(
+    () =>
+      hours.map(h => {
+        const date = new Date().setHours(h, 0, 0, 0);
+        return format(new Date(date), i18n.language === "ko" ? "HH시" : "hh a", { locale });
+      }),
+    [hours, locale, i18n.language]
+  );
 
   const parsedSingleDayEvents = useMemo(
     () => singleDayEvents.map(e => ({ event: e, start: parseISO(e.startDate), end: parseISO(e.endDate) })),
@@ -39,9 +50,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
 
   const dayEventsMap = useMemo(() => {
     return weekDays.map(day => {
-      const dayEvents = parsedSingleDayEvents
-        .filter(pe => isSameDay(pe.start, day) || isSameDay(pe.end, day))
-        .map(pe => pe.event);
+      const dayEvents = parsedSingleDayEvents.filter(pe => isSameDay(pe.start, day) || isSameDay(pe.end, day)).map(pe => pe.event);
       return dayEvents;
     });
   }, [parsedSingleDayEvents, weekDays]);
@@ -51,8 +60,8 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
   return (
     <>
       <div className="flex flex-col items-center justify-center border-b py-4 text-sm text-muted-foreground sm:hidden">
-        <p>Weekly view is not available on smaller devices.</p>
-        <p>Please switch to daily or monthly view.</p>
+        <p>{t("calendar.weekView.notAvailableOnMobile")}</p>
+        <p>{t("calendar.weekView.switchToOtherView")}</p>
       </div>
 
       <div className="hidden flex-col sm:flex">
@@ -65,7 +74,7 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
             <div className="grid flex-1 grid-cols-7 divide-x border-l">
               {weekDays.map((day, index) => (
                 <span key={index} className="py-2 text-center text-xs font-medium text-muted-foreground">
-                  {format(day, "EE")} <span className="ml-1 font-semibold text-foreground">{format(day, "d")}</span>
+                  {format(day, "EE", { locale })} <span className="ml-1 font-semibold text-foreground">{format(day, "d", { locale })}</span>
                 </span>
               ))}
             </div>

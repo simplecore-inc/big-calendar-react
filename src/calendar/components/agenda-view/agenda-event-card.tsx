@@ -1,8 +1,11 @@
 "use client";
 
-import { format, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 import { cva } from "class-variance-authority";
 import { Clock, Text, User } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { getDateLocale } from "@/lib/date-locale";
+import { formatTimeRange } from "@/lib/date-formats";
 
 import { useCalendarPreferences } from "@/stores/calendar-store";
 
@@ -49,6 +52,8 @@ interface IProps {
 
 export function AgendaEventCard({ event, eventCurrentDay, eventTotalDays }: IProps) {
   const { badgeVariant } = useCalendarPreferences();
+  const { t, i18n } = useTranslation();
+  const locale = getDateLocale(i18n.language);
 
   const startDate = parseISO(event.startDate);
   const endDate = parseISO(event.endDate);
@@ -77,9 +82,7 @@ export function AgendaEventCard({ event, eventCurrentDay, eventTotalDays }: IPro
 
             <p className="font-medium">
               {eventCurrentDay && eventTotalDays && (
-                <span className="mr-1 text-xs">
-                  Day {eventCurrentDay} of {eventTotalDays} •{" "}
-                </span>
+                <span className="mr-1 text-xs">{t("calendar.events.dayCount", { current: eventCurrentDay, total: eventTotalDays })} • </span>
               )}
               {event.title}
             </p>
@@ -92,9 +95,7 @@ export function AgendaEventCard({ event, eventCurrentDay, eventTotalDays }: IPro
 
           <div className="flex items-center gap-1">
             <Clock className="size-3 shrink-0" />
-            <p className="text-xs text-foreground">
-              {format(startDate, "h:mm a")} - {format(endDate, "h:mm a")}
-            </p>
+            <p className="text-xs text-foreground">{formatTimeRange(startDate, endDate, i18n.language, locale)}</p>
           </div>
 
           <div className="flex items-center gap-1">

@@ -1,8 +1,10 @@
 import { useMemo } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { format, isSameDay, parseISO, getDaysInMonth, startOfMonth } from "date-fns";
+import { format, isSameDay, parseISO, getDaysInMonth, startOfMonth, startOfWeek, addDays } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 import { useCalendarDate } from "@/stores/calendar-store";
+import { getDateLocale } from "@/lib/date-locale";
 
 import { YearViewDayCell } from "@/calendar/components/year-view/year-view-day-cell";
 
@@ -16,20 +18,30 @@ interface IProps {
 export function YearViewMonth({ month, events }: IProps) {
   const navigate = useNavigate();
   const { setSelectedDate } = useCalendarDate();
+  const { i18n } = useTranslation();
+  const locale = getDateLocale(i18n.language);
 
-  const monthName = format(month, "MMMM");
+  const monthName = format(month, "MMMM", { locale });
 
   const daysInMonth = useMemo(() => {
     const totalDays = getDaysInMonth(month);
-    const firstDay = startOfMonth(month).getDay();
+    const monthStart = startOfMonth(month);
+    const weekStart = startOfWeek(monthStart, { locale });
+    const firstDayOffset = (monthStart.getTime() - weekStart.getTime()) / (1000 * 60 * 60 * 24);
 
     const days = Array.from({ length: totalDays }, (_, i) => i + 1);
-    const blanks = Array(firstDay).fill(null);
+    const blanks = Array(firstDayOffset).fill(null);
 
     return [...blanks, ...days];
-  }, [month]);
+  }, [month, locale]);
 
-  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const weekDays = useMemo(() => {
+    const weekStart = startOfWeek(new Date(), { locale });
+    return Array.from({ length: 7 }, (_, i) => {
+      const day = addDays(weekStart, i);
+      return format(day, "EEE", { locale });
+    });
+  }, [locale]);
 
   const handleClick = () => {
     setSelectedDate(new Date(month.getFullYear(), month.getMonth(), 1));

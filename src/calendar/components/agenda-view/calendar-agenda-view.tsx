@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { CalendarX2 } from "lucide-react";
 import { parseISO, format, endOfDay, startOfDay, isSameMonth } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 import { useCalendarDate } from "@/stores/calendar-store";
 
@@ -16,6 +17,7 @@ interface IProps {
 
 export function CalendarAgendaView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate } = useCalendarDate();
+  const { t } = useTranslation();
 
   const eventsByDay = useMemo(() => {
     const allDates = new Map<string, { date: Date; events: IEvent[]; multiDayEvents: IEvent[] }>();
@@ -70,7 +72,7 @@ export function CalendarAgendaView({ singleDayEvents, multiDayEvents }: IProps) 
           {!hasAnyEvents && (
             <div className="flex flex-col items-center justify-center gap-2 py-20 text-muted-foreground">
               <CalendarX2 className="size-10" />
-              <p className="text-sm md:text-base">No events scheduled for the selected month</p>
+              <p className="text-sm md:text-base">{t("calendar.events.noEventsScheduled")}</p>
             </div>
           )}
         </div>

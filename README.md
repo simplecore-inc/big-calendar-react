@@ -6,6 +6,9 @@
 > | Build/Runtime | Next.js 14 | Vite 5 + React 19 |
 > | Routing | Next App Router (`src/app`) | TanStack Router (`src/routes`) |
 > | State/Data | React Context | Zustand + TanStack Query |
+> | Internationalization | Not implemented | Full i18n/l10n support with react-i18next |
+> | Language Support | English only | 25+ languages (EN, KO, JA, ZH, DE, FR, ES, etc.) |
+> | Date/Time Formatting | Basic | Locale-aware formatting with date-fns |
 > | Commands | `next dev/build/start` | Vite-based scripts + `vitest` |
 > | Config files | `next.config.mjs` and Next-specific setup | `vite.config.ts`, `vitest.config.ts`, ESLint/Prettier updates |
 >
@@ -13,6 +16,12 @@
 > - Removed `src/app/**`; rebuilt file-based routing under `src/routes/**`
 > - Dropped Next.js dependency; switched to Vite build/preview (`vite`, `vite preview`)
 > - Replaced React Context with Zustand + TanStack Query for state/data
+> - Added comprehensive internationalization (i18n) and localization (l10n) support:
+>   - Integrated react-i18next with automatic browser language detection
+>   - Added support for 25+ languages with proper locale-specific date/time formatting
+>   - Implemented culturally appropriate date formats (e.g., `2025年9月` for Japanese, `2025년 9월` for Korean)
+>   - Created complete translation files for English, Korean, and Japanese
+>   - Added dynamic language switching with persistent user preferences
 > - Added testing/dev tooling: Vitest + Testing Library
 > - Switched configuration: removed `next.config.mjs`; added Vite/Vitest configs and updated ESLint
 >

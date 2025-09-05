@@ -4,7 +4,7 @@ import { useCalendarPreferences } from "@/stores/calendar-store";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function ChangeBadgeVariantInput() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('calendar');
   const { badgeVariant, setBadgeVariant } = useCalendarPreferences();
 
   return (

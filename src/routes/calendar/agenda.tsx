@@ -17,14 +17,14 @@ function AgendaView() {
 
 // Error component for agenda view
 function AgendaViewError({ error }: { error: Error }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('calendar');
 
   return (
     <div className="p-4 text-center">
-      <h2 className="mb-2 text-xl font-bold text-red-600">{t("calendar.errors.agendaViewError")}</h2>
+      <h2 className="mb-2 text-xl font-bold text-red-600">{t("errors.agendaViewError")}</h2>
       <p className="mb-4 text-muted-foreground">{error.message}</p>
       <a href="/calendar/agenda" className="rounded bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90">
-        {t("calendar.navigation.goToCurrentAgenda")}
+        {t("navigation.goToCurrentAgenda")}
       </a>
     </div>
   );

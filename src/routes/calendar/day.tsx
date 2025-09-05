@@ -17,14 +17,14 @@ function DayView() {
 
 // Error component for day view
 function DayViewError({ error }: { error: Error }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('calendar');
 
   return (
     <div className="p-4 text-center">
-      <h2 className="mb-2 text-xl font-bold text-red-600">{t("calendar.errors.dayViewError")}</h2>
+      <h2 className="mb-2 text-xl font-bold text-red-600">{t("errors.dayViewError")}</h2>
       <p className="mb-4 text-muted-foreground">{error.message}</p>
       <a href="/calendar/day" className="rounded bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90">
-        {t("calendar.navigation.goToToday")}
+        {t("navigation.goToToday")}
       </a>
     </div>
   );

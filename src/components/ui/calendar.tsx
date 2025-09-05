@@ -13,7 +13,7 @@ import { getDateLocale } from "@/lib/date-locale";
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 function Calendar({ className, classNames, showOutsideDays = true, locale: propsLocale, ...props }: CalendarProps) {
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation('calendar');
   const locale = propsLocale || getDateLocale(i18n.language);
 
   // Custom formatters for different language date formats

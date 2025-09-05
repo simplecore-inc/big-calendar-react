@@ -17,7 +17,7 @@ interface IProps {
 
 export function CalendarAgendaView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate } = useCalendarDate();
-  const { t } = useTranslation();
+  const { t } = useTranslation('calendar');
 
   const eventsByDay = useMemo(() => {
     const allDates = new Map<string, { date: Date; events: IEvent[]; multiDayEvents: IEvent[] }>();
@@ -72,7 +72,7 @@ export function CalendarAgendaView({ singleDayEvents, multiDayEvents }: IProps) 
           {!hasAnyEvents && (
             <div className="flex flex-col items-center justify-center gap-2 py-20 text-muted-foreground">
               <CalendarX2 className="size-10" />
-              <p className="text-sm md:text-base">{t("calendar.events.noEventsScheduled")}</p>
+              <p className="text-sm md:text-base">{t("events.noEventsScheduled")}</p>
             </div>
           )}
         </div>

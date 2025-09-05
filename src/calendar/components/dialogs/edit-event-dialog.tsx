@@ -31,7 +31,7 @@ interface IProps {
 }
 
 export function EditEventDialog({ children, event }: IProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('calendar');
   const { isOpen, onClose, onToggle } = useDisclosure();
   const { data: users = [] } = useUsers();
   const updateEventMutation = useUpdateEvent();
@@ -85,7 +85,7 @@ export function EditEventDialog({ children, event }: IProps) {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("calendar.events.editEvent")}</DialogTitle>
+          <DialogTitle>{t("events.editEvent")}</DialogTitle>
           <DialogDescription>
             This is just and example of how to use the form. In a real application, you would call the API to update the event
           </DialogDescription>
@@ -98,11 +98,11 @@ export function EditEventDialog({ children, event }: IProps) {
               name="user"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>{t("calendar.events.user")}</FormLabel>
+                  <FormLabel>{t("events.user")}</FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger data-invalid={fieldState.invalid}>
-                        <SelectValue placeholder={t("calendar.userSelect.selectOption")} />
+                        <SelectValue placeholder={t("userSelect.selectOption")} />
                       </SelectTrigger>
 
                       <SelectContent>
@@ -131,10 +131,10 @@ export function EditEventDialog({ children, event }: IProps) {
               name="title"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel htmlFor="title">{t("calendar.events.title")}</FormLabel>
+                  <FormLabel htmlFor="title">{t("events.title")}</FormLabel>
 
                   <FormControl>
-                    <Input id="title" placeholder={t("calendar.events.title")} data-invalid={fieldState.invalid} {...field} />
+                    <Input id="title" placeholder={t("events.title")} data-invalid={fieldState.invalid} {...field} />
                   </FormControl>
 
                   <FormMessageTranslated />
@@ -148,14 +148,14 @@ export function EditEventDialog({ children, event }: IProps) {
                 name="startDate"
                 render={({ field, fieldState }) => (
                   <FormItem className="flex-1">
-                    <FormLabel htmlFor="startDate">{t("calendar.events.startDate")}</FormLabel>
+                    <FormLabel htmlFor="startDate">{t("events.startDate")}</FormLabel>
 
                     <FormControl>
                       <SingleDayPicker
                         id="startDate"
                         value={field.value}
                         onSelect={date => field.onChange(date as Date)}
-                        placeholder={t("calendar.events.startDate")}
+                        placeholder={t("events.startDate")}
                         data-invalid={fieldState.invalid}
                       />
                     </FormControl>
@@ -170,7 +170,7 @@ export function EditEventDialog({ children, event }: IProps) {
                 name="startTime"
                 render={({ field, fieldState }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>{t("calendar.events.startTime")}</FormLabel>
+                    <FormLabel>{t("events.startTime")}</FormLabel>
 
                     <FormControl>
                       <TimeInput value={field.value as TimeValue} onChange={field.onChange} hourCycle={12} data-invalid={fieldState.invalid} />
@@ -188,12 +188,12 @@ export function EditEventDialog({ children, event }: IProps) {
                 name="endDate"
                 render={({ field, fieldState }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>{t("calendar.events.endDate")}</FormLabel>
+                    <FormLabel>{t("events.endDate")}</FormLabel>
                     <FormControl>
                       <SingleDayPicker
                         value={field.value}
                         onSelect={date => field.onChange(date as Date)}
-                        placeholder={t("calendar.events.endDate")}
+                        placeholder={t("events.endDate")}
                         data-invalid={fieldState.invalid}
                       />
                     </FormControl>
@@ -207,7 +207,7 @@ export function EditEventDialog({ children, event }: IProps) {
                 name="endTime"
                 render={({ field, fieldState }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>{t("calendar.events.endTime")}</FormLabel>
+                    <FormLabel>{t("events.endTime")}</FormLabel>
                     <FormControl>
                       <TimeInput value={field.value as TimeValue} onChange={field.onChange} hourCycle={12} data-invalid={fieldState.invalid} />
                     </FormControl>
@@ -222,60 +222,60 @@ export function EditEventDialog({ children, event }: IProps) {
               name="color"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>{t("calendar.events.color")}</FormLabel>
+                  <FormLabel>{t("events.color")}</FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger data-invalid={fieldState.invalid}>
-                        <SelectValue placeholder={t("calendar.userSelect.selectOption")} />
+                        <SelectValue placeholder={t("userSelect.selectOption")} />
                       </SelectTrigger>
 
                       <SelectContent>
                         <SelectItem value="blue">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-blue-600" />
-                            {t("calendar.colors.blue")}
+                            {t("colors.blue")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="green">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-green-600" />
-                            {t("calendar.colors.green")}
+                            {t("colors.green")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="red">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-red-600" />
-                            {t("calendar.colors.red")}
+                            {t("colors.red")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="yellow">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-yellow-600" />
-                            {t("calendar.colors.yellow")}
+                            {t("colors.yellow")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="purple">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-purple-600" />
-                            {t("calendar.colors.purple")}
+                            {t("colors.purple")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="orange">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-orange-600" />
-                            {t("calendar.colors.orange")}
+                            {t("colors.orange")}
                           </div>
                         </SelectItem>
 
                         <SelectItem value="gray">
                           <div className="flex items-center gap-2">
                             <div className="size-3.5 rounded-full bg-neutral-600" />
-                            {t("calendar.colors.gray")}
+                            {t("colors.gray")}
                           </div>
                         </SelectItem>
                       </SelectContent>
@@ -291,10 +291,10 @@ export function EditEventDialog({ children, event }: IProps) {
               name="description"
               render={({ field, fieldState }) => (
                 <FormItem>
-                  <FormLabel>{t("calendar.events.description")}</FormLabel>
+                  <FormLabel>{t("events.description")}</FormLabel>
 
                   <FormControl>
-                    <Textarea {...field} value={field.value} placeholder={t("calendar.events.description")} data-invalid={fieldState.invalid} />
+                    <Textarea {...field} value={field.value} placeholder={t("events.description")} data-invalid={fieldState.invalid} />
                   </FormControl>
 
                   <FormMessageTranslated />

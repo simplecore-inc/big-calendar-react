@@ -20,7 +20,7 @@ interface TimeInputProps {
 
 const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
   ({ value, onChange, hourCycle = 24, granularity: _granularity, className, id, "data-invalid": dataInvalid, "aria-label": ariaLabel, ...props }, ref) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation("calendar");
 
     // Convert 24-hour to 12-hour format for display
     const get12HourFormat = (hour24: number) => {
@@ -88,9 +88,9 @@ const TimeInput = React.forwardRef<HTMLDivElement, TimeInputProps>(
             type="button"
             onClick={handlePeriodToggle}
             className="mr-2 rounded px-2 py-1 text-xs font-medium hover:bg-accent focus:outline-none focus:ring-1 focus:ring-ring"
-            aria-label={t("calendar.dateTime.toggleAmPm", "Toggle AM/PM")}
+            aria-label={t("dateTime.toggleAmPm", "Toggle AM/PM")}
           >
-            {t(`calendar.dateTime.${period}`)}
+            {t(`dateTime.${period}`)}
           </button>
         )}
         <input

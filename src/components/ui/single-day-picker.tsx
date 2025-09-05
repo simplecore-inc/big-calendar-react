@@ -22,7 +22,7 @@ const SingleDayPicker = React.forwardRef<HTMLButtonElement, SingleDayPickerProps
     const { i18n, t } = useTranslation();
     const locale = getDateLocale(i18n.language);
 
-    const displayDate = value ? formatDate(value, "fullDate", i18n.language, locale) : placeholder || t("calendar.selectDate", "Pick a date");
+    const displayDate = value ? formatDate(value, "fullDate", i18n.language, locale) : placeholder || t("dateTime.selectDate", "Pick a date");
 
     return (
       <Popover>

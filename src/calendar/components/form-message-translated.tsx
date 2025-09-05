@@ -16,7 +16,7 @@ const errorKeyMap: Record<string, string> = {
 
 export const FormMessageTranslated = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, children, ...props }, ref) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('calendar');
     const { error, formMessageId } = useFormField();
 
     let body = children;

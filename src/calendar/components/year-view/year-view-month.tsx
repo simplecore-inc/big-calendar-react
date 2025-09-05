@@ -18,7 +18,7 @@ interface IProps {
 export function YearViewMonth({ month, events }: IProps) {
   const navigate = useNavigate();
   const { setSelectedDate } = useCalendarDate();
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation('calendar');
   const locale = getDateLocale(i18n.language);
 
   const monthName = format(month, "MMMM", { locale });

@@ -10,7 +10,7 @@ interface IProps {
 
 export function CalendarTimeline({ firstVisibleHour, lastVisibleHour }: IProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation('calendar');
   const locale = getDateLocale(i18n.language);
 
   useEffect(() => {

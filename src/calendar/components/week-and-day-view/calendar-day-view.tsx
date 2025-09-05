@@ -29,7 +29,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate, setSelectedDate } = useCalendarDate();
   const { users } = useCalendarUser();
   const { visibleHours, workingHours } = useCalendarPreferences();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('calendar');
   const locale = getDateLocale(i18n.language);
 
   const { hours, earliestEventHour, latestEventHour } = getVisibleHours(visibleHours, singleDayEvents);
@@ -160,10 +160,10 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                 <span className="relative inline-flex size-2.5 rounded-full bg-green-600"></span>
               </span>
 
-              <p className="text-sm font-semibold text-foreground">{t("calendar.dayView.happeningNow")}</p>
+              <p className="text-sm font-semibold text-foreground">{t("dayView.happeningNow")}</p>
             </div>
           ) : (
-            <p className="p-4 text-center text-sm italic text-muted-foreground">{t("calendar.dayView.noAppointments")}</p>
+            <p className="p-4 text-center text-sm italic text-muted-foreground">{t("dayView.noAppointments")}</p>
           )}
 
           {currentEvents.length > 0 && (

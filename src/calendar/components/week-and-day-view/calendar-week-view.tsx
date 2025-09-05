@@ -26,7 +26,7 @@ interface IProps {
 export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate } = useCalendarDate();
   const { workingHours, visibleHours } = useCalendarPreferences();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('calendar');
   const locale = getDateLocale(i18n.language);
 
   const { hours, earliestEventHour, latestEventHour } = getVisibleHours(visibleHours, singleDayEvents);
@@ -60,8 +60,8 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
   return (
     <>
       <div className="flex flex-col items-center justify-center border-b py-4 text-sm text-muted-foreground sm:hidden">
-        <p>{t("calendar.weekView.notAvailableOnMobile")}</p>
-        <p>{t("calendar.weekView.switchToOtherView")}</p>
+        <p>{t("weekView.notAvailableOnMobile")}</p>
+        <p>{t("weekView.switchToOtherView")}</p>
       </div>
 
       <div className="hidden flex-col sm:flex">

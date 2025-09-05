@@ -9,7 +9,7 @@ const languages = [
 ];
 
 export function LanguageSelector() {
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation('calendar');
 
   const handleLanguageChange = (languageCode: string) => {
     i18n.changeLanguage(languageCode);

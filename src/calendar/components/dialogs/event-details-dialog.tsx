@@ -16,7 +16,7 @@ interface IProps {
 }
 
 export function EventDetailsDialog({ event, children }: IProps) {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('calendar');
   const locale = getDateLocale(i18n.language);
   const startDate = parseISO(event.startDate);
   const endDate = parseISO(event.endDate);
@@ -29,14 +29,14 @@ export function EventDetailsDialog({ event, children }: IProps) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{event.title}</DialogTitle>
-            <DialogDescription>{t("calendar.events.viewEventDetails")}</DialogDescription>
+            <DialogDescription>{t("events.viewEventDetails")}</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
             <div className="flex items-start gap-2">
               <User className="mt-1 size-4 shrink-0" />
               <div>
-                <p className="text-sm font-medium">{t("calendar.events.user")}</p>
+                <p className="text-sm font-medium">{t("events.user")}</p>
                 <p className="text-sm text-muted-foreground">{event.user.name}</p>
               </div>
             </div>
@@ -44,7 +44,7 @@ export function EventDetailsDialog({ event, children }: IProps) {
             <div className="flex items-start gap-2">
               <Calendar className="mt-1 size-4 shrink-0" />
               <div>
-                <p className="text-sm font-medium">{t("calendar.events.startDate")}</p>
+                <p className="text-sm font-medium">{t("events.startDate")}</p>
                 <p className="text-sm text-muted-foreground">{formatDate(startDate, "dateTimeWithTime", i18n.language, locale)}</p>
               </div>
             </div>
@@ -52,7 +52,7 @@ export function EventDetailsDialog({ event, children }: IProps) {
             <div className="flex items-start gap-2">
               <Clock className="mt-1 size-4 shrink-0" />
               <div>
-                <p className="text-sm font-medium">{t("calendar.events.endDate")}</p>
+                <p className="text-sm font-medium">{t("events.endDate")}</p>
                 <p className="text-sm text-muted-foreground">{formatDate(endDate, "dateTimeWithTime", i18n.language, locale)}</p>
               </div>
             </div>
@@ -60,7 +60,7 @@ export function EventDetailsDialog({ event, children }: IProps) {
             <div className="flex items-start gap-2">
               <Text className="mt-1 size-4 shrink-0" />
               <div>
-                <p className="text-sm font-medium">{t("calendar.events.description")}</p>
+                <p className="text-sm font-medium">{t("events.description")}</p>
                 <p className="text-sm text-muted-foreground">{event.description}</p>
               </div>
             </div>

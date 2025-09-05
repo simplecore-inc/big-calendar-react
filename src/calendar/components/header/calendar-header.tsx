@@ -24,7 +24,7 @@ interface IProps {
 }
 
 export function CalendarHeader({ events }: IProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('calendar');
   const location = useLocation();
 
   // Extract view from router path
@@ -119,14 +119,14 @@ export function CalendarHeader({ events }: IProps) {
           fallback={
             <Button className="w-full sm:w-auto" disabled>
               <Plus />
-              {t("calendar.events.addEvent")}
+              {t("events.addEvent")}
             </Button>
           }
         >
           <AddEventDialog>
             <Button className="w-full sm:w-auto">
               <Plus />
-              {t("calendar.events.addEvent")}
+              {t("events.addEvent")}
             </Button>
           </AddEventDialog>
         </Suspense>

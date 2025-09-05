@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export function UserSelect() {
   const { selectedUserId, setSelectedUserId } = useCalendarUser();
   const { data: users = [] } = useUsers();
-  const { t } = useTranslation();
+  const { t } = useTranslation('calendar');
 
   return (
     <Select value={selectedUserId} onValueChange={setSelectedUserId}>
@@ -29,7 +29,7 @@ export function UserSelect() {
                 </Avatar>
               ))}
             </AvatarGroup>
-            {t("calendar.userSelect.all")}
+            {t("userSelect.all")}
           </div>
         </SelectItem>
 

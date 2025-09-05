@@ -17,7 +17,7 @@ interface IProps {
 
 export function CalendarMonthView({ singleDayEvents, multiDayEvents }: IProps) {
   const { selectedDate } = useCalendarDate();
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation('calendar');
   const locale = getDateLocale(i18n.language);
 
   const allEvents = [...multiDayEvents, ...singleDayEvents];

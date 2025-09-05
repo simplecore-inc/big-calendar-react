@@ -14,7 +14,7 @@ interface IProps {
 }
 
 export function AgendaDayGroup({ date, events, multiDayEvents }: IProps) {
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation('calendar');
   const locale = getDateLocale(i18n.language);
   const sortedEvents = [...events].sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
 

@@ -61,7 +61,7 @@ interface IProps extends Omit<VariantProps<typeof eventBadgeVariants>, "color" |
 
 export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDays, className, position: propPosition }: IProps) {
   const { badgeVariant } = useCalendarPreferences();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("calendar");
   const locale = getDateLocale(i18n.language);
 
   const itemStart = startOfDay(parseISO(event.startDate));
@@ -117,7 +117,7 @@ export function MonthEventBadge({ event, cellDate, eventCurrentDay, eventTotalDa
             {renderBadgeText && (
               <p className="flex-1 truncate font-semibold">
                 {eventCurrentDay && eventTotalDays && (
-                  <span className="text-xs">{t("calendar.events.dayCount", { current: eventCurrentDay, total: eventTotalDays })} • </span>
+                  <span className="text-xs">{t("events.dayCount", { current: eventCurrentDay, total: eventTotalDays })} • </span>
                 )}
                 {event.title}
               </p>

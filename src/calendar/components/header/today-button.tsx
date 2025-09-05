@@ -5,7 +5,7 @@ import { useCalendarDate } from "@/stores/calendar-store";
 import { getDateLocale } from "@/lib/date-locale";
 
 export function TodayButton() {
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation('calendar');
   const { setSelectedDate } = useCalendarDate();
 
   const today = new Date();

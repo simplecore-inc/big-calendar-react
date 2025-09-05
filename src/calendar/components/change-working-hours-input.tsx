@@ -14,17 +14,17 @@ import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 const getDaysOfWeek = (t: TFunction) => [
-  { index: 0, name: t("calendar.weekdays.sunday") },
-  { index: 1, name: t("calendar.weekdays.monday") },
-  { index: 2, name: t("calendar.weekdays.tuesday") },
-  { index: 3, name: t("calendar.weekdays.wednesday") },
-  { index: 4, name: t("calendar.weekdays.thursday") },
-  { index: 5, name: t("calendar.weekdays.friday") },
-  { index: 6, name: t("calendar.weekdays.saturday") },
+  { index: 0, name: t("weekdays.sunday") },
+  { index: 1, name: t("weekdays.monday") },
+  { index: 2, name: t("weekdays.tuesday") },
+  { index: 3, name: t("weekdays.wednesday") },
+  { index: 4, name: t("weekdays.thursday") },
+  { index: 5, name: t("weekdays.friday") },
+  { index: 6, name: t("weekdays.saturday") },
 ];
 
 export function ChangeWorkingHoursInput() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('calendar');
   const { workingHours, setWorkingHours } = useCalendarPreferences();
 
   const [localWorkingHours, setLocalWorkingHours] = useState({ ...workingHours });

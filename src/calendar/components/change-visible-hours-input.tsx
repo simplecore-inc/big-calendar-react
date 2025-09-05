@@ -11,7 +11,7 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/comp
 import type { TimeValue } from "@/components/ui/time-input";
 
 export function ChangeVisibleHoursInput() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('calendar');
   const { visibleHours, setVisibleHours } = useCalendarPreferences();
 
   const [from, setFrom] = useState<TimeValue>({ hour: visibleHours.from, minute: 0 });

@@ -51,7 +51,7 @@ interface IProps extends HTMLAttributes<HTMLDivElement>, Omit<VariantProps<typeo
 
 export function EventBlock({ event, className }: IProps) {
   const { badgeVariant } = useCalendarPreferences();
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation('calendar');
   const locale = getDateLocale(i18n.language);
 
   const start = parseISO(event.startDate);

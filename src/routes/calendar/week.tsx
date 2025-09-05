@@ -17,14 +17,14 @@ function WeekView() {
 
 // Error component for week view
 function WeekViewError({ error }: { error: Error }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('calendar');
 
   return (
     <div className="p-4 text-center">
-      <h2 className="mb-2 text-xl font-bold text-red-600">{t("calendar.errors.weekViewError")}</h2>
+      <h2 className="mb-2 text-xl font-bold text-red-600">{t("errors.weekViewError")}</h2>
       <p className="mb-4 text-muted-foreground">{error.message}</p>
       <a href="/calendar/week" className="rounded bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90">
-        {t("calendar.navigation.goToCurrentWeek")}
+        {t("navigation.goToCurrentWeek")}
       </a>
     </div>
   );

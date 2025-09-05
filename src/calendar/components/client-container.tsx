@@ -1,71 +1,75 @@
 import { useMemo, Suspense, lazy } from "react";
 import { isSameDay, parseISO } from "date-fns";
 import { useLocation } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { useCalendarStore } from "@/stores/calendar-store";
 import { useEvents } from "@/hooks/use-events";
 import { CalendarHeader } from "@/calendar/components/header/calendar-header";
 import type { TCalendarView } from "@/calendar/types";
 
 // Lazy load calendar view components for better code splitting
-const CalendarMonthView = lazy(() => 
+const CalendarMonthView = lazy(() =>
   import("@/calendar/components/month-view/calendar-month-view").then(module => ({
-    default: module.CalendarMonthView
+    default: module.CalendarMonthView,
   }))
 );
 
-const CalendarWeekView = lazy(() => 
+const CalendarWeekView = lazy(() =>
   import("@/calendar/components/week-and-day-view/calendar-week-view").then(module => ({
-    default: module.CalendarWeekView
+    default: module.CalendarWeekView,
   }))
 );
 
-const CalendarDayView = lazy(() => 
+const CalendarDayView = lazy(() =>
   import("@/calendar/components/week-and-day-view/calendar-day-view").then(module => ({
-    default: module.CalendarDayView
+    default: module.CalendarDayView,
   }))
 );
 
-const CalendarYearView = lazy(() => 
+const CalendarYearView = lazy(() =>
   import("@/calendar/components/year-view/calendar-year-view").then(module => ({
-    default: module.CalendarYearView
+    default: module.CalendarYearView,
   }))
 );
 
-const CalendarAgendaView = lazy(() => 
+const CalendarAgendaView = lazy(() =>
   import("@/calendar/components/agenda-view/calendar-agenda-view").then(module => ({
-    default: module.CalendarAgendaView
+    default: module.CalendarAgendaView,
   }))
 );
 
 // Loading fallback component for lazy-loaded views
 function ViewLoadingFallback() {
-  return <div className="p-8 text-center">
-    <div className="mx-auto size-6 animate-spin rounded-full border-b-2 border-primary"></div>
-    <p className="mt-2 text-sm text-muted-foreground">Loading view...</p>
-  </div>
+  const { t } = useTranslation("calendar");
+  return (
+    <div className="p-8 text-center">
+      <div className="mx-auto size-6 animate-spin rounded-full border-b-2 border-primary"></div>
+      <p className="mt-2 text-sm text-muted-foreground">{t("common.loading")}</p>
+    </div>
+  );
 }
 
 export function ClientContainer() {
   const location = useLocation();
-  
+
   // Use individual selectors to avoid object recreation
-  const selectedDate = useCalendarStore((state) => state.selectedDate);
-  const selectedUserId = useCalendarStore((state) => state.selectedUserId);
+  const selectedDate = useCalendarStore(state => state.selectedDate);
+  const selectedUserId = useCalendarStore(state => state.selectedUserId);
   const { data: events = [], isLoading, error } = useEvents();
 
   // Extract view from router path
   const view = useMemo(() => {
-    const pathSegments = location.pathname.split('/');
+    const pathSegments = location.pathname.split("/");
     const viewSegment = pathSegments[pathSegments.length - 1];
-    
+
     // Validate that it's a valid calendar view
-    const validViews: TCalendarView[] = ['month', 'week', 'day', 'year', 'agenda'];
+    const validViews: TCalendarView[] = ["month", "week", "day", "year", "agenda"];
     if (validViews.includes(viewSegment as TCalendarView)) {
       return viewSegment as TCalendarView;
     }
-    
+
     // Default to month view if invalid
-    return 'month' as TCalendarView;
+    return "month" as TCalendarView;
   }, [location.pathname]);
 
   // Filter events based on view and user selection
@@ -86,11 +90,11 @@ export function ClientContainer() {
         const weekStart = new Date(selectedDate);
         weekStart.setDate(selectedDate.getDate() - selectedDate.getDay());
         weekStart.setHours(0, 0, 0, 0);
-        
+
         const weekEnd = new Date(weekStart);
         weekEnd.setDate(weekStart.getDate() + 6);
         weekEnd.setHours(23, 59, 59, 999);
-        
+
         const isInSelectedWeek = eventStartDate <= weekEnd && eventEndDate >= weekStart;
         return isInSelectedWeek && isUserMatch;
       }
@@ -98,10 +102,10 @@ export function ClientContainer() {
       if (view === "day") {
         const dayStart = new Date(selectedDate);
         dayStart.setHours(0, 0, 0, 0);
-        
+
         const dayEnd = new Date(selectedDate);
         dayEnd.setHours(23, 59, 59, 999);
-        
+
         const isInSelectedDay = eventStartDate <= dayEnd && eventEndDate >= dayStart;
         return isInSelectedDay && isUserMatch;
       }
@@ -109,7 +113,7 @@ export function ClientContainer() {
       if (view === "year") {
         const yearStart = new Date(selectedDate.getFullYear(), 0, 1);
         const yearEnd = new Date(selectedDate.getFullYear(), 11, 31, 23, 59, 59, 999);
-        
+
         const isInSelectedYear = eventStartDate <= yearEnd && eventEndDate >= yearStart;
         return isInSelectedYear && isUserMatch;
       }

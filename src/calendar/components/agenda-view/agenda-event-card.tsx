@@ -52,7 +52,7 @@ interface IProps {
 
 export function AgendaEventCard({ event, eventCurrentDay, eventTotalDays }: IProps) {
   const { badgeVariant } = useCalendarPreferences();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("calendar");
   const locale = getDateLocale(i18n.language);
 
   const startDate = parseISO(event.startDate);
@@ -82,7 +82,7 @@ export function AgendaEventCard({ event, eventCurrentDay, eventTotalDays }: IPro
 
             <p className="font-medium">
               {eventCurrentDay && eventTotalDays && (
-                <span className="mr-1 text-xs">{t("calendar.events.dayCount", { current: eventCurrentDay, total: eventTotalDays })} • </span>
+                <span className="mr-1 text-xs">{t("events.dayCount", { current: eventCurrentDay, total: eventTotalDays })} • </span>
               )}
               {event.title}
             </p>

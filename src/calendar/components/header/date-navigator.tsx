@@ -22,7 +22,7 @@ interface IProps {
 export function DateNavigator({ events }: IProps) {
   const location = useLocation();
   const { selectedDate, setSelectedDate } = useCalendarDate();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation("calendar");
   const locale = getDateLocale(i18n.language);
 
   // Extract view from router path
@@ -52,7 +52,7 @@ export function DateNavigator({ events }: IProps) {
       <div className="flex items-center gap-2">
         <span className="text-lg font-semibold">{monthYearDisplay}</span>
         <Badge variant="outline" className="px-1.5">
-          {t("calendar.events.eventCount", { count: eventCount })}
+          {t("events.eventCount", { count: eventCount })}
         </Badge>
       </div>
 
